@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Within · 协作同行</title>
+<style>
+/* ========== Within 首页 —— 纯氛围开场 ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: #4a5560;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
+    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
+    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* 雾感噪点 */
+body::before {
+  content: ""; position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  opacity: 0.03;
+  background-image:
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
+  background-size: 72px 72px, 96px 96px;
+}
+
+/* 漂浮几何切片 */
+.geo {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.geo div {
+  position: absolute;
+  border: 1px solid rgba(132,163,189,0.14);
+  background: linear-gradient(145deg, rgba(255,255,255,0.40), rgba(177,201,223,0.05));
+  backdrop-filter: blur(8px);
+}
+.g1 { width: 220px; height: 180px; top: 8%; left: -40px; clip-path: polygon(18% 0, 100% 10%, 80% 100%, 0 82%); opacity: .6; }
+.g2 { width: 260px; height: 220px; top: 22%; right: -60px; clip-path: polygon(8% 10%, 100% 0, 92% 78%, 24% 100%); opacity: .5; }
+.g3 { width: 180px; height: 160px; bottom: 18%; left: 6%; clip-path: polygon(0 22%, 70% 0, 100% 86%, 18% 100%); opacity: .4; }
+.g4 { width: 200px; height: 170px; bottom: 8%; right: 8%; clip-path: polygon(14% 0, 100% 14%, 82% 100%, 0 84%); opacity: .4; }
+
+/* 导航 */
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
+  display: flex; justify-content: center; gap: 10px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  background: rgba(245,247,250,0.65);
+  border-bottom: 1px solid rgba(112,136,160,0.16);
+}
+.nav a {
+  padding: 10px 20px; border-radius: 999px;
+  color: #8899a8; font-size: 14px;
+  transition: all .25s ease;
+}
+.nav a:hover, .nav a.active {
+  color: #4a5560;
+  background: rgba(138,180,196,0.14);
+}
+
+/* 首页主视觉 */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  position: relative; z-index: 1;
+  padding: 100px 24px 80px;
+}
+
+.hero-poster {
+  max-width: 420px; width: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(99,124,148,0.18);
+  border: 1px solid rgba(148,176,200,0.22);
+  background: rgba(255,255,255,0.5);
+  margin-bottom: 40px;
+}
+.hero-poster img { width: 100%; height: auto; display: block; }
+
+.hero h1 {
+  font-size: clamp(64px, 10vw, 120px);
+  line-height: 0.95; letter-spacing: .06em;
+  font-weight: 700; color: #5a7a8c;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+.hero .cn-title {
+  font-size: clamp(28px, 4vw, 52px);
+  color: #6b8fa3; letter-spacing: .14em;
+  margin-top: 14px; font-weight: 500;
+}
+.hero .cn-title span { color: #8ab4c4; }
+
+.hero .desc {
+  font-size: 16px; line-height: 1.9;
+  color: #8899a8; max-width: 480px;
+  margin-top: 24px;
+}
+
+.hero .enter {
+  margin-top: 36px;
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+}
+.hero .enter a {
+  padding: 14px 32px; border-radius: 999px;
+  font-size: 15px; letter-spacing: .06em;
+  transition: all .3s ease;
+}
+.hero .enter .btn-main {
+  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
+  color: #fff;
+  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
+}
+.hero .enter .btn-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
+}
+.hero .enter .btn-sub {
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(148,176,200,0.25);
+  color: #6b8fa3;
+}
+.hero .enter .btn-sub:hover {
+  background: rgba(255,255,255,0.90);
+  border-color: rgba(148,176,200,0.40);
+}
+
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  color: #8899a8; font-size: 12px;
+  letter-spacing: .15em;
+  animation: bounce 2.5s infinite;
+  pointer-events: none;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: .35; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: .7; }
+}
+
+footer {
+  text-align: center; padding: 24px;
+  color: #8899a8; font-size: 13px;
+  position: relative; z-index: 1;
+}
+
+@media (max-width: 700px) {
+  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
+  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+  .hero { padding: 90px 16px 60px; }
+  .hero-poster { max-width: 300px; }
+  .hero h1 { font-size: 56px; }
+  .hero .cn-title { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<div class="geo">
+  <div class="g1"></div><div class="g2"></div><div class="g3"></div><div class="g4"></div>
+</div>
+
+<nav class="nav">
+  <a href="index.html" class="active">首页</a>
+  <a href="about/">项目介绍</a>
+  <a href="chapters/">章节导览</a>
+  <a href="process/">制作过程</a>
+  <a href="thanks/">感谢</a>
+</nav>
+
+<div class="hero">
+  <!-- 这里换首页海报图 —— 把 src 改成你的海报文件名 -->
+  <div class="hero-poster">
+    <img src="images/剪贴板图片.jpg" alt="Within 主视觉海报" />
+  </div>
+
+  <!-- 这里改首页标题 -->
+  <h1>Within</h1>
+  <div class="cn-title">协作同<span>行</span></div>
+  <p class="desc">
+    一段关于成长与抉择的旅程<br>
+    在孤独与迷茫中寻找方向<br>
+    在协作与理解中看见希望
+  </p>
+
+  <div class="enter">
+    <a href="about.html" class="btn-main">进入作品</a>
+    <a href="chapters.html" class="btn-sub">探索章节</a>
+  </div>
+
+  <div class="scroll-hint">↓ 向下浏览</div>
+</div>
+
+<footer>
+  Within · 协作同行 ｜ VR 互动体验作品
+</footer>
+
+</body>
+</html>

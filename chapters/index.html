@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>章节导览 — Within · 协作同行</title>
+<style>
+/* ========== Within 章节导览页 ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: #4a5560;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
+    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
+    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: 0.03;
+  background-image:
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
+  background-size: 72px 72px, 96px 96px;
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
+  display: flex; justify-content: center; gap: 10px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  background: rgba(245,247,250,0.65);
+  border-bottom: 1px solid rgba(112,136,160,0.16);
+}
+.nav a {
+  padding: 10px 20px; border-radius: 999px;
+  color: #8899a8; font-size: 14px;
+  transition: all .25s ease;
+}
+.nav a:hover, .nav a.active {
+  color: #4a5560;
+  background: rgba(138,180,196,0.14);
+}
+
+.wrap {
+  position: relative; z-index: 1;
+  width: min(1100px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 100px 0 60px;
+}
+
+.eyebrow {
+  color: #6b8fa3; letter-spacing: .18em;
+  font-size: 13px; margin-bottom: 14px;
+  text-transform: uppercase;
+}
+h2 {
+  font-size: 38px; color: #2c3a4a;
+  margin-bottom: 16px; line-height: 1.2;
+}
+.lead {
+  font-size: 17px; line-height: 1.9;
+  color: #8899a8; max-width: 680px;
+  margin-bottom: 32px;
+}
+
+/* 海报热区容器 */
+.map-wrap { text-align: center; margin-bottom: 20px; }
+.map-shell {
+  position: relative;
+  display: inline-block;
+  border-radius: 28px; overflow: hidden;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(148,176,200,0.22);
+  box-shadow: 0 20px 60px rgba(99,124,148,0.12);
+  max-height: 75vh;
+}
+.map-shell img {
+  width: auto; height: auto;
+  max-height: 75vh; max-width: 100%;
+  display: block;
+}
+
+/* 热区 */
+.hotspot {
+  position: absolute; display: block;
+  border: 1px solid rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(1px);
+  transition: all .28s ease;
+  cursor: pointer; outline: none;
+}
+.hotspot:hover, .hotspot:focus {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.55), 0 18px 40px rgba(63,110,147,0.18);
+  background: rgba(255,255,255,0.14);
+}
+.hotspot::after {
+  content: attr(data-title);
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  padding: 10px 16px; border-radius: 999px;
+  background: rgba(255,255,255,0.90);
+  color: #2c3a4a; font-size: 13px;
+  letter-spacing: .04em; opacity: 0;
+  transition: .25s ease; pointer-events: none;
+  box-shadow: 0 10px 20px rgba(73,102,128,0.14);
+}
+.hotspot:hover::after, .hotspot:focus::after { opacity: 1; }
+
+/* 这里改热区形状 —— 四个章节点击区域 */
+.shape-1 {
+  left: 4%; top: 20%;
+  width: 36%; height: 32%;
+  clip-path: polygon(22% 0, 100% 8%, 86% 100%, 0 74%, 10% 34%);
+}
+.shape-2 {
+  right: 5%; top: 20%;
+  width: 35%; height: 30%;
+  clip-path: polygon(12% 4%, 100% 18%, 82% 100%, 6% 80%, 0 24%);
+}
+.shape-3 {
+  left: 8%; top: 54%;
+  width: 36%; height: 30%;
+  clip-path: polygon(0 16%, 84% 0, 100% 84%, 24% 100%, 6% 66%);
+}
+.shape-4 {
+  right: 6%; top: 52%;
+  width: 34%; height: 32%;
+  clip-path: polygon(16% 0, 100% 20%, 82% 100%, 0 78%, 4% 24%);
+}
+
+.map-tip {
+  text-align: center;
+  margin-top: 16px; color: #8899a8;
+  font-size: 14px; line-height: 1.9;
+}
+.map-tip code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: rgba(255,255,255,0.70);
+  border: 1px solid rgba(112,136,160,0.16);
+  padding: 2px 8px; border-radius: 999px;
+  color: #5a7a8c; font-size: 12px;
+}
+
+/* 章节内容区 */
+.chapter-section {
+  margin-top: 80px;
+  padding-top: 40px;
+}
+.chapter-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+}
+.chapter-cover {
+  min-height: 360px; border-radius: 28px;
+  border: 1px solid rgba(148,176,200,0.20);
+  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
+  position: relative; overflow: hidden;
+  background-size: cover; background-position: center;
+}
+.chapter-cover::before {
+  content: ""; position: absolute; inset: 14px;
+  border: 1px solid rgba(255,255,255,0.35);
+  clip-path: polygon(10% 0, 100% 8%, 88% 100%, 0 84%);
+  pointer-events: none; z-index: 2;
+}
+.chapter-cover::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(135deg, transparent 0 48%, rgba(255,255,255,0.15) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(255,255,255,0.10) 49%, transparent 50%);
+  background-size: 80px 80px;
+  opacity: .5; mix-blend-mode: screen;
+  pointer-events: none; z-index: 2;
+}
+.chapter-cover img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute; inset: 0;
+  z-index: 1;
+}
+
+.chapter-body {
+  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.46));
+  border: 1px solid rgba(148,176,200,0.20);
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
+  padding: 32px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.chapter-kicker {
+  color: #6b8fa3; font-size: 13px;
+  letter-spacing: .16em; margin-bottom: 10px;
+}
+.chapter-body h3 {
+  font-size: 32px; margin-bottom: 16px;
+  color: #2c3a4a; letter-spacing: .04em;
+}
+.chapter-body p {
+  color: #8899a8; line-height: 2.0;
+  font-size: 16px;
+}
+.chapter-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 20px;
+}
+.chapter-tag {
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 13px; border: 1px solid rgba(148,176,200,0.20);
+}
+.ch-1 .chapter-tag { background: rgba(138,180,196,0.12); color: #5a7a8c; }
+.ch-2 .chapter-tag { background: rgba(212,196,168,0.18); color: #8a7a60; }
+.ch-3 .chapter-tag { background: rgba(168,152,184,0.14); color: #786888; }
+.ch-4 .chapter-tag { background: rgba(138,180,212,0.12); color: #4a6a8a; }
+
+.next-page {
+  text-align: center; margin-top: 60px;
+}
+.next-page a {
+  display: inline-block;
+  padding: 14px 36px; border-radius: 999px;
+  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
+  color: #fff; font-size: 15px;
+  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
+  transition: all .3s ease;
+}
+.next-page a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
+}
+
+footer {
+  text-align: center; padding: 24px;
+  color: #8899a8; font-size: 13px;
+  position: relative; z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .chapter-grid { grid-template-columns: 1fr; }
+  .chapter-cover { min-height: 280px; }
+  h2 { font-size: 28px; }
+}
+@media (max-width: 700px) {
+  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
+  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+  .wrap { padding: 80px 0 40px; }
+  .hotspot::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html">首页</a>
+  <a href="../about/">项目介绍</a>
+  <a href="./" class="active">章节导览</a>
+  <a href="../process/">制作过程</a>
+  <a href="../thanks/">感谢</a>
+</nav>
+
+<div class="wrap">
+  <div class="eyebrow">INTERACTIVE POSTER MAP</div>
+  <h2>海报章节导览</h2>
+  <p class="lead">
+    点击海报上的四个碎片区域，或向下滚动，探索 Within 的四段叙事旅程。
+  </p>
+
+  <!-- 海报交互容器 -->
+  <div class="map-wrap">
+    <div class="map-shell">
+      <!-- 这里换海报图 —— 导览区展示的海报原图 -->
+      <img src="../images/剪贴板图片.jpg" alt="Within 可点击海报导航" />
+      <!-- 四个热区链接，点击后平滑滚动到对应章节 -->
+      <a class="hotspot shape-1" href="#chapter-1" data-title="第一章 · 孤独的城市" aria-label="第一章 孤独的城市"></a>
+      <a class="hotspot shape-2" href="#chapter-2" data-title="第二章 · 萨沙的家" aria-label="第二章 萨沙的家"></a>
+      <a class="hotspot shape-3" href="#chapter-3" data-title="第三章 · 皮埃尔的梦想" aria-label="第三章 皮埃尔的梦想"></a>
+      <a class="hotspot shape-4" href="#chapter-4" data-title="第四章 · 太空之梦" aria-label="第四章 太空之梦"></a>
+    </div>
+  </div>
+
+  <p class="map-tip">
+    💡 改热区形状：搜索 <code>.shape-1 ~ .shape-4</code> 调整 <code>left / top / width / height / clip-path</code>
+  </p>
+
+  <!-- 第一章 -->
+  <div class="chapter-section ch-1" id="chapter-1">
+    <div class="chapter-grid">
+      <div class="chapter-cover">
+        <!-- 这里改第一章图片 —— 替换为章节概念图或截图 -->
+        <img src="剪贴板图片.jpg" alt="第一章 孤独的城市" />
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-kicker">CHAPTER 01</div>
+        <h3>孤独的城市</h3>
+        <p>
+          雨夜城市的孤独场景，探索者代入萨沙的视角感受社交痛点。
+          行人逐渐透明化、火车轰鸣——具象化大学生"社交隐身"的心理状态。
+        </p>
+        <p style="margin-top:14px;">
+          冰蓝色的城市笼罩在细雨中，灯光稀薄而冷漠。
+          这是旅程的起点，为后续协作破冰做好情绪铺垫。
+        </p>
+        <div class="chapter-tags">
+          <span class="chapter-tag">雨夜</span>
+          <span class="chapter-tag">疏离</span>
+          <span class="chapter-tag">冰蓝</span>
+          <span class="chapter-tag">情绪铺垫</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第二章 -->
+  <div class="chapter-section ch-2" id="chapter-2">
+    <div class="chapter-grid">
+      <div class="chapter-cover">
+        <!-- 这里改第二章图片 —— 替换为章节概念图或截图 -->
+        <img src="剪贴板图片.jpg" alt="第二章 萨沙的家" />
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-kicker">CHAPTER 02</div>
+        <h3>萨沙的家</h3>
+        <p>
+          私密温馨的虚拟空间降低心理戒备。电话连接触发双人沟通，
+          协作绘画建立初步默契，解谜找钥匙积累社交成功经验。
+        </p>
+        <p style="margin-top:14px;">
+          暖米色调的客厅，昏黄的灯光，窗外是淅沥的雨声。
+          在这里，协作不再是任务，而是一种自然的陪伴。
+        </p>
+        <div class="chapter-tags">
+          <span class="chapter-tag">温暖</span>
+          <span class="chapter-tag">室内</span>
+          <span class="chapter-tag">协作绘画</span>
+          <span class="chapter-tag">安全空间</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三章 -->
+  <div class="chapter-section ch-3" id="chapter-3">
+    <div class="chapter-grid">
+      <div class="chapter-cover">
+        <!-- 这里改第三章图片 —— 替换为章节概念图或截图 -->
+        <img src="剪贴板图片.jpg" alt="第三章 皮埃尔的梦想" />
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-kicker">CHAPTER 03</div>
+        <h3>皮埃尔的梦想</h3>
+        <p>
+          进入皮埃尔的梦境世界——森林、城堡、太空三个场景对应其内心逃避、挣扎与理想。
+          奇幻化设计弱化现实社交压力，深度协同解谜强化沟通与决策。
+        </p>
+        <p style="margin-top:14px;">
+          紫灰色的迷雾中，森林低语，城堡矗立。
+          在梦境中，协作成为穿越迷雾的唯一方式。
+        </p>
+        <div class="chapter-tags">
+          <span class="chapter-tag">梦境</span>
+          <span class="chapter-tag">森林</span>
+          <span class="chapter-tag">紫灰</span>
+          <span class="chapter-tag">深度协同</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第四章 -->
+  <div class="chapter-section ch-4" id="chapter-4">
+    <div class="chapter-grid">
+      <div class="chapter-cover">
+        <!-- 这里改第四章图片 —— 替换为章节概念图或截图 -->
+        <img src="剪贴板图片.jpg" alt="第四章 太空之梦" />
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-kicker">CHAPTER 04</div>
+        <h3>太空之梦</h3>
+        <p>
+          协作推向高潮：共同修复飞船动力、驾驶飞船驶向黑洞。
+          在危急关头紧密协作，完成后脱离虚拟叙事进行自由交流。
+        </p>
+        <p style="margin-top:14px;">
+          星光照亮驾驶舱，仪表盘闪烁着冷蓝色的光芒。
+          当飞船穿越黑洞，萨沙终于明白：真正的成长，从不是独自前行。
+        </p>
+        <div class="chapter-tags">
+          <span class="chapter-tag">飞船</span>
+          <span class="chapter-tag">终章</span>
+          <span class="chapter-tag">希望</span>
+          <span class="chapter-tag">自由交流</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="next-page">
+    <a href="process.html">→ 制作过程</a>
+  </div>
+</div>
+
+<footer>
+  Within · 协作同行 ｜ <a href="index.html" style="color:#8899a8;text-decoration:underline;">返回首页</a>
+</footer>
+
+</body>
+</html>

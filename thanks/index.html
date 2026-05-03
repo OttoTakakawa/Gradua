@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>感谢 — Within · 协作同行</title>
+<style>
+/* ========== Within 感谢页 ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: #4a5560;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
+    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
+    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+body::before {
+  content: ""; position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: 0.03;
+  background-image:
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
+  background-size: 72px 72px, 96px 96px;
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
+  display: flex; justify-content: center; gap: 10px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  background: rgba(245,247,250,0.65);
+  border-bottom: 1px solid rgba(112,136,160,0.16);
+}
+.nav a {
+  padding: 10px 20px; border-radius: 999px;
+  color: #8899a8; font-size: 14px;
+  transition: all .25s ease;
+}
+.nav a:hover, .nav a.active {
+  color: #4a5560;
+  background: rgba(138,180,196,0.14);
+}
+
+.wrap {
+  position: relative; z-index: 1;
+  width: min(860px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 120px 0 60px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eyebrow {
+  text-align: center;
+  color: #6b8fa3; letter-spacing: .18em;
+  font-size: 13px; margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.thanks-card {
+  padding: 56px 40px; border-radius: 32px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.50));
+  border: 1px solid rgba(148,176,200,0.18);
+  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+.thanks-card::before, .thanks-card::after {
+  content: ""; position: absolute;
+  width: 200px; height: 200px;
+  border: 1px solid rgba(126,164,193,0.12);
+  background: linear-gradient(145deg, rgba(255,255,255,0.20), rgba(138,180,196,0.05));
+  clip-path: polygon(14% 0, 100% 14%, 82% 100%, 0 84%);
+}
+.thanks-card::before { left: -50px; top: -50px; }
+.thanks-card::after { right: -50px; bottom: -50px; }
+
+.thanks-title {
+  font-size: clamp(40px, 5vw, 72px);
+  color: #5a7a8c; letter-spacing: .08em;
+  margin-bottom: 16px; font-weight: 600;
+  position: relative; z-index: 1;
+}
+.thanks-sub {
+  font-size: 17px; color: #8899a8;
+  line-height: 2.0; max-width: 560px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+}
+
+.credits {
+  display: flex; justify-content: center;
+  flex-wrap: wrap; gap: 12px;
+  margin-top: 32px;
+  position: relative; z-index: 1;
+}
+.credit {
+  padding: 12px 20px; border-radius: 999px;
+  background: rgba(255,255,255,0.74);
+  border: 1px solid rgba(148,176,200,0.16);
+  color: #4a5560; font-size: 14px;
+  transition: all .2s ease;
+}
+.credit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99,124,148,0.08);
+}
+
+.back-home {
+  text-align: center; margin-top: 36px;
+  position: relative; z-index: 1;
+}
+.back-home a {
+  display: inline-block;
+  padding: 12px 32px; border-radius: 999px;
+  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
+  color: #fff; font-size: 14px;
+  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
+  transition: all .3s ease;
+}
+.back-home a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
+}
+
+footer {
+  text-align: center; padding: 24px;
+  color: #8899a8; font-size: 13px;
+  position: relative; z-index: 1;
+}
+
+@media (max-width: 700px) {
+  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
+  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+  .wrap { padding: 100px 0 40px; }
+  .thanks-card { padding: 40px 24px; }
+  .thanks-title { font-size: 40px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html">首页</a>
+  <a href="../about/">项目介绍</a>
+  <a href="../chapters/">章节导览</a>
+  <a href="../process/">制作过程</a>
+  <a href="./" class="active">感谢</a>
+</nav>
+
+<div class="wrap">
+  <div class="eyebrow">THANKS</div>
+  <div class="thanks-card">
+    <div class="thanks-title">感谢观看</div>
+    <p class="thanks-sub">
+      感谢所有指导、陪伴与参与这个项目的人。<br>
+      Within 不是单纯的 VR 展示，<br>
+      而是一段关于理解、陪伴与共同前行的体验。
+    </p>
+    <div class="credits">
+      <!-- 这里改感谢内容 —— 替换成具体人名或信息 -->
+      <div class="credit">指导教师</div>
+      <div class="credit">测试参与者</div>
+      <div class="credit">项目协作者</div>
+      <div class="credit">答辩评审</div>
+    </div>
+    <p style="margin-top:28px;font-size:14px;color:#8899a8;letter-spacing:.1em;">
+      Within · 协作同行 ｜ 愿每一段旅程都有人同行
+    </p>
+  </div>
+
+  <div class="back-home">
+    <a href="index.html">← 返回首页</a>
+  </div>
+</div>
+
+<footer>
+  Within · 协作同行 ｜ VR 互动体验作品
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目介绍 — Within · 协作同行</title>
+<style>
+/* ========== Within 项目介绍页 ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: #4a5560;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
+    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
+    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: 0.03;
+  background-image:
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
+  background-size: 72px 72px, 96px 96px;
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
+  display: flex; justify-content: center; gap: 10px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  background: rgba(245,247,250,0.65);
+  border-bottom: 1px solid rgba(112,136,160,0.16);
+}
+.nav a {
+  padding: 10px 20px; border-radius: 999px;
+  color: #8899a8; font-size: 14px;
+  transition: all .25s ease;
+}
+.nav a:hover, .nav a.active {
+  color: #4a5560;
+  background: rgba(138,180,196,0.14);
+}
+
+.wrap {
+  position: relative; z-index: 1;
+  width: min(1100px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 100px 0 60px;
+}
+
+.eyebrow {
+  color: #6b8fa3; letter-spacing: .18em;
+  font-size: 13px; margin-bottom: 14px;
+  text-transform: uppercase;
+}
+h2 {
+  font-size: 38px; color: #2c3a4a;
+  margin-bottom: 16px; line-height: 1.2;
+}
+.lead {
+  font-size: 17px; line-height: 1.9;
+  color: #8899a8; max-width: 680px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
+  border: 1px solid rgba(148,176,200,0.20);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
+  padding: 28px;
+  position: relative; overflow: hidden;
+  transition: transform .3s, box-shadow .3s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 64px rgba(99,124,148,0.14);
+}
+.card::before {
+  content: ""; position: absolute; top: 0; right: 0;
+  width: 120px; height: 120px;
+  background: linear-gradient(135deg, rgba(138,180,196,0.15), transparent 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+.card h3 {
+  font-size: 20px; color: #2c3a4a;
+  margin-bottom: 12px;
+}
+.card p {
+  font-size: 15px; line-height: 1.95;
+  color: #8899a8;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.feature-list { display: grid; gap: 10px; margin-top: 14px; }
+.feature-item {
+  padding: 12px 16px;
+  border: 1px solid rgba(138,164,188,0.13);
+  background: rgba(255,255,255,0.55);
+  border-radius: 14px;
+  color: #4a5560;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.tag-list {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 16px;
+}
+.tag {
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 13px;
+  background: rgba(138,180,196,0.10);
+  color: #5a7a8c;
+  border: 1px solid rgba(148,176,200,0.15);
+}
+
+.poster-showcase {
+  max-width: 360px; margin: 0 auto 40px;
+  border-radius: 24px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(99,124,148,0.12);
+  border: 1px solid rgba(148,176,200,0.20);
+}
+.poster-showcase img { width: 100%; height: auto; display: block; }
+
+.next-page {
+  text-align: center; margin-top: 50px;
+}
+.next-page a {
+  display: inline-block;
+  padding: 14px 36px; border-radius: 999px;
+  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
+  color: #fff; font-size: 15px;
+  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
+  transition: all .3s ease;
+}
+.next-page a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
+}
+
+footer {
+  text-align: center; padding: 24px;
+  color: #8899a8; font-size: 13px;
+  position: relative; z-index: 1;
+}
+
+@media (max-width: 800px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  h2 { font-size: 28px; }
+  .wrap { padding: 80px 0 40px; }
+}
+@media (max-width: 700px) {
+  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
+  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html">首页</a>
+  <a href="./" class="active">项目介绍</a>
+  <a href="../chapters/">章节导览</a>
+  <a href="../process/">制作过程</a>
+  <a href="../thanks/">感谢</a>
+</nav>
+
+<div class="wrap">
+  <div class="eyebrow">PROJECT INTRO</div>
+  <h2>项目介绍</h2>
+  <p class="lead">
+    Within 是一款以"成长、共情与协作"为核心叙事主题的 VR 互动体验作品。
+  </p>
+
+  <!-- 这里换项目介绍页海报 —— 可以放海报局部或概念图 -->
+  <div class="poster-showcase">
+    <img src="../images/剪贴板图片.jpg" alt="Within 项目海报" />
+  </div>
+
+  <div class="grid-2" style="margin-bottom:22px;">
+    <div class="card">
+      <h3>作品简介</h3>
+      <p>
+        主角萨沙是一名临近毕业的大学生，在成长中面对自我迷茫、人际疏离与理想现实的冲突。
+        雨夜的城市中，萨沙的孤独感达到顶点——通过与好友康斯坦丁的通话，
+        开启了一段跨越时空的探索旅程。
+      </p>
+      <p style="margin-top:12px;">
+        萨沙进入昔日伙伴皮埃尔的记忆世界，在好友陪伴与协作中完成自我接纳与成长。
+      </p>
+    </div>
+    <div class="card">
+      <h3>核心主题</h3>
+      <div class="feature-list">
+        <div class="feature-item">🌱 <strong>成长</strong> —— 从孤独迷茫到自我接纳的内心蜕变</div>
+        <div class="feature-item">💞 <strong>共情</strong> —— 走进他人记忆，理解不同的生命经验</div>
+        <div class="feature-item">🤝 <strong>协作</strong> —— 跨媒介分工让沟通自然发生</div>
+        <div class="feature-item">🎨 <strong>Low-Poly 视觉</strong> —— 几何切面营造独特的情绪空间</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>作品类型</h3>
+      <p>VR / 互动叙事体验 / 跨媒介协作装置</p>
+      <p style="margin-top:10px;font-size:14px;">基于 Unity + PICO 4 一体机开发，支持双人协作体验。</p>
+      <div class="tag-list">
+        <span class="tag">Unity</span>
+        <span class="tag">PICO 4</span>
+        <span class="tag">XR</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>视觉风格</h3>
+      <p>采用 Low-Poly 低多边形美术风格，以简洁几何造型与大块面色彩营造独特视觉层次。</p>
+      <p style="margin-top:10px;font-size:14px;">弱化写实细节，强化场景的空间属性与情绪隐喻。</p>
+      <div class="tag-list">
+        <span class="tag">Low-Poly</span>
+        <span class="tag">冰蓝</span>
+        <span class="tag">暖米</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>项目亮点</h3>
+      <p>创新性地提出"跨媒介协作"机制，将 XR 设备定位为"社交引导媒介"。</p>
+      <p style="margin-top:10px;font-size:14px;">通过信息差设计，让线下沟通成为体验推进的必要环节。</p>
+      <div class="tag-list">
+        <span class="tag">跨媒介协作</span>
+        <span class="tag">社交引导</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="next-page">
+    <a href="chapters.html">→ 探索章节</a>
+  </div>
+</div>
+
+<footer>
+  Within · 协作同行 ｜ <a href="index.html" style="color:#8899a8;text-decoration:underline;">返回首页</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>制作过程 — Within · 协作同行</title>
+<style>
+/* ========== Within 制作过程页 ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: #4a5560;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
+    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
+    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: 0.03;
+  background-image:
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
+  background-size: 72px 72px, 96px 96px;
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
+  display: flex; justify-content: center; gap: 10px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  background: rgba(245,247,250,0.65);
+  border-bottom: 1px solid rgba(112,136,160,0.16);
+}
+.nav a {
+  padding: 10px 20px; border-radius: 999px;
+  color: #8899a8; font-size: 14px;
+  transition: all .25s ease;
+}
+.nav a:hover, .nav a.active {
+  color: #4a5560;
+  background: rgba(138,180,196,0.14);
+}
+
+.wrap {
+  position: relative; z-index: 1;
+  width: min(1100px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 100px 0 60px;
+}
+
+.eyebrow {
+  color: #6b8fa3; letter-spacing: .18em;
+  font-size: 13px; margin-bottom: 14px;
+  text-transform: uppercase;
+}
+h2 {
+  font-size: 38px; color: #2c3a4a;
+  margin-bottom: 16px; line-height: 1.2;
+}
+.lead {
+  font-size: 17px; line-height: 1.9;
+  color: #8899a8; max-width: 680px;
+  margin-bottom: 32px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
+  border: 1px solid rgba(148,176,200,0.20);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
+  padding: 28px;
+  position: relative; overflow: hidden;
+  transition: transform .3s, box-shadow .3s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 64px rgba(99,124,148,0.14);
+}
+.card::before {
+  content: ""; position: absolute; top: 0; right: 0;
+  width: 120px; height: 120px;
+  background: linear-gradient(135deg, rgba(138,180,196,0.15), transparent 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+.card h3 {
+  font-size: 20px; color: #2c3a4a;
+  margin-bottom: 12px;
+}
+.card p {
+  font-size: 15px; line-height: 1.95;
+  color: #8899a8;
+}
+
+.video-box {
+  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
+  border: 1px solid rgba(148,176,200,0.20);
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
+  padding: 20px;
+}
+video {
+  width: 100%; border-radius: 20px;
+  display: block; background: #dfe9ef;
+}
+.video-tip {
+  margin-top: 14px; color: #8899a8;
+  font-size: 14px; line-height: 1.8;
+}
+.video-tip code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: rgba(255,255,255,0.70);
+  border: 1px solid rgba(112,136,160,0.16);
+  padding: 2px 8px; border-radius: 999px;
+  color: #5a7a8c; font-size: 12px;
+}
+
+.steps { display: grid; gap: 14px; }
+.step {
+  padding: 18px 20px; border-radius: 18px;
+  background: rgba(255,255,255,0.56);
+  border: 1px solid rgba(148,176,200,0.16);
+  transition: transform .2s, box-shadow .2s;
+}
+.step:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(99,124,148,0.08);
+}
+.step strong {
+  display: block; margin-bottom: 6px;
+  color: #2c3a4a; font-size: 15px;
+}
+.step span {
+  color: #8899a8; line-height: 1.85; font-size: 15px;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+.gallery-item {
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(148,176,200,0.18);
+  background: rgba(255,255,255,0.50);
+  aspect-ratio: 4/3;
+  display: flex; align-items: center; justify-content: center;
+  color: #aabbcc; font-size: 14px;
+}
+.gallery-item img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+.next-page {
+  text-align: center; margin-top: 50px;
+}
+.next-page a {
+  display: inline-block;
+  padding: 14px 36px; border-radius: 999px;
+  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
+  color: #fff; font-size: 15px;
+  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
+  transition: all .3s ease;
+}
+.next-page a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
+}
+
+footer {
+  text-align: center; padding: 24px;
+  color: #8899a8; font-size: 13px;
+  position: relative; z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  h2 { font-size: 28px; }
+}
+@media (max-width: 700px) {
+  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
+  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+  .wrap { padding: 80px 0 40px; }
+  .gallery { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html">首页</a>
+  <a href="../about/">项目介绍</a>
+  <a href="../chapters/">章节导览</a>
+  <a href="./" class="active">制作过程</a>
+  <a href="../thanks/">感谢</a>
+</nav>
+
+<div class="wrap">
+  <div class="eyebrow">PROCESS & VIDEO</div>
+  <h2>制作过程</h2>
+  <p class="lead">
+    从概念草图到 VR 场景搭建，从交互逻辑调试到用户测试迭代——
+    Within 的每一步都记录着对"用设计回应社交困境"的思考。
+  </p>
+
+  <div class="grid-2">
+    <!-- 左侧：本地视频 -->
+    <div class="video-box">
+      <!-- 
+        这里改视频路径 —— 把本地视频放到项目文件夹，修改下面的 src
+        poster 是视频封面图，也可以替换
+      -->
+      <!--
+        视频播放器
+        - poster：视频封面图，建议放一张 16:9 的截图或标题卡
+        - src：视频文件路径
+      -->
+      <video controls preload="metadata" poster="">
+        <source src="videos/within-process.mp4" type="video/mp4" />
+        你的浏览器不支持 video 标签。
+      </video>
+      <p class="video-tip">
+        💡 把本地视频放到 <code>videos/within-process.mp4</code> 即可播放。<br>
+        如需设置封面图，修改上面的 <code>poster=""</code> 为图片路径，例如 <code>poster="videos/cover.jpg"</code>
+      </p>
+    </div>
+
+    <!-- 右侧：制作步骤 -->
+    <div class="steps">
+      <div class="step">
+        <strong>01｜概念与视觉建立</strong>
+        <span>确定 Low-Poly 美术风格，绘制主视觉海报，构建四章叙事结构与情绪节奏。</span>
+      </div>
+      <div class="step">
+        <strong>02｜Unity / VR 开发</strong>
+        <span>使用 Unity 2022.3 + XR Interaction Toolkit + PICO SDK 搭建场景，实现抓取、瞬移、绘画等核心交互。</span>
+      </div>
+      <div class="step">
+        <strong>03｜跨媒介系统整合</strong>
+        <span>设计同步显示大屏、实体协作卡片、移动端回应者等辅助媒介，构建完整的信息流闭环。</span>
+      </div>
+      <div class="step">
+        <strong>04｜用户测试与迭代</strong>
+        <span>邀请 20 名大学生参与测试，根据反馈优化交互难度、叙事节奏与社交引导机制。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图片展示区 —— 可以替换成你的概念图、草图、截图 -->
+  <div style="margin-top:50px;">
+    <h3 style="font-size:22px;color:#2c3a4a;margin-bottom:20px;">过程记录</h3>
+    <div class="gallery">
+      <!-- 这里改制作过程图片 —— 替换 src 为你的草图/截图/照片 -->
+      <div class="gallery-item">
+        <img src="../images/剪贴板图片.jpg" alt="概念草图" />
+      </div>
+      <div class="gallery-item">
+        <img src="剪贴板图片.jpg" alt="场景搭建" />
+      </div>
+      <div class="gallery-item">
+        <img src="剪贴板图片.jpg" alt="测试记录" />
+      </div>
+    </div>
+  </div>
+
+  <div class="next-page">
+    <a href="thanks.html">→ 感谢</a>
+  </div>
+</div>
+
+<footer>
+  Within · 协作同行 ｜ <a href="index.html" style="color:#8899a8;text-decoration:underline;">返回首页</a>
+</footer>
+
+</body>
+</html>
