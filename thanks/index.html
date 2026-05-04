@@ -290,6 +290,50 @@ footer {
     }, delay);
   }
 
+  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
+  var currentPage = 'thanks';
+
+  function normalizeNavTarget(href) {
+    if (!href) return null;
+    if (href.indexOf('about/index.html') !== -1) return 'about';
+    if (href.indexOf('research/index.html') !== -1) return 'research';
+    if (href.indexOf('design/index.html') !== -1) return 'design';
+    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
+    if (href.indexOf('process/index.html') !== -1) return 'process';
+    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
+    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
+    return null;
+  }
+
+  function getNavDirection(href) {
+    var targetKey = normalizeNavTarget(href);
+    var currentIndex = pageOrder.indexOf(currentPage);
+    var targetIndex = pageOrder.indexOf(targetKey);
+    if (currentIndex === -1 || targetIndex === -1) return 'next';
+    return targetIndex < currentIndex ? 'prev' : 'next';
+  }
+
+  function bindNavLinks() {
+    var navLinks = document.querySelectorAll('.nav a[href]');
+    navLinks.forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        if (navigating) {
+          event.preventDefault();
+          return;
+        }
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return;
+        }
+        var href = link.getAttribute('href');
+        if (!href || link.classList.contains('active')) return;
+        event.preventDefault();
+        go(href, getNavDirection(href));
+      });
+    });
+  }
+
+  bindNavLinks();
+
   window.addEventListener('wheel', function (event) {
     if (navigating) {
       event.preventDefault();
@@ -350,5 +394,6 @@ footer {
 
 </body>
 </html>
+
 
 

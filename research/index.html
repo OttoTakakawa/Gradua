@@ -140,6 +140,48 @@ body.is-prev-armed .prev-arm-hint {
   opacity: 0.92;
   transform: translateX(-50%) translateY(0);
 }
+.next-arm-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  width: auto;
+  min-height: 24px;
+  padding: 8px 14px 8px 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,176,200,0.24);
+  background: rgba(245,247,250,0.86);
+  backdrop-filter: blur(8px);
+  transform: translateX(-50%) translateY(-6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 36;
+  transition: opacity .24s ease, transform .24s ease, background .24s ease;
+  color: #5a7a8c;
+  font-size: 12px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.next-arm-hint::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid rgba(91,154,160,0.9);
+  border-bottom: 1.5px solid rgba(91,154,160,0.9);
+  transform: translateY(-72%) rotate(45deg);
+}
+
+.next-arm-hint::after {
+  content: "滚轮下滑，前往下一页";
+}
+
+body.is-next-armed .next-arm-hint {
+  opacity: 0.92;
+  transform: translateX(-50%) translateY(0);
+}
 
 .wrap {
   position: relative; z-index: 1;
@@ -797,33 +839,6 @@ tbody tr:last-child td {
   line-height: 1.9;
 }
 
-.next-page {
-  text-align: center; margin-top: 50px;
-}
-.next-page a {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 9px;
-  padding: 14px 32px 16px; border-radius: 999px;
-  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
-  color: #fff; font-size: 15px; line-height: 1;
-  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
-  transition: all .3s ease;
-}
-.next-page a::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid rgba(255,255,255,0.92);
-  border-bottom: 1.5px solid rgba(255,255,255,0.92);
-  transform: rotate(45deg);
-}
-.next-page a:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
-}
-
 footer {
   text-align: center; padding: 24px;
   color: var(--text-soft); font-size: 13px;
@@ -887,6 +902,11 @@ footer {
     font-size: 11px;
     padding: 7px 12px 7px 30px;
   }
+  .next-arm-hint {
+    bottom: 60px;
+    font-size: 11px;
+    padding: 7px 12px 7px 30px;
+  }
 }
 </style>
 </head>
@@ -902,7 +922,7 @@ footer {
   <a href="../thanks/index.html">感谢</a>
 </nav>
 <div class="prev-arm-hint" aria-hidden="true"></div>
-
+<div class="next-arm-hint" aria-hidden="true"></div>
 <div class="wrap">
   <div class="eyebrow">PROBLEM STUDY</div>
   <h1>问题研究</h1>
@@ -1094,10 +1114,6 @@ footer {
         <p>采用 Low-Poly 与超现实倾向的风格化空间，使视觉表达与情绪引导、社交节奏和叙事推进形成统一结构。</p>
       </div>
     </div>
-  </div>
-
-  <div class="next-page">
-    <a href="../design/index.html">进入核心设计</a>
   </div>
 </div>
 
@@ -1554,6 +1570,7 @@ renderLikertBars("interaction-bars", interactionBars, designPalette);
   var wrap = document.querySelector('.wrap');
   var navigating = false;
   var prevArmed = false;
+  var nextArmed = false;
   var threshold = 4;
   var delay = 420;
   var pullOpenDistance = 240;
@@ -1561,7 +1578,10 @@ renderLikertBars("interaction-bars", interactionBars, designPalette);
   var armedGraceMs = 960;
   var armedConfirmReadyAt = 0;
   var armedConfirmCooldownMs = 360;
-
+  var nextLockUntil = 0;
+  var nextGraceMs = 960;
+  var nextConfirmReadyAt = 0;
+  var nextConfirmCooldownMs = 360;
   function applyPull(distance) {
     if (wrap) {
       wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
@@ -1575,9 +1595,17 @@ renderLikertBars("interaction-bars", interactionBars, designPalette);
     document.body.classList.remove('is-prev-armed');
   }
 
+  function clearNextArm() {
+    nextArmed = false;
+    nextLockUntil = 0;
+    nextConfirmReadyAt = 0;
+    document.body.classList.remove('is-next-armed');
+  }
+
   function openPrevPull() {
     if (!prevTarget || navigating) return;
     var now = Date.now();
+    clearNextArm();
     prevArmed = true;
     armedLockUntil = now + armedGraceMs;
     armedConfirmReadyAt = now + armedConfirmCooldownMs;
@@ -1585,30 +1613,89 @@ renderLikertBars("interaction-bars", interactionBars, designPalette);
     applyPull(pullOpenDistance);
   }
 
-  function closePrevPull() {
+  function openNextPull() {
+    if (!nextTarget || navigating) return;
+    var now = Date.now();
     clearPrevArm();
+    nextArmed = true;
+    nextLockUntil = now + nextGraceMs;
+    nextConfirmReadyAt = now + nextConfirmCooldownMs;
+    document.body.classList.add('is-next-armed');
+    applyPull(-pullOpenDistance);
+  }
+
+  function closePull() {
+    clearPrevArm();
+    clearNextArm();
     applyPull(0);
+  }
+
+  function getMaxScroll() {
+    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
   }
 
   function go(target, direction) {
     if (!target || navigating) return;
     navigating = true;
-    closePrevPull();
+    closePull();
     document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
     window.setTimeout(function () {
       window.location.href = target;
     }, delay);
   }
 
+  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
+  var currentPage = 'research';
+
+  function normalizeNavTarget(href) {
+    if (!href) return null;
+    if (href.indexOf('about/index.html') !== -1) return 'about';
+    if (href.indexOf('research/index.html') !== -1) return 'research';
+    if (href.indexOf('design/index.html') !== -1) return 'design';
+    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
+    if (href.indexOf('process/index.html') !== -1) return 'process';
+    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
+    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
+    return null;
+  }
+
+  function getNavDirection(href) {
+    var targetKey = normalizeNavTarget(href);
+    var currentIndex = pageOrder.indexOf(currentPage);
+    var targetIndex = pageOrder.indexOf(targetKey);
+    if (currentIndex === -1 || targetIndex === -1) return 'next';
+    return targetIndex < currentIndex ? 'prev' : 'next';
+  }
+
+  function bindNavLinks() {
+    var navLinks = document.querySelectorAll('.nav a[href]');
+    navLinks.forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        if (navigating) {
+          event.preventDefault();
+          return;
+        }
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return;
+        }
+        var href = link.getAttribute('href');
+        if (!href || link.classList.contains('active')) return;
+        event.preventDefault();
+        go(href, getNavDirection(href));
+      });
+    });
+  }
+
+  bindNavLinks();
   window.addEventListener('wheel', function (event) {
     if (navigating) {
       event.preventDefault();
       return;
     }
 
-    var doc = document.documentElement;
     var atTop = window.scrollY <= threshold;
-    var atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - threshold;
+    var maxScroll = getMaxScroll();
+    var atBottom = window.scrollY >= maxScroll - threshold;
 
     if (prevArmed) {
       event.preventDefault();
@@ -1621,7 +1708,23 @@ renderLikertBars("interaction-bars", interactionBars, designPalette);
         return;
       }
       if (event.deltaY > 10 && now >= armedLockUntil) {
-        closePrevPull();
+        closePull();
+      }
+      return;
+    }
+
+    if (nextArmed) {
+      event.preventDefault();
+      var nowNext = Date.now();
+      if (event.deltaY > 8 && nextTarget) {
+        if (nowNext < nextConfirmReadyAt) {
+          return;
+        }
+        go(nextTarget, 'next');
+        return;
+      }
+      if (event.deltaY < -10 && nowNext >= nextLockUntil) {
+        closePull();
       }
       return;
     }
@@ -1634,17 +1737,18 @@ renderLikertBars("interaction-bars", interactionBars, designPalette);
 
     if (event.deltaY > 12 && atBottom && nextTarget) {
       event.preventDefault();
-      closePrevPull();
-      go(nextTarget, 'next');
+      openNextPull();
       return;
     }
 
-    if (!atTop || event.deltaY > 6) {
-      closePrevPull();
+    if (!atTop && !atBottom) {
+      closePull();
     }
   }, { passive: false });
 
   window.addEventListener('scroll', function () {
+    var maxScroll = getMaxScroll();
+
     if (prevArmed) {
       if (window.scrollY > threshold + 2) {
         window.scrollTo(0, 0);
@@ -1652,14 +1756,25 @@ renderLikertBars("interaction-bars", interactionBars, designPalette);
       return;
     }
 
-    if (window.scrollY > threshold + 2) {
-      closePrevPull();
+    if (nextArmed) {
+      if (window.scrollY < maxScroll - threshold - 2) {
+        window.scrollTo(0, maxScroll);
+      }
+      return;
+    }
+
+    if (window.scrollY > threshold + 2 && window.scrollY < maxScroll - threshold - 2) {
+      closePull();
     }
   }, { passive: true });})();
 </script>
 
 </body>
 </html>
+
+
+
+
 
 
 
