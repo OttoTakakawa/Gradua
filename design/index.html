@@ -197,6 +197,268 @@ margin-bottom: 10px;
 min-height: 100%;
 }
 
+.mechanism-map {
+margin-top: 22px;
+display: grid;
+grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+gap: 22px;
+align-items: start;
+}
+
+.mechanism-figure-shell {
+position: relative;
+border-radius: 24px;
+overflow: hidden;
+background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.48));
+border: 1px solid rgba(148,176,200,0.20);
+box-shadow: var(--shadow);
+}
+
+.mechanism-figure-shell::before {
+content: "";
+position: absolute;
+inset: 0;
+pointer-events: none;
+background:
+radial-gradient(circle at 18% 22%, rgba(138,180,196,0.14), transparent 42%),
+radial-gradient(circle at 82% 32%, rgba(147,133,191,0.10), transparent 45%);
+opacity: 0.9;
+}
+
+.mechanism-image {
+position: relative;
+z-index: 1;
+width: 100%;
+display: block;
+object-fit: contain;
+background: rgba(255,255,255,0.40);
+}
+
+.mechanism-hotspots {
+position: absolute;
+inset: 0;
+z-index: 2;
+}
+
+.mechanism-hotspot {
+position: absolute;
+border-radius: 18px;
+border: 1px solid rgba(148,176,200,0.0);
+background: rgba(138,180,196,0.00);
+cursor: pointer;
+transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.mechanism-hotspot:hover {
+background: rgba(138,180,196,0.08);
+border-color: rgba(148,176,200,0.26);
+box-shadow: 0 18px 44px rgba(99,124,148,0.10);
+}
+
+.mechanism-hotspot.is-active {
+background: rgba(91,154,160,0.10);
+border-color: rgba(91,154,160,0.38);
+box-shadow: 0 20px 54px rgba(91,154,160,0.14);
+}
+
+.mechanism-zoom-btn {
+position: absolute;
+z-index: 3;
+right: 14px;
+top: 14px;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+padding: 10px 12px;
+border-radius: 999px;
+border: 1px solid rgba(148,176,200,0.22);
+background: rgba(245,247,250,0.86);
+backdrop-filter: blur(10px);
+color: #5a7a8c;
+font-size: 12px;
+letter-spacing: .06em;
+cursor: pointer;
+}
+
+.mechanism-zoom-btn:hover {
+background: rgba(245,247,250,0.94);
+}
+
+.mechanism-zoom-btn::before {
+content: "";
+width: 10px;
+height: 10px;
+border: 1.6px solid rgba(91,154,160,0.9);
+border-radius: 999px;
+position: relative;
+}
+
+.mechanism-zoom-btn::after {
+content: "";
+width: 8px;
+height: 0;
+border-top: 1.6px solid rgba(91,154,160,0.9);
+transform: rotate(45deg);
+transform-origin: left center;
+position: relative;
+left: -6px;
+top: 5px;
+}
+
+.mechanism-details {
+padding: 22px 24px 24px;
+border-radius: 24px;
+background: rgba(255,255,255,0.46);
+border: 1px solid rgba(148,176,200,0.12);
+box-shadow: var(--shadow);
+}
+
+.mechanism-details strong {
+display: block;
+color: var(--text-dark);
+font-size: 16px;
+margin-bottom: 10px;
+}
+
+.mechanism-step {
+padding: 14px 14px 14px;
+border-radius: 18px;
+background: rgba(255,255,255,0.56);
+border: 1px solid rgba(148,176,200,0.12);
+cursor: pointer;
+transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.mechanism-step + .mechanism-step { margin-top: 12px; }
+
+.mechanism-step:hover {
+transform: translateY(-1px);
+box-shadow: var(--shadow-hover);
+}
+
+.mechanism-step.is-active {
+border-color: rgba(91,154,160,0.30);
+box-shadow: 0 22px 64px rgba(91,154,160,0.10);
+}
+
+.mechanism-step h3 {
+font-size: 16px;
+color: var(--text-dark);
+margin-bottom: 6px;
+}
+
+.mechanism-step p {
+font-size: 13px;
+line-height: 1.85;
+color: var(--text-soft);
+}
+
+.diagram-lightbox {
+position: fixed;
+inset: 0;
+z-index: 90;
+display: none;
+align-items: center;
+justify-content: center;
+padding: 22px;
+}
+
+.diagram-lightbox.is-open { display: flex; }
+
+.diagram-lightbox-backdrop {
+position: absolute;
+inset: 0;
+background: rgba(18, 24, 30, 0.62);
+backdrop-filter: blur(12px);
+opacity: 0;
+transition: opacity .22s ease;
+}
+
+.diagram-lightbox.is-open .diagram-lightbox-backdrop { opacity: 1; }
+
+.diagram-lightbox-stage {
+position: relative;
+z-index: 1;
+width: min(1320px, calc(100vw - 44px));
+height: min(820px, calc(100vh - 44px));
+border-radius: 22px;
+overflow: hidden;
+background: rgba(245,247,250,0.92);
+border: 1px solid rgba(148,176,200,0.18);
+box-shadow: 0 26px 88px rgba(0,0,0,0.22);
+transform: scale(0.985);
+opacity: 0;
+transition: transform .26s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+}
+
+.diagram-lightbox.is-open .diagram-lightbox-stage {
+transform: scale(1);
+opacity: 1;
+}
+
+.diagram-lightbox-toolbar {
+position: absolute;
+left: 14px;
+right: 14px;
+top: 14px;
+z-index: 2;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 12px;
+pointer-events: none;
+}
+
+.diagram-lightbox-hint {
+pointer-events: none;
+padding: 9px 12px;
+border-radius: 999px;
+border: 1px solid rgba(148,176,200,0.18);
+background: rgba(255,255,255,0.78);
+color: #5a7a8c;
+font-size: 12px;
+letter-spacing: .06em;
+}
+
+.diagram-lightbox-close {
+pointer-events: auto;
+width: 40px;
+height: 40px;
+border-radius: 999px;
+border: 1px solid rgba(148,176,200,0.22);
+background: rgba(255,255,255,0.86);
+cursor: pointer;
+color: #3b4b5c;
+font-size: 20px;
+line-height: 1;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+}
+
+.diagram-lightbox-viewport {
+position: absolute;
+inset: 0;
+overflow: hidden;
+cursor: grab;
+}
+
+.diagram-lightbox-viewport:active { cursor: grabbing; }
+
+.diagram-lightbox-image {
+position: absolute;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%) scale(1);
+transform-origin: 50% 50%;
+max-width: none;
+max-height: none;
+width: auto;
+height: auto;
+user-select: none;
+pointer-events: none;
+}
+
 .stage-num {
 color: var(--cyan-deep);
 font-size: 12px;
@@ -251,6 +513,10 @@ font-size: 26px;
 
 .wrap {
 width: min(100%, calc(100% - 28px));
+}
+
+.mechanism-map {
+grid-template-columns: 1fr;
 }
 }
 </style>
@@ -437,6 +703,52 @@ width: min(100%, calc(100% - 28px));
           <p>承担面对面交流、破冰、复盘与体验结束后的自由对话，让社交行为继续发生。</p>
         </div>
       </div>
+
+      <div class="mechanism-map" data-mechanism-map>
+        <div class="mechanism-figure-shell">
+          <button class="mechanism-zoom-btn" type="button" data-map-zoom>查看大图</button>
+          <img class="mechanism-image" src="../images/mechanism-map.jpg" alt="跨媒介协作机制图" loading="lazy" decoding="async" data-map-image>
+          <div class="mechanism-hotspots" aria-hidden="true">
+            <button class="mechanism-hotspot is-active" type="button" data-step="1" style="left:3.2%;top:9.5%;width:22.0%;height:78.0%;"></button>
+            <button class="mechanism-hotspot" type="button" data-step="2" style="left:26.3%;top:9.5%;width:22.0%;height:78.0%;"></button>
+            <button class="mechanism-hotspot" type="button" data-step="3" style="left:49.4%;top:9.5%;width:22.0%;height:78.0%;"></button>
+            <button class="mechanism-hotspot" type="button" data-step="4" style="left:72.5%;top:9.5%;width:24.2%;height:78.0%;"></button>
+          </div>
+        </div>
+
+        <div class="mechanism-details" aria-live="polite">
+          <strong>机制图交互</strong>
+          <div class="mechanism-step is-active" data-step="1" role="button" tabindex="0" aria-pressed="true">
+            <h3>① 媒介组织</h3>
+            <p>先把 XR 头显、大屏、纸质卡片与现实空间编排成一个“信息流动的场”。</p>
+          </div>
+          <div class="mechanism-step" data-step="2" role="button" tabindex="0" aria-pressed="false">
+            <h3>② 角色分配</h3>
+            <p>通过非对称权限与信息拆分，让沟通成为推进任务的必要条件。</p>
+          </div>
+          <div class="mechanism-step" data-step="3" role="button" tabindex="0" aria-pressed="false">
+            <h3>③ 交互推进</h3>
+            <p>以任务目标为核心组织互动，形成“协作讨论”而非“强行社交”。</p>
+          </div>
+          <div class="mechanism-step" data-step="4" role="button" tabindex="0" aria-pressed="false">
+            <h3>④ 目标转化</h3>
+            <p>在完成任务的过程中完成关系递进，把虚拟协作自然转译为现实交流。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram-lightbox" id="design-diagram-lightbox" aria-hidden="true">
+      <div class="diagram-lightbox-backdrop" data-lightbox-close></div>
+      <div class="diagram-lightbox-stage" role="dialog" aria-modal="true" aria-label="跨媒介协作机制图（可缩放）">
+        <div class="diagram-lightbox-toolbar">
+          <div class="diagram-lightbox-hint">滚轮缩放，拖拽平移，Esc 关闭</div>
+          <button class="diagram-lightbox-close" type="button" aria-label="关闭" data-lightbox-close>×</button>
+        </div>
+        <div class="diagram-lightbox-viewport" data-lightbox-viewport>
+          <img class="diagram-lightbox-image" alt="跨媒介协作机制图大图" data-lightbox-image>
+        </div>
+      </div>
     </div>
 
     <div class="section">
@@ -509,6 +821,158 @@ window.__pageConfig = {
 };
 </script>
 <script src="../shell.js"></script>
+<script id="page-script">
+if (window.__designMechanismCleanup) {
+  try { window.__designMechanismCleanup(); } catch (e) {}
+  window.__designMechanismCleanup = null;
+}
+
+var host = document.querySelector('[data-mechanism-map]');
+if (host) {
+  var steps = Array.prototype.slice.call(host.querySelectorAll('.mechanism-step[data-step]'));
+  var hotspots = Array.prototype.slice.call(host.querySelectorAll('.mechanism-hotspot[data-step]'));
+  var zoomBtn = host.querySelector('[data-map-zoom]');
+  var img = host.querySelector('[data-map-image]');
+
+  var lightbox = document.getElementById('design-diagram-lightbox');
+  var lbImage = lightbox ? lightbox.querySelector('[data-lightbox-image]') : null;
+  var lbViewport = lightbox ? lightbox.querySelector('[data-lightbox-viewport]') : null;
+  var lbCloseEls = lightbox ? lightbox.querySelectorAll('[data-lightbox-close]') : [];
+
+  var activeStep = '1';
+
+  function setActive(step) {
+    activeStep = String(step || '1');
+    hotspots.forEach(function (el) {
+      el.classList.toggle('is-active', el.getAttribute('data-step') === activeStep);
+    });
+    steps.forEach(function (el) {
+      var isActive = el.getAttribute('data-step') === activeStep;
+      el.classList.toggle('is-active', isActive);
+      el.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
+  function onActivateFromNode(node) {
+    if (!node) return;
+    var step = node.getAttribute('data-step');
+    if (!step) return;
+    setActive(step);
+  }
+
+  hotspots.forEach(function (el) {
+    el.addEventListener('pointerenter', function () { onActivateFromNode(el); });
+    el.addEventListener('click', function () { onActivateFromNode(el); });
+  });
+
+  steps.forEach(function (el) {
+    el.addEventListener('click', function () { onActivateFromNode(el); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onActivateFromNode(el);
+      }
+    });
+  });
+
+  function openLightbox() {
+    if (!lightbox || !lbImage || !img) return;
+    lbImage.src = img.getAttribute('src') || '';
+    lbImage.style.transform = 'translate(-50%, -50%) scale(1)';
+    lbImage.dataset.scale = '1';
+    lbImage.dataset.tx = '0';
+    lbImage.dataset.ty = '0';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function applyLightboxTransform() {
+    if (!lbImage) return;
+    var scale = parseFloat(lbImage.dataset.scale || '1') || 1;
+    var tx = parseFloat(lbImage.dataset.tx || '0') || 0;
+    var ty = parseFloat(lbImage.dataset.ty || '0') || 0;
+    lbImage.style.transform = 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(' + scale + ')';
+  }
+
+  function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  var dragging = false;
+  var dragStartX = 0;
+  var dragStartY = 0;
+  var dragStartTx = 0;
+  var dragStartTy = 0;
+
+  function onViewportDown(e) {
+    if (!lbImage) return;
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragStartTx = parseFloat(lbImage.dataset.tx || '0') || 0;
+    dragStartTy = parseFloat(lbImage.dataset.ty || '0') || 0;
+  }
+
+  function onViewportMove(e) {
+    if (!dragging || !lbImage) return;
+    var dx = e.clientX - dragStartX;
+    var dy = e.clientY - dragStartY;
+    lbImage.dataset.tx = String(dragStartTx + dx);
+    lbImage.dataset.ty = String(dragStartTy + dy);
+    applyLightboxTransform();
+  }
+
+  function onViewportUp() {
+    dragging = false;
+  }
+
+  function onViewportWheel(e) {
+    if (!lbImage) return;
+    e.preventDefault();
+    var current = parseFloat(lbImage.dataset.scale || '1') || 1;
+    var next = current + (e.deltaY > 0 ? -0.12 : 0.12);
+    next = clamp(next, 0.8, 2.6);
+    lbImage.dataset.scale = String(next);
+    applyLightboxTransform();
+  }
+
+  function onKeyDown(e) {
+    if (e.key === 'Escape' && lightbox && lightbox.classList.contains('is-open')) {
+      closeLightbox();
+    }
+  }
+
+  if (zoomBtn) zoomBtn.addEventListener('click', openLightbox);
+  if (img) img.addEventListener('dblclick', openLightbox);
+  if (lightbox && lbViewport) {
+    lbViewport.addEventListener('pointerdown', onViewportDown);
+    lbViewport.addEventListener('pointermove', onViewportMove);
+    lbViewport.addEventListener('pointerup', onViewportUp);
+    lbViewport.addEventListener('pointercancel', onViewportUp);
+    lbViewport.addEventListener('wheel', onViewportWheel, { passive: false });
+  }
+  if (lbCloseEls && lbCloseEls.length) {
+    Array.prototype.forEach.call(lbCloseEls, function (el) {
+      el.addEventListener('click', closeLightbox);
+    });
+  }
+  window.addEventListener('keydown', onKeyDown);
+
+  window.__designMechanismCleanup = function () {
+    window.removeEventListener('keydown', onKeyDown);
+  };
+
+  setActive(activeStep);
+}
+</script>
 
 </body>
 </html>
