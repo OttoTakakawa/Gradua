@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -6,7 +6,10 @@
 <title>感谢 — Within · 协作同行</title>
 <style>
 /* ========== Within 感谢页 ========== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
+
 body {
   font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   color: #4a5560;
@@ -36,8 +39,9 @@ body::before {
   border-bottom: 1px solid rgba(112,136,160,0.16);
 }
 .nav a {
-  padding: 10px 20px; border-radius: 999px;
+  padding: 10px 18px; border-radius: 999px;
   color: #8899a8; font-size: 14px;
+  text-decoration: none;
   transition: all .25s ease;
 }
 .nav a:hover, .nav a.active {
@@ -45,11 +49,76 @@ body::before {
   background: rgba(138,180,196,0.14);
 }
 
+.nav,
+.wrap,
+footer {
+  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
+}
+
+body.is-leaving-next .nav,
+body.is-leaving-next .wrap,
+body.is-leaving-next footer {
+  opacity: 0;
+  transform: translateY(-24px);
+  filter: blur(3px);
+}
+
+body.is-leaving-prev .nav,
+body.is-leaving-prev .wrap,
+body.is-leaving-prev footer {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(3px);
+}
+
+.prev-arm-hint {
+  position: fixed;
+  left: 50%;
+  top: 156px;
+  width: auto;
+  min-height: 24px;
+  padding: 8px 14px 8px 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,176,200,0.24);
+  background: rgba(245,247,250,0.86);
+  backdrop-filter: blur(8px);
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 36;
+  transition: opacity .24s ease, transform .24s ease, background .24s ease;
+  color: #5a7a8c;
+  font-size: 12px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.prev-arm-hint::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-left: 1.5px solid rgba(91,154,160,0.9);
+  border-top: 1.5px solid rgba(91,154,160,0.9);
+  transform: translateY(-28%) rotate(45deg);
+}
+
+.prev-arm-hint::after {
+  content: "滚轮上滑，回到前一页";
+}
+
+body.is-prev-armed .prev-arm-hint {
+  opacity: 0.92;
+  transform: translateX(-50%) translateY(0);
+}
+
 .wrap {
   position: relative; z-index: 1;
   width: min(860px, calc(100% - 36px));
   margin: 0 auto;
-  padding: 120px 0 60px;
+  padding: 104px 0 72px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -112,23 +181,6 @@ body::before {
   box-shadow: 0 4px 12px rgba(99,124,148,0.08);
 }
 
-.back-home {
-  text-align: center; margin-top: 36px;
-  position: relative; z-index: 1;
-}
-.back-home a {
-  display: inline-block;
-  padding: 12px 32px; border-radius: 999px;
-  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
-  color: #fff; font-size: 14px;
-  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
-  transition: all .3s ease;
-}
-.back-home a:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
-}
-
 footer {
   text-align: center; padding: 24px;
   color: #8899a8; font-size: 13px;
@@ -138,9 +190,10 @@ footer {
 @media (max-width: 700px) {
   .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
   .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
-  .wrap { padding: 100px 0 40px; }
+  .wrap { width: min(100%, calc(100% - 28px)); padding: 84px 0 40px; }
   .thanks-card { padding: 40px 24px; }
   .thanks-title { font-size: 40px; }
+  .prev-arm-hint { top: 124px; font-size: 11px; padding: 7px 12px 7px 30px; }
 }
 </style>
 </head>
@@ -149,10 +202,13 @@ footer {
 <nav class="nav">
   <a href="../index.html">首页</a>
   <a href="../about/index.html">项目介绍</a>
+  <a href="../research/index.html">问题研究</a>
+  <a href="../design/index.html">核心设计</a>
   <a href="../chapters/index.html">章节导览</a>
   <a href="../process/index.html">制作过程</a>
   <a href="../thanks/index.html" class="active">感谢</a>
 </nav>
+<div class="prev-arm-hint" aria-hidden="true"></div>
 
 <div class="wrap">
   <div class="eyebrow">THANKS</div>
@@ -175,14 +231,124 @@ footer {
     </p>
   </div>
 
-  <div class="back-home">
-    <a href="../index.html">← 返回首页</a>
-  </div>
 </div>
 
 <footer>
   Within · 协作同行 ｜ VR 互动体验作品
 </footer>
 
+<script>
+(function () {
+  var prevTarget = '../process/index.html';
+  var nextTarget = null;
+  var wrap = document.querySelector('.wrap');
+  var navigating = false;
+  var prevArmed = false;
+  var threshold = 4;
+  var delay = 420;
+  var pullOpenDistance = 240;
+  var armedLockUntil = 0;
+  var armedGraceMs = 960;
+  var armedConfirmReadyAt = 0;
+  var armedConfirmCooldownMs = 360;
+
+  function applyPull(distance) {
+    if (wrap) {
+      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
+    }
+  }
+
+  function clearPrevArm() {
+    prevArmed = false;
+    armedLockUntil = 0;
+    armedConfirmReadyAt = 0;
+    document.body.classList.remove('is-prev-armed');
+  }
+
+  function openPrevPull() {
+    if (!prevTarget || navigating) return;
+    var now = Date.now();
+    prevArmed = true;
+    armedLockUntil = now + armedGraceMs;
+    armedConfirmReadyAt = now + armedConfirmCooldownMs;
+    document.body.classList.add('is-prev-armed');
+    applyPull(pullOpenDistance);
+  }
+
+  function closePrevPull() {
+    clearPrevArm();
+    applyPull(0);
+  }
+
+  function go(target, direction) {
+    if (!target || navigating) return;
+    navigating = true;
+    closePrevPull();
+    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
+    window.setTimeout(function () {
+      window.location.href = target;
+    }, delay);
+  }
+
+  window.addEventListener('wheel', function (event) {
+    if (navigating) {
+      event.preventDefault();
+      return;
+    }
+
+    var doc = document.documentElement;
+    var atTop = window.scrollY <= threshold;
+
+    if (prevArmed) {
+      event.preventDefault();
+      var now = Date.now();
+      if (event.deltaY < -8 && prevTarget) {
+        if (now < armedConfirmReadyAt) {
+          return;
+        }
+        go(prevTarget, 'prev');
+        return;
+      }
+      if (event.deltaY > 10 && now >= armedLockUntil) {
+        closePrevPull();
+      }
+      return;
+    }
+
+    if (event.deltaY < -12 && atTop && prevTarget) {
+      event.preventDefault();
+      openPrevPull();
+      return;
+    }
+
+    if (nextTarget && event.deltaY > 12 && window.innerHeight + window.scrollY >= doc.scrollHeight - threshold) {
+      event.preventDefault();
+      closePrevPull();
+      go(nextTarget, 'next');
+      return;
+    }
+
+    if (!atTop || event.deltaY > 6) {
+      closePrevPull();
+    }
+  }, { passive: false });
+
+  window.addEventListener('scroll', function () {
+    if (prevArmed) {
+      if (window.scrollY > threshold + 2) {
+        window.scrollTo(0, 0);
+      }
+      return;
+    }
+
+    if (window.scrollY > threshold + 2) {
+      closePrevPull();
+    }
+  }, { passive: true });
+})();
+</script>
+
 </body>
 </html>
+
+

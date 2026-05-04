@@ -1,0 +1,626 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第三章 · 皮埃尔的梦想 — Within · 协作同行</title>
+<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
+
+:root {
+  --accent: #9385bf;
+  --accent-soft: rgba(147,133,191,0.13);
+  --text-main: #4a5560;
+  --text-dark: #2c3a4a;
+  --text-soft: #8899a8;
+  --border: rgba(112,136,160,0.16);
+  --shadow: 0 20px 60px rgba(99,124,148,0.10);
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 18% 22%, rgba(147,133,191,0.12), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(91,154,160,0.08), transparent 30%),
+    linear-gradient(180deg, #f5f3f8 0%, #f0eef5 52%, #efedf4 100%);
+  overflow-x: hidden;
+  overflow-y: clip;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image:
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
+  background-size: 72px 72px, 96px 96px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(245,242,248,0.14), rgba(238,233,243,0.94) 68%, rgba(235,230,240,1));
+  transition: opacity .42s ease;
+}
+
+body.is-leaving-prev::after,
+body.is-leaving-next::after {
+  opacity: 1;
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  background: rgba(245,243,248,0.72);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav a {
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: var(--text-soft);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all .25s ease;
+}
+
+.nav a:hover,
+.nav a.active {
+  color: var(--text-main);
+  background: var(--accent-soft);
+}
+
+.nav,
+.wrap,
+footer {
+  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
+}
+
+body.is-leaving-next .nav,
+body.is-leaving-next .wrap,
+body.is-leaving-next footer {
+  opacity: 0;
+  transform: translateY(-26px);
+  filter: blur(3px);
+}
+
+body.is-leaving-prev .nav,
+body.is-leaving-prev .wrap,
+body.is-leaving-prev footer {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(3px);
+}
+
+.prev-arm-hint {
+  position: fixed;
+  left: 50%;
+  top: 156px;
+  width: auto;
+  min-height: 24px;
+  padding: 8px 14px 8px 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,176,200,0.24);
+  background: rgba(245,247,250,0.86);
+  backdrop-filter: blur(8px);
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 36;
+  transition: opacity .24s ease, transform .24s ease, background .24s ease;
+  color: #5a7a8c;
+  font-size: 12px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.prev-arm-hint::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-left: 1.5px solid rgba(91,154,160,0.9);
+  border-top: 1.5px solid rgba(91,154,160,0.9);
+  transform: translateY(-28%) rotate(45deg);
+}
+
+.prev-arm-hint::after {
+  content: "滚轮上滑，回到前一页";
+}
+
+body.is-prev-armed .prev-arm-hint {
+  opacity: 0.92;
+  transform: translateX(-50%) translateY(0);
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 104px 0 72px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.cover {
+  min-height: 520px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+  border: 1px solid rgba(148,176,200,0.20);
+  box-shadow: var(--shadow);
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(59,47,82,0.10), rgba(59,47,82,0.24)),
+    linear-gradient(135deg, transparent 0 48%, rgba(255,255,255,0.12) 49%, transparent 50%);
+  background-size: auto, 84px 84px;
+}
+
+.hero-card,
+.meta-card,
+.gallery-card,
+.video-card,
+.note-card,
+.pager a {
+  border: 1px solid rgba(148,176,200,0.20);
+  box-shadow: var(--shadow);
+}
+
+.hero-card {
+  padding: 32px;
+  border-radius: 32px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: .18em;
+}
+
+h1 {
+  margin-top: 14px;
+  color: var(--text-dark);
+  font-size: clamp(34px, 4vw, 48px);
+  line-height: 1.15;
+}
+
+.lead {
+  margin-top: 16px;
+  color: var(--text-soft);
+  font-size: 16px;
+  line-height: 1.95;
+}
+
+.tag-row {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-row span {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid rgba(147,133,191,0.16);
+  color: #786888;
+  font-size: 12px;
+}
+
+.section { margin-top: 28px; }
+
+.section-title {
+  color: var(--text-dark);
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+
+.meta-grid,
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.detail-grid {
+  grid-template-columns: 1fr 1fr;
+  margin-top: 18px;
+}
+
+.meta-card,
+.gallery-card,
+.video-card,
+.note-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.76);
+}
+
+.meta-card h3,
+.gallery-card h3,
+.video-card h3,
+.note-card h3 {
+  color: var(--text-dark);
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.meta-card p,
+.gallery-card p,
+.video-card p,
+.note-card p,
+.note-card li {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.placeholder-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.placeholder {
+  min-height: 160px;
+  border-radius: 18px;
+  border: 1px dashed rgba(147,133,191,0.32);
+  background: linear-gradient(135deg, rgba(147,133,191,0.08), rgba(255,255,255,0.58));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #786888;
+  font-size: 13px;
+  line-height: 1.7;
+  padding: 12px;
+}
+
+code {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(148,176,200,0.18);
+  color: #786888;
+  font-size: 12px;
+}
+
+.note-card ul {
+  margin-top: 10px;
+  padding-left: 18px;
+}
+
+.pager {
+  margin-top: 34px;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.pager a {
+  flex: 1;
+  padding: 16px 20px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.84);
+  text-align: center;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: all .25s ease;
+}
+
+.pager a:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.96);
+}
+
+footer {
+  text-align: center;
+  padding: 24px 24px 40px;
+  color: var(--text-soft);
+  font-size: 13px;
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .meta-grid,
+  .detail-grid,
+  .placeholder-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 6px;
+  }
+
+  .nav a {
+    padding: 8px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .wrap {
+    width: min(100%, calc(100% - 28px));
+    padding: 84px 0 40px;
+  }
+
+  .cover {
+    min-height: 320px;
+  }
+
+  .pager {
+    flex-direction: column;
+  }
+
+  .prev-arm-hint {
+    top: 124px;
+    font-size: 11px;
+    padding: 7px 12px 7px 30px;
+  }
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="../../index.html">首页</a>
+  <a href="../../about/index.html">项目介绍</a>
+  <a href="../../research/index.html">问题研究</a>
+  <a href="../../design/index.html">核心设计</a>
+  <a href="../index.html" class="active">章节导览</a>
+  <a href="../../process/index.html">制作过程</a>
+  <a href="../../thanks/index.html">感谢</a>
+</nav>
+<div class="prev-arm-hint" aria-hidden="true"></div>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="cover">
+      <img src="../../images/剪贴板图片.jpg" alt="第三章 皮埃尔的梦想">
+    </div>
+
+    <div class="hero-card">
+      <div class="eyebrow">CHAPTER 03</div>
+      <h1>皮埃尔的梦想</h1>
+      <p class="lead">
+        第三章是整部作品最复杂、最有层次的一段。它不再只是安全地开始沟通，而是通过梦境世界的转场、
+        场景切换和信息分工，把协作推进到真正需要判断、共创和共同决策的深度层级。
+      </p>
+      <div class="tag-row">
+        <span>梦境空间</span>
+        <span>森林 / 城堡 / 太空</span>
+        <span>深度协同</span>
+        <span>关系深化</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">本章作用</h2>
+    <div class="meta-grid">
+      <div class="meta-card">
+        <h3>核心情绪</h3>
+        <p>神秘、漂浮、不稳定，同时带有理想投射。这一章让用户进入更内在、更复杂的情绪层面。</p>
+      </div>
+      <div class="meta-card">
+        <h3>核心交互</h3>
+        <p>分工解谜、协同判断、情境切换与共创决策。这里开始要求用户持续而真实地互相回应。</p>
+      </div>
+      <div class="meta-card">
+        <h3>叙事功能</h3>
+        <p>作为关系深化章节，它把“能配合”推进为“能理解”，也是全作协作密度最强的一段。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">素材展示区</h2>
+    <div class="detail-grid">
+      <div class="gallery-card">
+        <h3>图片素材</h3>
+        <p>这里适合放森林、城堡、太空三个梦境空间的截图，解谜分镜图和视觉层级草图。</p>
+        <div class="placeholder-grid">
+          <div class="placeholder">建议放置<br>森林场景截图</div>
+          <div class="placeholder">建议放置<br>城堡空间画面</div>
+          <div class="placeholder">建议放置<br>太空梦境构图</div>
+        </div>
+        <code>chapter-3/images/</code>
+      </div>
+
+      <div class="video-card">
+        <h3>视频素材</h3>
+        <p>这里适合放梦境段落切换演示、协同解谜录像、分支选择互动片段和完整章节短片。</p>
+        <div class="placeholder">建议放置第三章演示视频<br>或梦境解谜录屏</div>
+        <code>chapter-3/videos/</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="note-card">
+      <h3>后续可补内容</h3>
+      <p>第三章最适合承载最多素材，因为它既有视觉层次也有交互层次。后续你可以在这一页继续补这些内容：</p>
+      <ul>
+        <li>三个梦境子场景的视觉差异说明</li>
+        <li>协同解谜流程图、角色分工图和共创机制草图</li>
+        <li>皮埃尔心理状态如何映射到空间设计的说明文本</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="pager">
+    <a href="../chapter-2/index.html">← 上一章：萨沙的家</a>
+    <a href="../chapter-4/index.html">下一章：太空之梦 →</a>
+  </div>
+</div>
+
+<footer>
+  Within · 协作同行 ｜ 第三章页面
+</footer>
+<script>
+(function () {
+  var prevTarget = '../chapter-2/index.html';
+  var nextTarget = '../chapter-4/index.html';
+  var wrap = document.querySelector('.wrap');
+  var navigating = false;
+  var prevArmed = false;
+  var threshold = 4;
+  var delay = 420;
+  var pullOpenDistance = 240;
+  var armedLockUntil = 0;
+  var armedGraceMs = 960;
+  var armedConfirmReadyAt = 0;
+  var armedConfirmCooldownMs = 360;
+
+  function applyPull(distance) {
+    if (wrap) {
+      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
+    }
+  }
+
+  function clearPrevArm() {
+    prevArmed = false;
+    armedLockUntil = 0;
+    armedConfirmReadyAt = 0;
+    document.body.classList.remove('is-prev-armed');
+  }
+
+  function openPrevPull() {
+    if (!prevTarget || navigating) return;
+    var now = Date.now();
+    prevArmed = true;
+    armedLockUntil = now + armedGraceMs;
+    armedConfirmReadyAt = now + armedConfirmCooldownMs;
+    document.body.classList.add('is-prev-armed');
+    applyPull(pullOpenDistance);
+  }
+
+  function closePrevPull() {
+    clearPrevArm();
+    applyPull(0);
+  }
+
+  function go(target, direction) {
+    if (!target || navigating) return;
+    navigating = true;
+    closePrevPull();
+    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
+    window.setTimeout(function () {
+      window.location.href = target;
+    }, delay);
+  }
+
+  window.addEventListener('wheel', function (event) {
+    if (navigating) {
+      event.preventDefault();
+      return;
+    }
+
+    var doc = document.documentElement;
+    var atTop = window.scrollY <= threshold;
+    var atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - threshold;
+
+    if (prevArmed) {
+      event.preventDefault();
+      var now = Date.now();
+      if (event.deltaY < -8 && prevTarget) {
+        if (now < armedConfirmReadyAt) {
+          return;
+        }
+        go(prevTarget, 'prev');
+        return;
+      }
+      if (event.deltaY > 10 && now >= armedLockUntil) {
+        closePrevPull();
+      }
+      return;
+    }
+
+    if (event.deltaY < -12 && atTop && prevTarget) {
+      event.preventDefault();
+      openPrevPull();
+      return;
+    }
+
+    if (event.deltaY > 12 && atBottom && nextTarget) {
+      event.preventDefault();
+      closePrevPull();
+      go(nextTarget, 'next');
+      return;
+    }
+
+    if (!atTop || event.deltaY > 6) {
+      closePrevPull();
+    }
+  }, { passive: false });
+
+  window.addEventListener('scroll', function () {
+    if (prevArmed) {
+      if (window.scrollY > threshold + 2) {
+        window.scrollTo(0, 0);
+      }
+      return;
+    }
+
+    if (window.scrollY > threshold + 2) {
+      closePrevPull();
+    }
+  }, { passive: true });})();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

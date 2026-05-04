@@ -1,226 +1,404 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Within · 协作同行</title>
-<style>
-/* ========== Within 首页 —— 纯氛围开场 ========== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow-y: scroll; scrollbar-gutter: stable; }
+
+:root {
+  --text-main: #465564;
+  --text-dark: #243241;
+  --text-soft: #7d8f9f;
+  --cyan: #8ab4c4;
+  --cyan-deep: #5b9aa0;
+  --blue: #6b8fa3;
+  --border: rgba(112,136,160,0.14);
+}
+
 body {
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: #4a5560;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
-    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
-    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
-  overflow-x: hidden;
   min-height: 100vh;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 14% 14%, rgba(138,180,196,0.12), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(196,168,130,0.10), transparent 30%),
+    linear-gradient(180deg, #f6f8fb 0%, #eef2f6 46%, #edf1f4 100%);
+  overflow-x: hidden;
 }
 
-/* 雾感噪点 */
 body::before {
-  content: ""; position: fixed; inset: 0;
-  pointer-events: none; z-index: 0;
-  opacity: 0.03;
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
   background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
-  background-size: 72px 72px, 96px 96px;
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.9) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.55) 49%, transparent 50%);
+  background-size: 92px 92px, 126px 126px;
 }
 
-/* 漂浮几何切片 */
-.geo {
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 0; overflow: hidden;
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255,255,255,0.72), rgba(241,246,249,0.96) 58%, rgba(238,242,246,1) 100%);
+  transition: opacity .48s ease;
 }
-.geo div {
-  position: absolute;
-  border: 1px solid rgba(132,163,189,0.14);
-  background: linear-gradient(145deg, rgba(255,255,255,0.40), rgba(177,201,223,0.05));
-  backdrop-filter: blur(8px);
-}
-.g1 { width: 220px; height: 180px; top: 8%; left: -40px; clip-path: polygon(18% 0, 100% 10%, 80% 100%, 0 82%); opacity: .6; }
-.g2 { width: 260px; height: 220px; top: 22%; right: -60px; clip-path: polygon(8% 10%, 100% 0, 92% 78%, 24% 100%); opacity: .5; }
-.g3 { width: 180px; height: 160px; bottom: 18%; left: 6%; clip-path: polygon(0 22%, 70% 0, 100% 86%, 18% 100%); opacity: .4; }
-.g4 { width: 200px; height: 170px; bottom: 8%; right: 8%; clip-path: polygon(14% 0, 100% 14%, 82% 100%, 0 84%); opacity: .4; }
 
-/* 导航 */
+body.is-leaving::after {
+  opacity: 1;
+}
+
 .nav {
-  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
-  display: flex; justify-content: center; gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
   padding: 16px;
   backdrop-filter: blur(16px);
-  background: rgba(245,247,250,0.65);
-  border-bottom: 1px solid rgba(112,136,160,0.16);
+  background: rgba(246,248,251,0.68);
+  border-bottom: 1px solid var(--border);
 }
+
 .nav a {
-  padding: 10px 20px; border-radius: 999px;
-  color: #8899a8; font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: var(--text-soft);
+  font-size: 14px;
+  text-decoration: none;
   transition: all .25s ease;
 }
-.nav a:hover, .nav a.active {
-  color: #4a5560;
-  background: rgba(138,180,196,0.14);
+
+.nav a:hover,
+.nav a.active {
+  color: var(--text-main);
+  background: rgba(138,180,196,0.12);
 }
 
-/* 首页主视觉 */
-.hero {
+.nav,
+.logo,
+.poly {
+  transition: opacity .42s ease, transform .48s ease, filter .48s ease;
+}
+
+body.is-leaving .nav {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.cover {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 104px 24px 40px;
+}
+
+.poly-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow-x: hidden;
+}
+
+.poly {
+  position: absolute;
+  border: 1px solid rgba(124, 151, 173, 0.16);
+  background: linear-gradient(145deg, rgba(255,255,255,0.28), rgba(138,180,196,0.08));
+  box-shadow: 0 18px 42px rgba(95, 118, 138, 0.05);
+}
+
+body.is-leaving .poly {
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+}
+
+.poly-1 {
+  top: 15%;
+  left: 8%;
+  width: 220px;
+  height: 180px;
+  clip-path: polygon(10% 18%, 74% 0, 100% 34%, 84% 100%, 0 78%);
+  transform: rotate(-10deg);
+}
+
+.poly-2 {
+  top: 18%;
+  right: 12%;
+  width: 280px;
+  height: 220px;
+  clip-path: polygon(20% 0, 100% 22%, 84% 100%, 6% 86%, 0 28%);
+  transform: rotate(8deg);
+}
+
+.poly-3 {
+  bottom: 16%;
+  left: 14%;
+  width: 240px;
+  height: 190px;
+  clip-path: polygon(0 20%, 78% 0, 100% 76%, 26% 100%);
+  transform: rotate(12deg);
+}
+
+.poly-4 {
+  bottom: 14%;
+  right: 10%;
+  width: 320px;
+  height: 240px;
+  clip-path: polygon(18% 0, 100% 18%, 88% 100%, 0 82%, 4% 26%);
+  transform: rotate(-7deg);
+}
+
+.poly-5 {
+  top: 44%;
+  left: 18%;
+  width: 140px;
+  height: 120px;
+  clip-path: polygon(16% 0, 100% 28%, 68% 100%, 0 74%);
+  background: linear-gradient(145deg, rgba(138,180,196,0.16), rgba(255,255,255,0.08));
+  opacity: 0.9;
+}
+
+.poly-6 {
+  top: 54%;
+  right: 22%;
+  width: 160px;
+  height: 140px;
+  clip-path: polygon(0 22%, 70% 0, 100% 68%, 18% 100%);
+  background: linear-gradient(145deg, rgba(196,168,130,0.12), rgba(255,255,255,0.08));
+  opacity: 0.78;
+}
+
+.logo-shell {
+  position: relative;
+  width: auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+}
+
+.logo {
+  position: relative;
+  z-index: 1;
   text-align: center;
-  position: relative; z-index: 1;
-  padding: 100px 24px 80px;
 }
 
-.hero-poster {
-  max-width: 420px; width: 100%;
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 24px 80px rgba(99,124,148,0.18);
-  border: 1px solid rgba(148,176,200,0.22);
-  background: rgba(255,255,255,0.5);
-  margin-bottom: 40px;
-}
-.hero-poster img { width: 100%; height: auto; display: block; }
-
-.hero h1 {
-  font-size: clamp(64px, 10vw, 120px);
-  line-height: 0.95; letter-spacing: .06em;
-  font-weight: 700; color: #5a7a8c;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-}
-.hero .cn-title {
-  font-size: clamp(28px, 4vw, 52px);
-  color: #6b8fa3; letter-spacing: .14em;
-  margin-top: 14px; font-weight: 500;
-}
-.hero .cn-title span { color: #8ab4c4; }
-
-.hero .desc {
-  font-size: 16px; line-height: 1.9;
-  color: #8899a8; max-width: 480px;
-  margin-top: 24px;
+body.is-leaving .logo {
+  opacity: 0;
+  transform: translateY(-18px) scale(0.985);
+  filter: blur(3px);
 }
 
-.hero .enter {
-  margin-top: 36px;
-  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+.logo-image {
+  display: block;
+  width: min(760px, 78vw);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 42px rgba(58, 76, 96, 0.18));
 }
-.hero .enter a {
-  padding: 14px 32px; border-radius: 999px;
-  font-size: 15px; letter-spacing: .06em;
-  transition: all .3s ease;
-}
-.hero .enter .btn-main {
-  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
-  color: #fff;
-  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
-}
-.hero .enter .btn-main:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
-}
-.hero .enter .btn-sub {
-  background: rgba(255,255,255,0.72);
-  border: 1px solid rgba(148,176,200,0.25);
-  color: #6b8fa3;
-}
-.hero .enter .btn-sub:hover {
-  background: rgba(255,255,255,0.90);
-  border-color: rgba(148,176,200,0.40);
+
+.logo-caption {
+  margin-top: 18px;
+  color: rgba(108, 130, 146, 0.88);
+  font-size: 13px;
+  letter-spacing: .12em;
+  line-height: 1.9;
 }
 
 .scroll-hint {
-  position: absolute; bottom: 28px; left: 50%;
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
   transform: translateX(-50%);
-  color: #8899a8; font-size: 12px;
-  letter-spacing: .15em;
-  animation: bounce 2.5s infinite;
-  pointer-events: none;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); opacity: .35; }
-  50% { transform: translateX(-50%) translateY(8px); opacity: .7; }
+  z-index: 3;
+  width: 26px;
+  height: 26px;
+  text-decoration: none;
+  transition: transform .25s ease, opacity .25s ease;
 }
 
-footer {
-  text-align: center; padding: 24px;
-  color: #8899a8; font-size: 13px;
-  position: relative; z-index: 1;
+.scroll-hint::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-right: 1.5px solid rgba(91,154,160,0.88);
+  border-bottom: 1.5px solid rgba(91,154,160,0.88);
+  transform: translate(-50%, -60%) rotate(45deg);
+  animation: hintArrow 2.2s ease-in-out infinite;
 }
 
-@media (max-width: 700px) {
-  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
-  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
-  .hero { padding: 90px 16px 60px; }
-  .hero-poster { max-width: 300px; }
-  .hero h1 { font-size: 56px; }
-  .hero .cn-title { font-size: 26px; }
+.scroll-hint:hover {
+  transform: translateX(-50%) translateY(-2px);
+  opacity: 0.85;
+}
+
+body.is-leaving .scroll-hint {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+}
+
+@keyframes hintArrow {
+  0% {
+    opacity: 0.28;
+    transform: translate(-50%, -72%) rotate(45deg);
+  }
+  35% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.9;
+    transform: translate(-50%, -42%) rotate(45deg);
+  }
+  100% {
+    opacity: 0.28;
+    transform: translate(-50%, -28%) rotate(45deg);
+  }
+}
+
+@media (max-width: 860px) {
+  .nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 6px;
+  }
+
+  .nav a {
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .cover {
+    padding: 84px 14px 20px;
+  }
+
+  .logo-shell {
+    width: 100%;
+  }
+
+  .poly {
+    opacity: 0.7;
+  }
+
+  .poly-1,
+  .poly-2,
+  .poly-3,
+  .poly-4 {
+    width: 160px;
+    height: 130px;
+  }
+
+  .poly-5,
+  .poly-6 {
+    width: 100px;
+    height: 86px;
+  }
+
+  .scroll-hint {
+    bottom: 22px;
+  }
 }
 </style>
 </head>
 <body>
-<div class="geo-bg">
-  <svg class="tri-1" width="160" height="140" viewBox="0 0 160 140">
-    <polygon points="0,30 80,0 100,90 20,100" fill="none" stroke="#5b9aa0" stroke-width="1.2" opacity="0.4"/>
-    <polygon points="30,10 50,5 55,30 20,35" fill="#5b9aa0" opacity="0.06"/>
-  </svg>
-  <svg class="tri-2" width="200" height="180" viewBox="0 0 200 180">
-    <polygon points="20,0 140,10 180,70 120,150 0,120" fill="none" stroke="#9385bf" stroke-width="1" opacity="0.35"/>
-    <polygon points="60,40 100,20 110,60" fill="#9385bf" opacity="0.05"/>
-  </svg>
-  <svg class="tri-3" width="140" height="130" viewBox="0 0 140 130">
-    <polygon points="10,10 80,0 130,50 90,110 0,80" fill="none" stroke="#c4a882" stroke-width="1" opacity="0.3"/>
-    <polygon points="40,30 60,15 75,45" fill="#c4a882" opacity="0.05"/>
-  </svg>
-  <svg class="tri-4" width="180" height="160" viewBox="0 0 180 160">
-    <polygon points="0,40 60,0 150,20 170,100 80,120" fill="none" stroke="#6b8399" stroke-width="1.2" opacity="0.3"/>
-    <polygon points="80,20 120,10 130,60" fill="#6b8399" opacity="0.05"/>
-  </svg>
-</div>
-
-
-<div class="geo">
-  <div class="g1"></div><div class="g2"></div><div class="g3"></div><div class="g4"></div>
-</div>
-
 <nav class="nav">
   <a href="index.html" class="active">首页</a>
   <a href="about/index.html">项目介绍</a>
+  <a href="research/index.html">问题研究</a>
+  <a href="design/index.html">核心设计</a>
   <a href="chapters/index.html">章节导览</a>
   <a href="process/index.html">制作过程</a>
   <a href="thanks/index.html">感谢</a>
 </nav>
 
-<div class="hero">
-  <!-- 这里换首页海报图 —— 把 src 改成你的海报文件名 -->
-  <div class="hero-poster">
-    <img src="images/剪贴板图片.jpg" alt="Within 主视觉海报" />
+<main class="cover">
+  <div class="poly-bg" aria-hidden="true">
+    <div class="poly poly-1"></div>
+    <div class="poly poly-2"></div>
+    <div class="poly poly-3"></div>
+    <div class="poly poly-4"></div>
+    <div class="poly poly-5"></div>
+    <div class="poly poly-6"></div>
   </div>
-
-  <!-- 这里改首页标题 -->
-  <h1>Within</h1>
-  <div class="cn-title">协作同<span>行</span></div>
-  <p class="desc">
-    一段关于成长与抉择的旅程<br>
-    在孤独与迷茫中寻找方向<br>
-    在协作与理解中看见希望
-  </p>
-
-  <div class="enter">
-    <a href="about/index.html" class="btn-main">进入作品</a>
-    <a href="chapters/index.html" class="btn-sub">探索章节</a>
+  <div class="logo-shell" aria-label="Within 协作同行">
+    <div class="logo">
+      <img class="logo-image" src="title.png" alt="Within 协作同行">
+      <div class="logo-caption">具身认知视角下大学生社交数字化设计研究</div>
+    </div>
   </div>
+  <a class="scroll-hint" href="about/index.html" aria-label="向下进入项目介绍"></a>
+</main>
+<script>
+(function () {
+  var target = 'about/index.html';
+  var navigating = false;
+  var touchStartY = null;
+  var delay = 430;
+  var hint = document.querySelector('.scroll-hint');
 
-  <div class="scroll-hint">↓ 向下浏览</div>
-</div>
+  function goNext(event) {
+    if (navigating) return;
+    if (event) event.preventDefault();
+    navigating = true;
+    document.body.classList.add('is-leaving');
+    window.setTimeout(function () {
+      window.location.href = target;
+    }, delay);
+  }
 
-<footer>
-  Within · 协作同行 ｜ VR 互动体验作品
-</footer>
+  window.addEventListener('wheel', function (event) {
+    if (event.deltaY > 8) {
+      goNext(event);
+    }
+  }, { passive: true });
 
+  window.addEventListener('keydown', function (event) {
+    if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
+      goNext(event);
+    }
+  });
+
+  window.addEventListener('touchstart', function (event) {
+    if (!event.touches || !event.touches.length) return;
+    touchStartY = event.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchend', function (event) {
+    if (touchStartY === null || !event.changedTouches || !event.changedTouches.length) return;
+    var deltaY = event.changedTouches[0].clientY - touchStartY;
+    touchStartY = null;
+    if (deltaY < -24) {
+      goNext();
+    }
+  }, { passive: true });
+
+  if (hint) {
+    hint.addEventListener('click', goNext);
+  }
+})();
+</script>
 </body>
 </html>
+
+
+

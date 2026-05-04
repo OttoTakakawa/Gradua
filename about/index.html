@@ -1,259 +1,1057 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>项目介绍 — Within · 协作同行</title>
-<style>
-/* ========== Within 项目介绍页 ========== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
+
+:root {
+  --text-main: #465564;
+  --text-dark: #243241;
+  --text-soft: #7d8f9f;
+  --cyan: #8ab4c4;
+  --cyan-deep: #5b9aa0;
+  --blue: #6b8fa3;
+  --purple: #9385bf;
+  --warm: #c4a882;
+  --border: rgba(112,136,160,0.14);
+  --panel: rgba(255,255,255,0.74);
+  --panel-soft: rgba(255,255,255,0.58);
+  --shadow: 0 22px 70px rgba(73, 97, 122, 0.10);
+  --shadow-hover: 0 28px 82px rgba(73, 97, 122, 0.14);
+}
+
 body {
   font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: #4a5560;
+  color: var(--text-main);
   background:
-    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
-    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
-    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
+    radial-gradient(circle at 14% 14%, rgba(138,180,196,0.12), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(196,168,130,0.10), transparent 30%),
+    linear-gradient(180deg, #f6f8fb 0%, #eef2f6 46%, #edf1f4 100%);
   overflow-x: hidden;
+  overflow-y: clip;
 }
+
 body::before {
-  content: ""; position: fixed; inset: 0;
-  pointer-events: none; z-index: 0; opacity: 0.03;
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
   background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
-  background-size: 72px 72px, 96px 96px;
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.9) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.55) 49%, transparent 50%);
+  background-size: 92px 92px, 126px 126px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 45;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(246,248,251,0.14), rgba(238,242,246,0.94) 68%, rgba(237,241,244,1));
+  transition: opacity .44s ease;
+}
+
+body.is-leaving-prev::after,
+body.is-leaving-next::after {
+  opacity: 1;
 }
 
 .nav {
-  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
-  display: flex; justify-content: center; gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
   padding: 16px;
   backdrop-filter: blur(16px);
-  background: rgba(245,247,250,0.65);
-  border-bottom: 1px solid rgba(112,136,160,0.16);
+  background: rgba(246,248,251,0.68);
+  border-bottom: 1px solid var(--border);
 }
+
 .nav a {
-  padding: 10px 20px; border-radius: 999px;
-  color: #8899a8; font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: var(--text-soft);
+  font-size: 14px;
+  text-decoration: none;
   transition: all .25s ease;
 }
-.nav a:hover, .nav a.active {
-  color: #4a5560;
-  background: rgba(138,180,196,0.14);
+
+.nav a:hover,
+.nav a.active {
+  color: var(--text-main);
+  background: rgba(138,180,196,0.12);
+}
+
+.nav,
+.wrap,
+footer {
+  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
+}
+
+body.is-leaving-next .nav,
+body.is-leaving-next .wrap,
+body.is-leaving-next footer {
+  opacity: 0;
+  transform: translateY(-24px);
+  filter: blur(3px);
+}
+
+body.is-leaving-prev .nav,
+body.is-leaving-prev .wrap,
+body.is-leaving-prev footer {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(3px);
+}
+
+.prev-arm-hint {
+  position: fixed;
+  left: 50%;
+  top: 156px;
+  width: auto;
+  min-height: 24px;
+  padding: 8px 14px 8px 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,176,200,0.24);
+  background: rgba(245,247,250,0.86);
+  backdrop-filter: blur(8px);
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 36;
+  transition: opacity .24s ease, transform .24s ease, background .24s ease;
+  color: #5a7a8c;
+  font-size: 12px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.prev-arm-hint::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-left: 1.5px solid rgba(91,154,160,0.9);
+  border-top: 1.5px solid rgba(91,154,160,0.9);
+  transform: translateY(-28%) rotate(45deg);
+}
+
+.prev-arm-hint::after {
+  content: "滚轮上滑，回到前一页";
+}
+
+body.is-prev-armed .prev-arm-hint {
+  opacity: 0.92;
+  transform: translateX(-50%) translateY(0);
 }
 
 .wrap {
-  position: relative; z-index: 1;
-  width: min(1100px, calc(100% - 36px));
+  position: relative;
+  z-index: 1;
+  width: min(1520px, calc(100% - 56px));
   margin: 0 auto;
-  padding: 100px 0 60px;
+  padding: 104px 0 72px;
 }
 
-.eyebrow {
-  color: #6b8fa3; letter-spacing: .18em;
-  font-size: 13px; margin-bottom: 14px;
-  text-transform: uppercase;
-}
-h2 {
-  font-size: 38px; color: #2c3a4a;
-  margin-bottom: 16px; line-height: 1.2;
-}
-.lead {
-  font-size: 17px; line-height: 1.9;
-  color: #8899a8; max-width: 680px;
-  margin-bottom: 40px;
-}
-
-.card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
+.hero {
+  position: relative;
+  min-height: 760px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 28px;
+  padding: 56px;
   border: 1px solid rgba(148,176,200,0.20);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background:
+    linear-gradient(90deg, rgba(241,246,249,0.96) 0%, rgba(241,246,249,0.84) 42%, rgba(241,246,249,0.46) 70%, rgba(241,246,249,0.12) 100%),
+    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(138,180,196,0.03)),
+    url("../images/剪贴板图片.jpg") center 28% / cover no-repeat;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(255,255,255,0.42);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -12%;
+  top: -6%;
+  width: 52%;
+  height: 120%;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0)),
+    linear-gradient(135deg, transparent 0 47%, rgba(255,255,255,0.14) 48%, transparent 49%);
+  background-size: auto, 100px 100px;
+  transform: skewX(-12deg);
+  pointer-events: none;
+}
+
+.hero-copy,
+.hero-side {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 760px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  padding: 9px 16px;
+  border-radius: 10px;
+  background: rgba(138,180,196,0.12);
+  border: 1px solid rgba(138,180,196,0.18);
+  color: var(--cyan-deep);
+  font-size: 12px;
+  letter-spacing: .16em;
+}
+
+.hero h1 {
+  margin-top: 22px;
+  font-size: clamp(82px, 10vw, 146px);
+  line-height: .9;
+  letter-spacing: .04em;
+  color: #59798b;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.hero .cn-title {
+  margin-top: 18px;
+  font-size: clamp(32px, 3.6vw, 56px);
+  color: var(--blue);
+  letter-spacing: .22em;
+  font-weight: 500;
+}
+
+.hero .cn-title span { color: var(--cyan); }
+
+.hero .desc {
+  max-width: 660px;
+  margin-top: 28px;
+  color: #6c8292;
+  font-size: 17px;
+  line-height: 2;
+}
+
+.hero-meta {
+  margin-top: 18px;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 2;
+}
+
+.hero-actions {
+  margin-top: 34px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.hero-panel,
+.hero-metric,
+.card,
+.chapter-card,
+.summary-box,
+.entry-card {
+  border: 1px solid rgba(148,176,200,0.18);
+  box-shadow: var(--shadow);
+}
+
+.hero-panel,
+.hero-metric,
+.card,
+.chapter-card,
+.summary-box,
+.entry-card {
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.52));
+}
+
+.hero-panel {
+  padding: 26px;
+}
+
+.panel-kicker {
+  color: var(--cyan-deep);
+  font-size: 12px;
+  letter-spacing: .18em;
+}
+
+.panel-title {
+  margin-top: 10px;
+  color: var(--text-dark);
+  font-size: 28px;
+  line-height: 1.25;
+}
+
+.panel-copy {
+  margin-top: 12px;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.panel-lines {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.panel-line {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(148,176,200,0.16);
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+.stat-band {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hero-metric {
+  padding: 20px;
+}
+
+.hero-metric strong {
+  display: block;
+  color: var(--cyan-deep);
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.hero-metric span {
+  display: block;
+  margin-top: 8px;
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 15px;
+  letter-spacing: .04em;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
+  box-shadow: 0 8px 28px rgba(107,143,163,0.22);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(107,143,163,0.30);
+}
+
+.btn-secondary {
+  color: var(--blue);
+  background: rgba(255,255,255,0.82);
+  border: 1px solid rgba(148,176,200,0.22);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.94);
+}
+
+.section {
+  margin-top: 64px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.section-head h2 {
+  font-size: 30px;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.section-head p {
+  max-width: 920px;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.grid-2,
+.grid-3,
+.grid-4,
+.summary-grid {
+  display: grid;
+  gap: 22px;
+}
+
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.card,
+.chapter-card,
+.summary-box,
+.entry-card {
   padding: 28px;
-  position: relative; overflow: hidden;
+  position: relative;
+  overflow: hidden;
   transition: transform .3s, box-shadow .3s;
 }
-.card:hover {
+
+.card:hover,
+.chapter-card:hover,
+.summary-box:hover,
+.entry-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 24px 64px rgba(99,124,148,0.14);
+  box-shadow: var(--shadow-hover);
 }
-.card::before {
-  content: ""; position: absolute; top: 0; right: 0;
-  width: 120px; height: 120px;
+
+.card::before,
+.chapter-card::before,
+.summary-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
   background: linear-gradient(135deg, rgba(138,180,196,0.15), transparent 70%);
   clip-path: polygon(0 0, 100% 0, 100% 100%);
   pointer-events: none;
 }
-.card h3 {
-  font-size: 20px; color: #2c3a4a;
+
+.card h3,
+.chapter-card h3,
+.summary-box h3,
+.entry-card h3 {
+  font-size: 20px;
+  color: var(--text-dark);
   margin-bottom: 12px;
 }
-.card p {
-  font-size: 15px; line-height: 1.95;
-  color: #8899a8;
+
+.card p,
+.chapter-card p,
+.summary-box p,
+.entry-card p {
+  font-size: 15px;
+  line-height: 1.95;
+  color: var(--text-soft);
 }
 
-.grid-2 {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-}
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
-}
-
-.feature-list { display: grid; gap: 10px; margin-top: 14px; }
-.feature-item {
-  padding: 12px 16px;
-  border: 1px solid rgba(138,164,188,0.13);
-  background: rgba(255,255,255,0.55);
-  border-radius: 14px;
-  color: #4a5560;
-  line-height: 1.7;
-  font-size: 14px;
-}
+.accent-cyan { border-top: 3px solid var(--cyan-deep); }
+.accent-purple { border-top: 3px solid var(--purple); }
+.accent-warm { border-top: 3px solid var(--warm); }
 
 .tag-list {
-  display: flex; flex-wrap: wrap; gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 16px;
 }
+
 .tag {
-  padding: 6px 14px; border-radius: 999px;
+  padding: 6px 14px;
+  border-radius: 999px;
   font-size: 13px;
   background: rgba(138,180,196,0.10);
   color: #5a7a8c;
   border: 1px solid rgba(148,176,200,0.15);
 }
 
-.poster-showcase {
-  max-width: 360px; margin: 0 auto 40px;
-  border-radius: 24px; overflow: hidden;
-  box-shadow: 0 20px 60px rgba(99,124,148,0.12);
-  border: 1px solid rgba(148,176,200,0.20);
+.media-strip {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
-.poster-showcase img { width: 100%; height: auto; display: block; }
 
-.next-page {
-  text-align: center; margin-top: 50px;
+.media-box {
+  padding: 22px 18px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.74);
+  border: 1px solid rgba(148,176,200,0.16);
+  text-align: center;
+  color: var(--text-dark);
+  font-size: 14px;
+  line-height: 1.85;
+  box-shadow: 0 14px 42px rgba(99,124,148,0.08);
 }
-.next-page a {
-  display: inline-block;
-  padding: 14px 36px; border-radius: 999px;
-  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
-  color: #fff; font-size: 15px;
-  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
-  transition: all .3s ease;
+
+.media-box small {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-soft);
+  font-size: 12px;
 }
-.next-page a:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
+
+.chapter-card .chapter-num {
+  margin-bottom: 10px;
+  font-size: 12px;
+  letter-spacing: .18em;
+  color: var(--blue);
+}
+
+.chapter-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 18px;
+  color: var(--cyan-deep);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.stats-wide {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.stat-card {
+  padding: 24px 18px;
+  border: 1px solid rgba(148,176,200,0.18);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,255,255,0.56));
+  box-shadow: 0 14px 42px rgba(99,124,148,0.08);
+}
+
+.stat-num {
+  color: var(--cyan-deep);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.stat-desc {
+  margin-top: 8px;
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.entry-card {
+  text-decoration: none;
+  display: block;
+}
+
+.entry-card .entry-link {
+  margin-top: 18px;
+  color: var(--cyan-deep);
+  font-size: 14px;
 }
 
 footer {
-  text-align: center; padding: 24px;
-  color: #8899a8; font-size: 13px;
-  position: relative; z-index: 1;
+  text-align: center;
+  padding: 28px 24px 36px;
+  color: var(--text-soft);
+  font-size: 13px;
+  position: relative;
+  z-index: 1;
 }
 
-@media (max-width: 800px) {
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
-  h2 { font-size: 28px; }
-  .wrap { padding: 80px 0 40px; }
+@media (max-width: 1180px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 42px;
+  }
+
+  .grid-4,
+  .grid-3,
+  .grid-2,
+  .summary-grid,
+  .media-strip,
+  .stats-wide {
+    grid-template-columns: 1fr 1fr;
+  }
 }
-@media (max-width: 700px) {
-  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
-  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+
+@media (max-width: 860px) {
+  .nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    gap: 6px;
+  }
+
+  .nav a {
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .wrap {
+    width: min(100%, calc(100% - 28px));
+    padding: 84px 0 40px;
+  }
+
+  .hero {
+    padding: 26px;
+    border-radius: 22px;
+    background:
+      linear-gradient(180deg, rgba(241,246,249,0.94) 0%, rgba(241,246,249,0.84) 48%, rgba(241,246,249,0.72) 100%),
+      url("../images/剪贴板图片.jpg") center 24% / cover no-repeat;
+  }
+
+  .hero::after { display: none; }
+
+  .hero h1 { font-size: 64px; }
+  .hero .cn-title { font-size: 28px; }
+
+  .grid-4,
+  .grid-3,
+  .grid-2,
+  .summary-grid,
+  .media-strip,
+  .stats-wide,
+  .stat-band {
+    grid-template-columns: 1fr;
+  }
+
+  .section-head {
+    display: block;
+  }
+
+  .section-head h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  .prev-arm-hint {
+    top: 124px;
+    font-size: 11px;
+    padding: 7px 12px 7px 30px;
+  }
 }
 </style>
 </head>
 <body>
-
 <nav class="nav">
   <a href="../index.html">首页</a>
   <a href="../about/index.html" class="active">项目介绍</a>
+  <a href="../research/index.html">问题研究</a>
+  <a href="../design/index.html">核心设计</a>
   <a href="../chapters/index.html">章节导览</a>
   <a href="../process/index.html">制作过程</a>
   <a href="../thanks/index.html">感谢</a>
 </nav>
+<div class="prev-arm-hint" aria-hidden="true"></div>
 
 <div class="wrap">
-  <div class="eyebrow">PROJECT INTRO</div>
-  <h2>项目介绍</h2>
-  <p class="lead">
-    Within 是一款以"成长、共情与协作"为核心叙事主题的 VR 互动体验作品。
-  </p>
-
-  <!-- 这里换项目介绍页海报 —— 可以放海报局部或概念图 -->
-  <div class="poster-showcase">
-    <img src="../images/剪贴板图片.jpg" alt="Within 项目海报" />
-  </div>
-
-  <div class="grid-2" style="margin-bottom:22px;">
-    <div class="card">
-      <h3>作品简介</h3>
-      <p>
-        主角萨沙是一名临近毕业的大学生，在成长中面对自我迷茫、人际疏离与理想现实的冲突。
-        雨夜的城市中，萨沙的孤独感达到顶点——通过与好友康斯坦丁的通话，
-        开启了一段跨越时空的探索旅程。
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="hero-badge">MASTER PROJECT · XR / 互动叙事 / 社交设计</div>
+      <h1>Within</h1>
+      <div class="cn-title">协作同<span>行</span></div>
+      <p class="desc">
+        一项从具身认知视角出发的社交数字化设计研究，
+        也是一段关于成长、共情与协作的 VR 互动叙事旅程。
+        这不是单纯的头显体验，而是一个把虚拟协作延伸到现实交流中的跨媒介社交系统。
       </p>
-      <p style="margin-top:12px;">
-        萨沙进入昔日伙伴皮埃尔的记忆世界，在好友陪伴与协作中完成自我接纳与成长。
-      </p>
-    </div>
-    <div class="card">
-      <h3>核心主题</h3>
-      <div class="feature-list">
-        <div class="feature-item">🌱 <strong>成长</strong> —— 从孤独迷茫到自我接纳的内心蜕变</div>
-        <div class="feature-item">💞 <strong>共情</strong> —— 走进他人记忆，理解不同的生命经验</div>
-        <div class="feature-item">🤝 <strong>协作</strong> —— 跨媒介分工让沟通自然发生</div>
-        <div class="feature-item">🎨 <strong>Low-Poly 视觉</strong> —— 几何切面营造独特的情绪空间</div>
+      <div class="hero-meta">
+        研究方向：大学生社交数字化设计<br>
+        项目形式：XR 互动体验 / 跨媒介协作 / Low-Poly 叙事空间
+      </div>
+      <div class="hero-actions">
+        <a href="../research/index.html" class="btn btn-primary">进入问题研究</a>
+        <a href="../design/index.html" class="btn btn-secondary">进入核心设计</a>
+        <a href="../chapters/index.html" class="btn btn-secondary">进入章节导览</a>
       </div>
     </div>
-  </div>
 
-  <div class="grid-3">
-    <div class="card">
-      <h3>作品类型</h3>
-      <p>VR / 互动叙事体验 / 跨媒介协作装置</p>
-      <p style="margin-top:10px;font-size:14px;">基于 Unity + PICO 4 一体机开发，支持双人协作体验。</p>
-      <div class="tag-list">
-        <span class="tag">Unity</span>
-        <span class="tag">PICO 4</span>
-        <span class="tag">XR</span>
+    <div class="hero-side">
+      <div class="hero-panel">
+        <div class="panel-kicker">PROJECT FOCUS</div>
+        <div class="panel-title">不是展示一张海报，<br>而是进入一段协作旅程</div>
+        <div class="panel-copy">
+          项目试图回应大学生“线上活跃、线下疏离”的现实处境，
+          将 XR 从单纯沉浸内容转化为社交引导媒介，让沟通、配合与共同判断成为体验推进的必要条件。
+        </div>
+        <div class="panel-lines">
+          <div class="panel-line">具身认知作为方法切入</div>
+          <div class="panel-line">XR 作为社交引导媒介</div>
+          <div class="panel-line">协作从任务走向现实交流</div>
+        </div>
       </div>
-    </div>
-    <div class="card">
-      <h3>视觉风格</h3>
-      <p>采用 Low-Poly 低多边形美术风格，以简洁几何造型与大块面色彩营造独特视觉层次。</p>
-      <p style="margin-top:10px;font-size:14px;">弱化写实细节，强化场景的空间属性与情绪隐喻。</p>
-      <div class="tag-list">
-        <span class="tag">Low-Poly</span>
-        <span class="tag">冰蓝</span>
-        <span class="tag">暖米</span>
-      </div>
-    </div>
-    <div class="card">
-      <h3>项目亮点</h3>
-      <p>创新性地提出"跨媒介协作"机制，将 XR 设备定位为"社交引导媒介"。</p>
-      <p style="margin-top:10px;font-size:14px;">通过信息差设计，让线下沟通成为体验推进的必要环节。</p>
-      <div class="tag-list">
-        <span class="tag">跨媒介协作</span>
-        <span class="tag">社交引导</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="next-page">
-    <a href="../chapters/index.html">→ 探索章节</a>
-  </div>
+      <div class="stat-band">
+        <div class="hero-metric">
+          <strong>4</strong>
+          <span>叙事章节</span>
+        </div>
+        <div class="hero-metric">
+          <strong>3</strong>
+          <span>角色分工层级</span>
+        </div>
+        <div class="hero-metric">
+          <strong>20</strong>
+          <span>测试样本</span>
+        </div>
+        <div class="hero-metric">
+          <strong>XR</strong>
+          <span>具身交互媒介</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>研究锚点</h2>
+      <p>这一页集中说明项目为什么成立、依据什么展开，以及它最终试图带来的设计价值。</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card accent-cyan">
+        <h3>研究问题</h3>
+        <p>大学生群体存在明显的线下社交启动门槛。项目聚焦的不是抽象社交命题，而是现实社交中真实存在的启动压力、评价焦虑与联结浅层化问题。</p>
+      </div>
+      <div class="card accent-purple">
+        <h3>理论视角</h3>
+        <p>项目以具身认知为核心支撑，将社交理解为身体、环境与任务共同参与的过程，而不只是语言交换本身。</p>
+      </div>
+      <div class="card accent-warm">
+        <h3>作品定位</h3>
+        <p>Within 将 XR 重新定义为“社交引导媒介”，通过叙事空间、角色差异与信息分配，把用户从任务协作逐步引向现实中的自然交流。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>协作机制</h2>
+      <p>项目的核心不是让所有人看同一个画面，而是通过不同角色的职责差异与多媒介信息拆分，促使沟通在情境中自然发生。</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card accent-cyan">
+        <h3>探索者</h3>
+        <p>佩戴 XR 头显进入虚拟场景，以第一人称完成移动、抓取、绘画与探索，是具身体验的核心承载者。</p>
+        <div class="tag-list">
+          <span class="tag">XR头显</span>
+          <span class="tag">具身交互</span>
+          <span class="tag">场景探索</span>
+        </div>
+      </div>
+      <div class="card accent-purple">
+        <h3>引导者</h3>
+        <p>借助同步大屏和实体线索卡掌握更完整的信息框架，通过语言提示与策略判断为探索者提供协作支持。</p>
+        <div class="tag-list">
+          <span class="tag">同步大屏</span>
+          <span class="tag">实体道具</span>
+          <span class="tag">策略指引</span>
+        </div>
+      </div>
+      <div class="card accent-warm">
+        <h3>回应者</h3>
+        <p>围观参与者通过轻量互动方式参与线索补充与反馈，让项目具备更大的社交覆盖面和现场活力。</p>
+        <div class="tag-list">
+          <span class="tag">移动端</span>
+          <span class="tag">轻量参与</span>
+          <span class="tag">社交暖场</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-strip">
+      <div class="media-box">XR虚拟场景<small>沉浸情境构建</small></div>
+      <div class="media-box">同步显示大屏<small>共享全局信息</small></div>
+      <div class="media-box">实体协作卡片<small>线索分配与触发</small></div>
+      <div class="media-box">线下空间互动<small>面对面交流延伸</small></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>章节预览</h2>
+      <p>作品通过四段递进式叙事旅程，将情绪铺垫、协作强度与关系深化组织成完整体验结构。</p>
+    </div>
+
+    <div class="grid-4">
+      <div class="chapter-card">
+        <div class="chapter-num">CHAPTER 01</div>
+        <h3>孤独的城市</h3>
+        <p>以雨夜城市的疏离感作为开端，让用户先进入萨沙的内心状态，为后续协作的发生建立情绪底座。</p>
+        <a class="chapter-link" href="../chapters/chapter-1/index.html">进入第一章 →</a>
+      </div>
+      <div class="chapter-card">
+        <div class="chapter-num">CHAPTER 02</div>
+        <h3>萨沙的家</h3>
+        <p>在较为私密和安全的空间中启动轻量协作，让沟通第一次以低门槛、低风险的形式自然发生。</p>
+        <a class="chapter-link" href="../chapters/chapter-2/index.html">进入第二章 →</a>
+      </div>
+      <div class="chapter-card">
+        <div class="chapter-num">CHAPTER 03</div>
+        <h3>皮埃尔的梦想</h3>
+        <p>通过梦境化场景承载更复杂的共同决策与协同解谜，把伙伴关系从配合推进到理解与共创。</p>
+        <a class="chapter-link" href="../chapters/chapter-3/index.html">进入第三章 →</a>
+      </div>
+      <div class="chapter-card">
+        <div class="chapter-num">CHAPTER 04</div>
+        <h3>太空之梦</h3>
+        <p>在高强度协作中抵达终章，使用户在完成任务后自然过渡到现实层面的自由交流与情感沉淀。</p>
+        <a class="chapter-link" href="../chapters/chapter-4/index.html">进入第四章 →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>设计机会点</h2>
+      <p>在总体层面，Within 的设计价值最终落在降低启动压力、强化具身反馈与用风格承接情绪三个方向上。</p>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-box">
+        <h3>降低社交启动压力</h3>
+        <p>通过私密尺度、渐进式任务和低暴露度互动，把“主动社交”转化为“在情境中自然发生的协作”。</p>
+      </div>
+      <div class="summary-box">
+        <h3>强化具身反馈</h3>
+        <p>通过即时视觉反馈、多感官线索和环境联动，让用户在行动中获得明确的身体在场感与情境理解。</p>
+      </div>
+      <div class="summary-box">
+        <h3>用风格承接情绪</h3>
+        <p>采用 Low-Poly 与超现实倾向的风格化空间，使视觉表达与情绪引导、社交节奏和叙事推进形成统一结构。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>结果验证</h2>
+      <p>作品不只建立了理论与叙事框架，也通过实际测试验证了其在社交引导上的正向作用。</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>测试结论</h3>
+        <p>20 名大学生参与测试后，项目在“降低与陌生人沟通的尴尬感”“让任务中的交流变得自然”“促进体验结束后的继续交流”等维度上，都呈现出明确的正向反馈。</p>
+      </div>
+      <div class="card">
+        <h3>核心验证</h3>
+        <p>具身交互让用户更容易进入情境；渐进式协作让沟通不再突兀；跨媒介信息差则把现实交流变成了体验推进的必要条件。</p>
+      </div>
+    </div>
+
+    <div class="stats-wide">
+      <div class="stat-card">
+        <div class="stat-num">18/20</div>
+        <div class="stat-desc">缓解与陌生人交流的尴尬感</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">18/20</div>
+        <div class="stat-desc">愿意与本次搭档继续交流</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">75%</div>
+        <div class="stat-desc">认可任务让沟通更自然</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">70%</div>
+        <div class="stat-desc">对视觉风格给出正向评价</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>继续深入</h2>
+      <p>如果这一页负责建立项目全貌，那么后续页面就分别承接研究证据、设计落地、章节细看与过程记录。</p>
+    </div>
+
+    <div class="grid-3">
+      <a class="entry-card" href="../research/index.html">
+        <h3>问题研究</h3>
+        <p>查看大学生社交困境、问卷分析、图表证据与设计机会点。</p>
+        <div class="entry-link">进入页面 →</div>
+      </a>
+      <a class="entry-card" href="../design/index.html">
+        <h3>核心设计</h3>
+        <p>查看论文第四章中的方案定位、机制设计、技术实现与体验流程。</p>
+        <div class="entry-link">进入页面 →</div>
+      </a>
+      <a class="entry-card" href="../process/index.html">
+        <h3>制作过程</h3>
+        <p>查看从概念、视觉到 Unity / XR 落地的开发过程与过程素材。</p>
+        <div class="entry-link">进入页面 →</div>
+      </a>
+    </div>
+  </section>
 </div>
 
 <footer>
-  Within · 协作同行 ｜ <a href="../index.html" style="color:#8899a8;text-decoration:underline;">返回首页</a>
+  Within · 协作同行 ｜ 基于具身认知视角的大学生社交数字化设计研究
 </footer>
+<script>
+(function () {
+  var prevTarget = '../index.html';
+  var nextTarget = '../research/index.html';
+  var wrap = document.querySelector('.wrap');
+  var navigating = false;
+  var prevArmed = false;
+  var threshold = 4;
+  var delay = 420;
+  var pullOpenDistance = 240;
+  var armedLockUntil = 0;
+  var armedGraceMs = 960;
+  var armedConfirmReadyAt = 0;
+  var armedConfirmCooldownMs = 360;
 
+  function applyPull(distance) {
+    if (wrap) {
+      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
+    }
+  }
+
+  function clearPrevArm() {
+    prevArmed = false;
+    armedLockUntil = 0;
+    armedConfirmReadyAt = 0;
+    document.body.classList.remove('is-prev-armed');
+  }
+
+  function openPrevPull() {
+    if (!prevTarget || navigating) return;
+    var now = Date.now();
+    prevArmed = true;
+    armedLockUntil = now + armedGraceMs;
+    armedConfirmReadyAt = now + armedConfirmCooldownMs;
+    document.body.classList.add('is-prev-armed');
+    applyPull(pullOpenDistance);
+  }
+
+  function closePrevPull() {
+    clearPrevArm();
+    applyPull(0);
+  }
+
+  function go(target, direction) {
+    if (!target || navigating) return;
+    navigating = true;
+    closePrevPull();
+    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
+    window.setTimeout(function () {
+      window.location.href = target;
+    }, delay);
+  }
+
+  window.addEventListener('wheel', function (event) {
+    if (navigating) {
+      event.preventDefault();
+      return;
+    }
+
+    var doc = document.documentElement;
+    var atTop = window.scrollY <= threshold;
+    var atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - threshold;
+
+    if (prevArmed) {
+      event.preventDefault();
+      var now = Date.now();
+      if (event.deltaY < -8 && prevTarget) {
+        if (now < armedConfirmReadyAt) {
+          return;
+        }
+        go(prevTarget, 'prev');
+        return;
+      }
+      if (event.deltaY > 10 && now >= armedLockUntil) {
+        closePrevPull();
+      }
+      return;
+    }
+
+    if (event.deltaY < -12 && atTop && prevTarget) {
+      event.preventDefault();
+      openPrevPull();
+      return;
+    }
+
+    if (event.deltaY > 12 && atBottom && nextTarget) {
+      event.preventDefault();
+      closePrevPull();
+      go(nextTarget, 'next');
+      return;
+    }
+
+    if (!atTop || event.deltaY > 6) {
+      closePrevPull();
+    }
+  }, { passive: false });
+
+  window.addEventListener('scroll', function () {
+    if (prevArmed) {
+      if (window.scrollY > threshold + 2) {
+        window.scrollTo(0, 0);
+      }
+      return;
+    }
+
+    if (window.scrollY > threshold + 2) {
+      closePrevPull();
+    }
+  }, { passive: true });})();
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1673 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>问题研究 — Within · 协作同行</title>
+<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
+
+:root {
+  --text-main: #4a5560;
+  --text-dark: #2c3a4a;
+  --text-soft: #8899a8;
+  --blue: #6b8fa3;
+  --cyan: #8ab4c4;
+  --cyan-deep: #5b9aa0;
+  --purple: #9385bf;
+  --warm: #c4a882;
+  --border: rgba(112,136,160,0.16);
+  --shadow: 0 20px 60px rgba(99,124,148,0.10);
+  --shadow-hover: 0 24px 64px rgba(99,124,148,0.14);
+}
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
+    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
+    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
+  overflow-x: hidden;
+  overflow-y: clip;
+}
+body::before {
+  content: ""; position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: 0.03;
+  background-image:
+    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
+  background-size: 72px 72px, 96px 96px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 35;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(245,247,250,0.14), rgba(238,241,245,0.94) 68%, rgba(237,240,244,1));
+  transition: opacity .42s ease;
+}
+
+body.is-leaving-prev::after,
+body.is-leaving-next::after {
+  opacity: 1;
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
+  display: flex; justify-content: center; gap: 10px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  background: rgba(245,247,250,0.65);
+  border-bottom: 1px solid var(--border);
+}
+.nav a {
+  padding: 10px 18px; border-radius: 999px;
+  color: var(--text-soft); font-size: 14px;
+  text-decoration: none;
+  transition: all .25s ease;
+}
+.nav a:hover, .nav a.active {
+  color: var(--text-main);
+  background: rgba(138,180,196,0.14);
+}
+
+.nav,
+.wrap,
+footer {
+  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
+}
+
+body.is-leaving-next .nav,
+body.is-leaving-next .wrap,
+body.is-leaving-next footer {
+  opacity: 0;
+  transform: translateY(-24px);
+  filter: blur(3px);
+}
+
+body.is-leaving-prev .nav,
+body.is-leaving-prev .wrap,
+body.is-leaving-prev footer {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(3px);
+}
+
+.prev-arm-hint {
+  position: fixed;
+  left: 50%;
+  top: 156px;
+  width: auto;
+  min-height: 24px;
+  padding: 8px 14px 8px 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,176,200,0.24);
+  background: rgba(245,247,250,0.86);
+  backdrop-filter: blur(8px);
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 36;
+  transition: opacity .24s ease, transform .24s ease, background .24s ease;
+  color: #5a7a8c;
+  font-size: 12px;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.prev-arm-hint::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-left: 1.5px solid rgba(91,154,160,0.9);
+  border-top: 1.5px solid rgba(91,154,160,0.9);
+  transform: translateY(-28%) rotate(45deg);
+}
+
+.prev-arm-hint::after {
+  content: "滚轮上滑，回到前一页";
+}
+
+body.is-prev-armed .prev-arm-hint {
+  opacity: 0.92;
+  transform: translateX(-50%) translateY(0);
+}
+
+.wrap {
+  position: relative; z-index: 1;
+  width: min(1520px, calc(100% - 56px));
+  margin: 0 auto;
+  padding: 104px 0 72px;
+}
+
+.eyebrow {
+  color: var(--blue); letter-spacing: .18em;
+  font-size: 13px; margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: clamp(34px, 4vw, 50px);
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.lead {
+  font-size: 17px; line-height: 1.9;
+  color: var(--text-soft); max-width: 980px;
+  margin-bottom: 40px;
+}
+
+.hero-note,
+.card,
+.table-shell,
+.summary-box {
+  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
+  border: 1px solid rgba(148,176,200,0.20);
+  box-shadow: var(--shadow);
+}
+
+.hero-note {
+  padding: 26px 28px;
+  border-radius: 24px;
+  margin-bottom: 26px;
+}
+
+.hero-note p {
+  font-size: 15px;
+  line-height: 1.95;
+  color: var(--text-main);
+}
+
+.hero-note strong {
+  color: var(--cyan-deep);
+}
+
+.section {
+  margin-top: 58px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.section-head h2 {
+  font-size: 30px;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.section-head p {
+  max-width: 900px;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.card {
+  border-radius: 24px;
+  padding: 28px;
+  position: relative; overflow: hidden;
+  transition: transform .3s, box-shadow .3s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+.card::before {
+  content: ""; position: absolute; top: 0; right: 0;
+  width: 120px; height: 120px;
+  background: linear-gradient(135deg, rgba(138,180,196,0.15), transparent 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+.card h3 {
+  font-size: 20px; color: var(--text-dark);
+  margin-bottom: 12px;
+}
+.card p {
+  font-size: 15px; line-height: 1.95;
+  color: var(--text-soft);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.feature-list { display: grid; gap: 10px; margin-top: 16px; }
+.feature-item {
+  padding: 12px 16px;
+  border: 1px solid rgba(138,164,188,0.13);
+  background: rgba(255,255,255,0.55);
+  border-radius: 14px;
+  color: var(--text-main);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.tag-list {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 16px;
+}
+.tag {
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 13px;
+  background: rgba(138,180,196,0.10);
+  color: #5a7a8c;
+  border: 1px solid rgba(148,176,200,0.15);
+}
+
+.accent-cyan { border-top: 3px solid var(--cyan-deep); }
+.accent-purple { border-top: 3px solid var(--purple); }
+.accent-warm { border-top: 3px solid var(--warm); }
+
+.table-shell {
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+
+.table-head {
+  padding: 22px 24px 14px;
+  border-bottom: 1px solid rgba(148,176,200,0.14);
+}
+
+.table-head h3 {
+  font-size: 22px;
+  color: var(--text-dark);
+}
+
+.table-head p {
+  margin-top: 8px;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(148,176,200,0.14);
+  text-align: left;
+  vertical-align: top;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+th {
+  background: rgba(255,255,255,0.58);
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+td {
+  color: var(--text-main);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.chart-card {
+  padding: 26px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.52));
+  border: 1px solid rgba(148,176,200,0.18);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chart-card.wide {
+  grid-column: 1 / -1;
+}
+
+.chart-card h3 {
+  color: var(--text-dark);
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.chart-card > p {
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.donut-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 12px;
+}
+
+.donut-grid.compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.donut-item {
+  padding: 20px 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.64);
+  border: 1px solid rgba(148,176,200,0.14);
+  display: flex;
+  height: 100%;
+}
+
+.donut-item.style-card {
+  padding: 16px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.6));
+  border-color: rgba(148,176,200,0.2);
+  height: 100%;
+}
+
+.donut-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(148,176,200,0.16);
+  box-shadow: 0 10px 24px rgba(96, 116, 136, 0.12);
+}
+
+.style-name {
+  margin: 0 0 10px;
+  text-align: center;
+  color: var(--text-dark);
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+.donut-top {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.donut-frame {
+  position: relative;
+  width: 156px;
+  height: 156px;
+  flex: 0 0 156px;
+}
+
+.donut-svg {
+  width: 156px;
+  height: 156px;
+  transform: rotate(var(--donut-rotation, -90deg));
+}
+
+.donut-track {
+  fill: none;
+  stroke: rgba(138,180,196,0.12);
+  stroke-width: 16;
+}
+
+.donut-segment {
+  fill: none;
+  stroke-width: 18;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity .2s ease, transform .2s ease, stroke-width .2s ease, filter .2s ease, stroke .2s ease;
+  transform-origin: 50% 50%;
+  outline: none;
+}
+
+.donut-segment.is-max {
+  opacity: 1;
+  stroke-width: 18;
+  filter: drop-shadow(0 4px 10px rgba(78, 96, 116, 0.16));
+}
+
+.donut-segment:hover,
+.donut-segment:focus {
+  opacity: 1;
+  stroke-width: 20;
+}
+
+.donut-segment.is-max:hover,
+.donut-segment.is-max:focus {
+  opacity: 1;
+  stroke-width: 20;
+}
+
+.donut-segment:focus-visible {
+  outline: none;
+}
+
+.donut-summary {
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex: 1;
+}
+
+.donut-item.style-card .donut-summary {
+  display: none;
+}
+
+.donut-item.style-card .donut-top {
+  height: auto;
+  gap: 10px;
+}
+
+.donut-title {
+  color: var(--text-main);
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 20em;
+}
+
+.legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 14px;
+  margin-top: 16px;
+}
+
+.chart-grid > .chart-card:not(.wide) > p {
+  min-height: 48px;
+  max-width: 32em;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.75;
+  color: rgba(136,153,168,0.92);
+}
+
+.chart-grid > .chart-card:not(.wide) .donut-grid {
+  flex: 1;
+  align-content: start;
+  grid-auto-rows: 1fr;
+}
+
+.chart-grid > .chart-card:not(.wide) .legend-list {
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-soft);
+  font-size: 12px;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.chart-subsection {
+  margin-top: 26px;
+}
+
+.style-legend {
+  margin: 14px auto 18px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.58);
+  border: 1px solid rgba(148,176,200,0.14);
+  width: fit-content;
+  max-width: 100%;
+  justify-content: center;
+}
+
+.donut-grid.style-grid {
+  margin-top: 0;
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.style-grid .donut-item.style-card {
+  width: 100%;
+}
+
+.style-grid .donut-frame {
+  width: 140px;
+  height: 140px;
+  flex-basis: 140px;
+}
+
+.style-grid .donut-svg {
+  width: 140px;
+  height: 140px;
+}
+
+.style-subsection > p {
+  max-width: 46em;
+  margin: 0 auto;
+  text-align: center;
+}
+.chart-subsection h4 {
+  color: var(--text-dark);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.chart-subsection p {
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.likert-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.likert-matrix {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(148,176,200,0.14);
+}
+
+.matrix-header,
+.matrix-row {
+  display: grid;
+  grid-template-columns: minmax(300px, 1.7fr) repeat(5, minmax(72px, 0.68fr));
+  gap: 10px;
+  align-items: center;
+}
+
+.matrix-header {
+  padding: 0 4px 12px;
+  border-bottom: 1px solid rgba(148,176,200,0.12);
+}
+
+.matrix-header span {
+  color: var(--text-soft);
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.matrix-corner {
+  text-align: left !important;
+}
+
+.matrix-row {
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(148,176,200,0.1);
+}
+
+.matrix-row:last-child {
+  border-bottom: none;
+  padding-bottom: 4px;
+}
+
+.matrix-question {
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 1.8;
+  padding-right: 10px;
+}
+
+.matrix-cell {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-soft);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+.matrix-cell:hover,
+.matrix-cell:focus {
+  transform: translateY(-2px);
+  color: var(--text-dark);
+}
+
+.matrix-cell:focus-visible {
+  outline: none;
+}
+
+.likert-row {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(148,176,200,0.14);
+}
+
+.likert-head {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.likert-label {
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.likert-bar {
+  display: flex;
+  overflow: hidden;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(138,180,196,0.10);
+}
+
+.likert-segment {
+  height: 100%;
+  min-width: 0;
+  cursor: pointer;
+  position: relative;
+  transition: filter .22s ease, transform .22s ease, box-shadow .22s ease;
+  transform-origin: center;
+  outline: none;
+}
+
+.likert-segment:hover,
+.likert-segment:focus {
+  filter: brightness(1.12) saturate(1.08);
+  transform: translateY(-2px) scaleY(1.24);
+  z-index: 2;
+  box-shadow: 0 8px 18px rgba(77, 96, 118, 0.22);
+}
+
+.likert-segment:focus-visible {
+  outline: none;
+}
+
+.chart-tooltip {
+  position: fixed;
+  z-index: 80;
+  max-width: 280px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(42, 52, 63, 0.92);
+  color: #f4f7fa;
+  box-shadow: 0 18px 40px rgba(22, 29, 36, 0.24);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.chart-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chart-tooltip strong {
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+.chart-tooltip span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(244,247,250,0.86);
+}
+
+.chart-footnote {
+  margin-top: 18px;
+  color: var(--text-soft);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.summary-box {
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.summary-box h3 {
+  color: var(--text-dark);
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.summary-box p {
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.next-page {
+  text-align: center; margin-top: 50px;
+}
+.next-page a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 32px 16px; border-radius: 999px;
+  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
+  color: #fff; font-size: 15px; line-height: 1;
+  box-shadow: 0 8px 28px rgba(107,143,163,0.25);
+  transition: all .3s ease;
+}
+.next-page a::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid rgba(255,255,255,0.92);
+  border-bottom: 1.5px solid rgba(255,255,255,0.92);
+  transform: rotate(45deg);
+}
+.next-page a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(107,143,163,0.32);
+}
+
+footer {
+  text-align: center; padding: 24px;
+  color: var(--text-soft); font-size: 13px;
+  position: relative; z-index: 1;
+}
+
+@media (max-width: 1280px) {
+  .wrap {
+    width: min(1320px, calc(100% - 48px));
+  }
+  .chart-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .grid-2, .grid-3, .summary-grid, .chart-grid, .donut-grid, .donut-grid.compact { grid-template-columns: 1fr; }
+  .section-head {
+    display: block;
+  }
+  .section-head h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+  .wrap { width: min(100%, calc(100% - 28px)); padding: 84px 0 40px; }
+  .donut-frame {
+    width: 136px;
+    height: 136px;
+    flex-basis: 136px;
+  }
+  .donut-svg {
+    width: 136px;
+    height: 136px;
+  }
+  .chart-grid > .chart-card:not(.wide) > p {
+    min-height: 0;
+  }
+  .style-legend {
+    justify-content: center;
+  }
+  .donut-image {
+    width: 100%;
+    max-width: 320px;
+  }
+  .donut-grid.style-grid {
+    grid-template-columns: 1fr;
+  }
+  .likert-matrix {
+    overflow-x: auto;
+  }
+  .matrix-header,
+  .matrix-row {
+    min-width: 760px;
+  }
+}
+@media (max-width: 700px) {
+  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
+  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+  .prev-arm-hint {
+    top: 124px;
+    font-size: 11px;
+    padding: 7px 12px 7px 30px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html">首页</a>
+  <a href="../about/index.html">项目介绍</a>
+  <a href="../research/index.html" class="active">问题研究</a>
+  <a href="../design/index.html">核心设计</a>
+  <a href="../chapters/index.html">章节导览</a>
+  <a href="../process/index.html">制作过程</a>
+  <a href="../thanks/index.html">感谢</a>
+</nav>
+<div class="prev-arm-hint" aria-hidden="true"></div>
+
+<div class="wrap">
+  <div class="eyebrow">PROBLEM STUDY</div>
+  <h1>问题研究</h1>
+  <p class="lead">
+    这一页集中梳理大学生社交困境、问卷调查结果与设计机会点，用研究证据说明 Within 为什么需要被设计出来。
+  </p>
+
+  <div class="hero-note">
+    <p>
+      研究从“<strong>线上活跃、线下疏离</strong>”的大学生社交状态切入，
+      重点关注现实社交中的启动门槛、评价压力与浅层联结问题。
+      问卷与前期分析并不是为了证明技术新奇，而是为了找到 XR 与 <strong>跨媒介协作</strong> 真正能够介入社交行为的切口。
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>研究锚点</h2>
+      <p>这一页集中建立研究问题、理论基础、方法链路与数据依据，把项目判断从“感觉”转为可解释、可追溯的研究结论。</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card accent-cyan">
+        <h3>研究问题</h3>
+        <p>
+          当代大学生在数字媒介环境下呈现出明显的“线上亲近、线下疏离”状态。
+          项目聚焦的不是抽象社交命题，而是现实社交中真实存在的启动门槛、评价压力与联结浅层化问题。
+        </p>
+      </div>
+      <div class="card accent-purple">
+        <h3>理论视角</h3>
+        <p>
+          项目以具身认知为核心理论支撑，将社交理解为身体、环境与任务共同参与的过程。
+          社交不只是语言交换，而是发生在身体在场、多感官参与与情境嵌入中的认知与行为生成。
+        </p>
+      </div>
+      <div class="card accent-warm">
+        <h3>作品定位</h3>
+        <p>
+          Within 将 XR 重新定义为“社交引导媒介”。
+          它通过叙事空间、角色差异和信息分配，把用户从任务协作逐步引向现实中的自然交流，而非停留在头显内部体验。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>机制与方法</h2>
+      <p>研究方法与样本信息共同构成证据基础，既回答“问题从哪里来”，也回答“设计判断如何被验证”。</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>跨媒介协作机制</h3>
+        <p>
+          项目通过 XR 虚拟场景、同步显示界面、实体线索和线下空间互动的组合，
+          形成非对称的信息分配关系。不同参与者无法单独完成全部任务，因此沟通与协作成为推进体验的必要条件。
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">XR 场景承担沉浸探索与具身操作</div>
+          <div class="feature-item">同步大屏承担观察、共享与策略提示</div>
+          <div class="feature-item">实体线索承担信息转译与协作触发</div>
+          <div class="feature-item">现实空间承担关系延伸与面对面交流</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>研究方法</h3>
+        <p>
+          论文采用文献研究、问卷调查、案例分析与实践创作法，
+          从前期调研、中期开发到后期测试，形成从理论构建到原型验证的完整闭环。
+        </p>
+        <div class="tag-list">
+          <span class="tag">文献研究</span>
+          <span class="tag">问卷调查</span>
+          <span class="tag">案例分析</span>
+          <span class="tag">实践创作</span>
+          <span class="tag">Unity / XR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>调研图表</h2>
+      <p>问卷数据以图表方式重组，重点呈现社交偏好、线下痛点、线上行为与视觉交互需求之间的结构关系。</p>
+    </div>
+
+    <div class="table-shell">
+      <div class="table-head">
+        <h3>表 1 · 问卷基本信息</h3>
+        <p>这里汇总两份问卷的样本量、题目方向与分析重点，作为后续图表阅读的总入口。</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>调研名称</th>
+              <th>发放份数</th>
+              <th>有效问卷</th>
+              <th>调研重点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>大学生社交互动偏好调研</td>
+              <td>130</td>
+              <td>117</td>
+              <td>虚拟场景接受度、线下社交痛点、线上社交偏好、场景与交互体验</td>
+            </tr>
+            <tr>
+              <td>虚拟环境风格偏好与交互需求调研</td>
+              <td>127</td>
+              <td>117</td>
+              <td>美术风格偏好、空间设计诉求、氛围营造需求、具身交互反馈</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>虚拟场景与协作偏好</h3>
+        <p>聚焦 XR 接受度、任务导向协作与私密空间偏好。悬浮到扇区可查看具体档位数据。</p>
+        <div class="donut-grid" id="virtual-social-charts"></div>
+        <div class="legend-list" id="social-legend"></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>线下社交场景痛点</h3>
+        <p>聚焦沉默倾向、开口压力、被评价感与线下社交后的疲惫恢复。</p>
+        <div class="donut-grid" id="offline-social-charts"></div>
+        <div class="legend-list" id="offline-legend"></div>
+      </div>
+
+      <div class="chart-card">
+        <h3>线上社交行为偏好</h3>
+        <p>聚焦社交媒体自我展示、虚拟语境活跃度与低暴露度表达偏好。</p>
+        <div class="donut-grid" id="online-social-charts"></div>
+        <div class="legend-list" id="online-legend"></div>
+      </div>
+
+      <div class="chart-card wide">
+        <h3>视觉与交互需求</h3>
+        <p>这一块不再硬做成一堆饼图，而是基于你现有统计图的数据，拆成“风格选择环图 + 需求分布条”。悬浮到任意色块即可看到题项、选项和百分比。</p>
+
+        <div class="chart-subsection style-subsection">
+          <h4>风格偏好</h4>
+          <p>保留你原始图里最关键的风格对比：写实、像素与 Low-Poly。这样既能对应论文里的视觉结论，也能直接说明最终为何选择 Low-Poly 方向。</p>
+          <div class="legend-list style-legend" id="design-legend"></div>
+          <div class="donut-grid style-grid" id="style-choice-charts"></div>
+        </div>
+
+        <div class="chart-subsection">
+          <h4>空间与氛围需求</h4>
+          <p>这一部分改成矩阵式对照，五档倾向会直接横向展开，读数关系比长条更清楚，也不会显得太碎。</p>
+          <div class="likert-matrix" id="space-visual-matrix"></div>
+        </div>
+
+        <div class="chart-subsection">
+          <h4>交互反馈需求</h4>
+          <p>交互相关题项保留 Likert 分布结构，这样更容易读出“比较符合”与“非常符合”的整体聚集趋势。</p>
+          <div class="likert-list" id="interaction-bars"></div>
+        </div>
+        <div class="chart-footnote">注：风格与交互需求部分的原始统计表按 118 份汇总，当前先保留这一口径以对应现有源数据。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h2>设计机会点</h2>
+      <p>结合问卷结果与前期论述，可以把研究结论收束为以下三个设计机会点，它们共同推动 Within 的叙事、空间与交互方向。</p>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-box">
+        <h3>降低社交启动压力</h3>
+        <p>通过私密尺度、渐进式任务和低暴露度互动，把“主动社交”转化为“在情境中自然发生的协作”。</p>
+      </div>
+      <div class="summary-box">
+        <h3>强化具身反馈</h3>
+        <p>通过即时视觉反馈、多感官线索和环境联动，让用户在行动中获得明确的身体在场感与情境理解。</p>
+      </div>
+      <div class="summary-box">
+        <h3>用风格承接情绪</h3>
+        <p>采用 Low-Poly 与超现实倾向的风格化空间，使视觉表达与情绪引导、社交节奏和叙事推进形成统一结构。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="next-page">
+    <a href="../design/index.html">进入核心设计</a>
+  </div>
+</div>
+
+<footer>
+  Within · 协作同行 ｜ 问题研究整理
+</footer>
+
+<script>
+const likertLabels = ["非常不符合", "比较不符合", "一般", "比较符合", "非常符合"];
+const socialPalette = ["#3f427e", "#6a6fb8", "#9a9bb8", "#8aa2cf", "#73c2bf"];
+const designPalette = ["#d95c47", "#e38833", "#e6b61c", "#8bbd60", "#62bcb5"];
+
+const virtualSocialCharts = [
+  {
+    code: "01",
+    sample: 117,
+    question: "我对通过 XR 技术构建的新型社交虚拟空间持有积极的好奇心和尝试意愿。",
+    values: [6, 15, 26, 30, 23]
+  },
+  {
+    code: "02",
+    sample: 117,
+    question: "如果有一个沉浸式的虚拟空间能让我通过完成任务而非单纯聊天来社交，我愿意尝试。",
+    values: [5, 15, 28, 33, 19]
+  },
+  {
+    code: "03",
+    sample: 117,
+    question: "相比于开阔、人员密集的公共社交场景，我更偏好尺度适中、氛围私密的小范围社交空间。",
+    values: [3, 0, 28, 53, 16]
+  },
+  {
+    code: "04",
+    sample: 117,
+    question: "相比于无明确主题的自由闲聊，我更倾向于在有共同目标、任务导向的场景中开展社交互动。",
+    values: [4, 7, 28, 42, 19]
+  }
+];
+
+const offlineSocialCharts = [
+  {
+    code: "01",
+    sample: 117,
+    question: "在多人参与的讨论中，我倾向于保持沉默而非主动发言。",
+    values: [15, 18, 24, 28, 15]
+  },
+  {
+    code: "02",
+    sample: 117,
+    question: "当需要向不熟悉的人寻求帮助或发起对话时，我会感到明显的心理负担。",
+    values: [16, 16, 22, 28, 18]
+  },
+  {
+    code: "03",
+    sample: 117,
+    question: "我比较在意他人在社交场合中对我言行举止的实时评价。",
+    values: [14, 20, 21, 25, 20]
+  },
+  {
+    code: "04",
+    sample: 117,
+    question: "在面对面的即时社交后，我会感到精神疲惫，需要独处来恢复精力。",
+    values: [10, 17, 24, 23, 26]
+  }
+];
+
+const onlineSocialCharts = [
+  {
+    code: "01",
+    sample: 117,
+    question: "我更依赖社交媒体来展示自我。",
+    values: [11, 11, 21, 33, 24]
+  },
+  {
+    code: "02",
+    sample: 117,
+    question: "我发现在自己在虚拟社交平台中表现得比现实中更开朗活跃。",
+    values: [6, 13, 28, 30, 23]
+  },
+  {
+    code: "03",
+    sample: 117,
+    question: "我倾向于在社交中使用虚拟形象或表情包更安全地传达情感。",
+    values: [14, 25, 21, 25, 15]
+  }
+];
+
+const styleChoiceCharts = [
+  {
+    code: "01",
+    sample: 118,
+    question: "我更倾向于选择写实风格作为主要的场景呈现方式。",
+    label: "写实风格",
+    values: [6, 20, 27, 19, 28],
+    image: "../images/style-realistic.png",
+    imageAlt: "写实风格参考图"
+  },
+  {
+    code: "02",
+    sample: 118,
+    question: "我更倾向于选择像素风格作为主要的场景呈现方式。",
+    label: "像素风格",
+    values: [10, 31, 30, 13, 16],
+    image: "../images/style-pixel.png",
+    imageAlt: "像素风格参考图"
+  },
+  {
+    code: "03",
+    sample: 118,
+    question: "我更倾向于选择 Low-Poly 风格作为主要的场景呈现方式。",
+    label: "Low-Poly",
+    values: [3, 6, 24, 20, 47],
+    image: "../images/style-lowpoly.png",
+    imageAlt: "Low-Poly 风格参考图"
+  }
+];
+
+const spaceVisualBars = [
+  {
+    sample: 118,
+    question: "相比于写实场景，我更偏好具有艺术加工感或超现实元素的场景设计。",
+    values: [7, 4, 30, 40, 19]
+  },
+  {
+    sample: 118,
+    question: "场景的视觉独特性与艺术表现力比画面真实性更能吸引我长时间停留。",
+    values: [9, 7, 28, 31, 25]
+  },
+  {
+    sample: 118,
+    question: "相比于宏大空旷的空间，我更偏好尺度适中、能给人安全感的空间。",
+    values: [5, 11, 29, 35, 20]
+  },
+  {
+    sample: 118,
+    question: "场景中存在明确的视觉遮挡或物理边界，会增强我的心理安全感。",
+    values: [4, 9, 27, 37, 23]
+  },
+  {
+    sample: 118,
+    question: "我认为场景应具备清晰的空间逻辑和秩序感，以便于我快速理解环境功能。",
+    values: [5, 7, 30, 33, 25]
+  }
+];
+
+const interactionBars = [
+  {
+    sample: 118,
+    question: "当我产生交互行为时，我希望场景能够给予及时的视觉反馈。",
+    values: [4, 7, 14, 39, 36]
+  },
+  {
+    sample: 118,
+    question: "相比于高密度的装饰细节，我更偏好视觉信息简洁、交互点明确的场景设计。",
+    values: [3, 8, 24, 33, 32]
+  },
+  {
+    sample: 118,
+    question: "我希望场景中的自然元素能与用户的具体行为产生实时联动。",
+    values: [4, 5, 29, 37, 25]
+  }
+];
+
+function createLegend(containerId, palette) {
+  const host = document.getElementById(containerId);
+  if (!host) return;
+  host.innerHTML = "";
+  likertLabels.forEach((label, index) => {
+    const item = document.createElement("div");
+    item.className = "legend-item";
+
+    const swatch = document.createElement("span");
+    swatch.className = "legend-swatch";
+    swatch.style.background = palette[index];
+
+    const text = document.createElement("span");
+    text.textContent = label;
+
+    item.appendChild(swatch);
+    item.appendChild(text);
+    host.appendChild(item);
+  });
+}
+
+function ensureTooltip() {
+  let tooltip = document.querySelector(".chart-tooltip");
+  if (!tooltip) {
+    tooltip = document.createElement("div");
+    tooltip.className = "chart-tooltip";
+    document.body.appendChild(tooltip);
+  }
+  return tooltip;
+}
+
+function showTooltip(event, lines) {
+  const tooltip = ensureTooltip();
+  tooltip.innerHTML = lines.map((line) => `<span>${line}</span>`).join("");
+  tooltip.classList.add("visible");
+  moveTooltip(event);
+}
+
+function moveTooltip(event) {
+  const tooltip = ensureTooltip();
+  const offset = 18;
+  const tooltipWidth = tooltip.offsetWidth || 240;
+  const tooltipHeight = tooltip.offsetHeight || 80;
+  let left = event.clientX + offset;
+  let top = event.clientY + offset;
+  if (left + tooltipWidth > window.innerWidth - 12) left = event.clientX - tooltipWidth - offset;
+  if (top + tooltipHeight > window.innerHeight - 12) top = event.clientY - tooltipHeight - offset;
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
+}
+
+function hideTooltip() {
+  const tooltip = ensureTooltip();
+  tooltip.classList.remove("visible");
+}
+
+function bindTooltip(node, lines) {
+  node.addEventListener("pointerenter", (event) => showTooltip(event, lines));
+  node.addEventListener("pointermove", moveTooltip);
+  node.addEventListener("pointerleave", hideTooltip);
+  node.addEventListener("focus", () => {
+    const rect = node.getBoundingClientRect();
+    showTooltip({ clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 }, lines);
+  });
+  node.addEventListener("blur", hideTooltip);
+}
+
+function positiveShare(values) {
+  return (values[3] + values[4]).toFixed(1).replace(".0", "");
+}
+
+function countsFromPercentages(sample, percentages) {
+  const raw = percentages.map((value) => sample * value / 100);
+  const counts = raw.map((value) => Math.floor(value));
+  let remainder = sample - counts.reduce((sum, value) => sum + value, 0);
+
+  const order = raw
+    .map((value, index) => ({ index, fraction: value - Math.floor(value) }))
+    .sort((a, b) => b.fraction - a.fraction);
+
+  for (let i = 0; i < remainder; i += 1) {
+    counts[order[i % order.length].index] += 1;
+  }
+
+  return counts;
+}
+
+function renderDonutCharts(containerId, charts, palette) {
+  const host = document.getElementById(containerId);
+  if (!host) return;
+  const svgNS = "http://www.w3.org/2000/svg";
+  const circumference = 2 * Math.PI * 42;
+
+  charts.forEach((chart) => {
+    const counts = countsFromPercentages(chart.sample, chart.values);
+    const maxValue = Math.max(...chart.values);
+    const item = document.createElement("div");
+    item.className = "donut-item";
+    const isStyleCard = Boolean(chart.image && chart.label);
+    if (isStyleCard) {
+      item.classList.add("style-card");
+    }
+
+    const top = document.createElement("div");
+    top.className = "donut-top";
+
+    const frame = document.createElement("div");
+    frame.className = "donut-frame";
+
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 140 140");
+    svg.setAttribute("class", "donut-svg");
+    svg.style.setProperty("--donut-rotation", donutRotationFor(host.children.length, chart));
+
+    const track = document.createElementNS(svgNS, "circle");
+    track.setAttribute("cx", "70");
+    track.setAttribute("cy", "70");
+    track.setAttribute("r", "42");
+    track.setAttribute("class", "donut-track");
+    svg.appendChild(track);
+
+    let offset = 0;
+    chart.values.forEach((value, index) => {
+      if (value <= 0) return;
+      const segment = document.createElementNS(svgNS, "circle");
+      const segmentLength = circumference * (value / 100);
+      segment.setAttribute("cx", "70");
+      segment.setAttribute("cy", "70");
+      segment.setAttribute("r", "42");
+      segment.setAttribute("class", "donut-segment");
+      segment.setAttribute("stroke", value === maxValue ? palette[index] : softenedRgba(palette[index], 0.62, 0.92));
+      segment.setAttribute("stroke-dasharray", `${segmentLength} ${circumference - segmentLength}`);
+      segment.setAttribute("stroke-dashoffset", `${-offset}`);
+      segment.setAttribute("tabindex", "0");
+      segment.setAttribute("aria-label", `${likertLabels[index]} ${value}%`);
+      if (value === maxValue) {
+        segment.classList.add("is-max");
+      }
+      bindTooltip(segment, [
+        `${likertLabels[index]}：${counts[index]} 人`,
+        `占比：${value}%`
+      ]);
+      svg.appendChild(segment);
+      offset += segmentLength;
+    });
+
+    frame.appendChild(svg);
+
+    const summary = document.createElement("div");
+    summary.className = "donut-summary";
+    summary.innerHTML = `<div class="donut-title">${chart.question}</div>`;
+
+    if (isStyleCard) {
+      const image = document.createElement("img");
+      image.className = "donut-image";
+      image.src = chart.image;
+      image.alt = chart.imageAlt || chart.question;
+
+      const label = document.createElement("div");
+      label.className = "style-name";
+      label.textContent = chart.label;
+
+      top.appendChild(frame);
+      item.appendChild(image);
+      item.appendChild(label);
+      item.appendChild(top);
+    } else {
+      top.appendChild(frame);
+      top.appendChild(summary);
+      item.appendChild(top);
+    }
+    host.appendChild(item);
+  });
+}
+
+function renderLikertBars(containerId, rows, palette) {
+  const host = document.getElementById(containerId);
+  if (!host) return;
+
+  rows.forEach((row) => {
+    const counts = countsFromPercentages(row.sample, row.values);
+    const wrapper = document.createElement("div");
+    wrapper.className = "likert-row";
+
+    const head = document.createElement("div");
+    head.className = "likert-head";
+    head.innerHTML = `<div class="likert-label">${row.question}</div>`;
+
+    const bar = document.createElement("div");
+    bar.className = "likert-bar";
+
+    row.values.forEach((value, index) => {
+      const segment = document.createElement("div");
+      segment.className = "likert-segment";
+      segment.style.width = `${value}%`;
+      segment.style.background = palette[index];
+      segment.setAttribute("tabindex", "0");
+      segment.setAttribute("aria-label", `${likertLabels[index]} ${value}%`);
+      bindTooltip(segment, [
+        `${likertLabels[index]}：${counts[index]} 人`,
+        `占比：${value}%`
+      ]);
+      bar.appendChild(segment);
+    });
+
+    wrapper.appendChild(head);
+    wrapper.appendChild(bar);
+    host.appendChild(wrapper);
+  });
+}
+
+function matrixCellColor(hex, value) {
+  const safe = Math.max(0.24, Math.min(0.92, value / 100));
+  const normalized = hex.replace("#", "");
+  const r = parseInt(normalized.slice(0, 2), 16);
+  const g = parseInt(normalized.slice(2, 4), 16);
+  const b = parseInt(normalized.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${safe})`;
+}
+
+function softenedRgba(hex, blend = 0.62, alpha = 0.92) {
+  const normalized = hex.replace("#", "");
+  const r = parseInt(normalized.slice(0, 2), 16);
+  const g = parseInt(normalized.slice(2, 4), 16);
+  const b = parseInt(normalized.slice(4, 6), 16);
+  const nr = Math.round(r + (255 - r) * blend);
+  const ng = Math.round(g + (255 - g) * blend);
+  const nb = Math.round(b + (255 - b) * blend);
+  return `rgba(${nr}, ${ng}, ${nb}, ${alpha})`;
+}
+
+function donutRotationFor(index, chart) {
+  const preset = [-78, -104, -64, -122, -88, -136];
+  const offset = chart.values.findIndex((value) => value === Math.max(...chart.values));
+  return `${preset[(index + Math.max(offset, 0)) % preset.length]}deg`;
+}
+
+function renderLikertMatrix(containerId, rows, palette) {
+  const host = document.getElementById(containerId);
+  if (!host) return;
+
+  const header = document.createElement("div");
+  header.className = "matrix-header";
+  header.innerHTML = `<span class="matrix-corner">题目</span>${likertLabels.map((label) => `<span>${label}</span>`).join("")}`;
+  host.appendChild(header);
+
+  rows.forEach((row) => {
+    const counts = countsFromPercentages(row.sample, row.values);
+    const rowEl = document.createElement("div");
+    rowEl.className = "matrix-row";
+
+    const question = document.createElement("div");
+    question.className = "matrix-question";
+    question.textContent = row.question;
+    rowEl.appendChild(question);
+
+    row.values.forEach((value, index) => {
+      const cell = document.createElement("div");
+      cell.className = "matrix-cell";
+      cell.textContent = `${value}%`;
+      cell.setAttribute("tabindex", "0");
+      cell.setAttribute("aria-label", `${likertLabels[index]} ${value}%`);
+      bindTooltip(cell, [
+        `${likertLabels[index]}：${counts[index]} 人`,
+        `占比：${value}%`
+      ]);
+      rowEl.appendChild(cell);
+    });
+
+    host.appendChild(rowEl);
+  });
+}
+
+createLegend("social-legend", socialPalette);
+createLegend("offline-legend", socialPalette);
+createLegend("online-legend", socialPalette);
+createLegend("design-legend", designPalette);
+
+renderDonutCharts("virtual-social-charts", virtualSocialCharts, socialPalette);
+renderDonutCharts("offline-social-charts", offlineSocialCharts, socialPalette);
+renderDonutCharts("online-social-charts", onlineSocialCharts, socialPalette);
+renderDonutCharts("style-choice-charts", styleChoiceCharts, designPalette);
+renderLikertMatrix("space-visual-matrix", spaceVisualBars, designPalette);
+renderLikertBars("interaction-bars", interactionBars, designPalette);
+</script>
+
+<script>
+(function () {
+  var prevTarget = '../about/index.html';
+  var nextTarget = '../design/index.html';
+  var wrap = document.querySelector('.wrap');
+  var navigating = false;
+  var prevArmed = false;
+  var threshold = 4;
+  var delay = 420;
+  var pullOpenDistance = 240;
+  var armedLockUntil = 0;
+  var armedGraceMs = 960;
+  var armedConfirmReadyAt = 0;
+  var armedConfirmCooldownMs = 360;
+
+  function applyPull(distance) {
+    if (wrap) {
+      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
+    }
+  }
+
+  function clearPrevArm() {
+    prevArmed = false;
+    armedLockUntil = 0;
+    armedConfirmReadyAt = 0;
+    document.body.classList.remove('is-prev-armed');
+  }
+
+  function openPrevPull() {
+    if (!prevTarget || navigating) return;
+    var now = Date.now();
+    prevArmed = true;
+    armedLockUntil = now + armedGraceMs;
+    armedConfirmReadyAt = now + armedConfirmCooldownMs;
+    document.body.classList.add('is-prev-armed');
+    applyPull(pullOpenDistance);
+  }
+
+  function closePrevPull() {
+    clearPrevArm();
+    applyPull(0);
+  }
+
+  function go(target, direction) {
+    if (!target || navigating) return;
+    navigating = true;
+    closePrevPull();
+    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
+    window.setTimeout(function () {
+      window.location.href = target;
+    }, delay);
+  }
+
+  window.addEventListener('wheel', function (event) {
+    if (navigating) {
+      event.preventDefault();
+      return;
+    }
+
+    var doc = document.documentElement;
+    var atTop = window.scrollY <= threshold;
+    var atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - threshold;
+
+    if (prevArmed) {
+      event.preventDefault();
+      var now = Date.now();
+      if (event.deltaY < -8 && prevTarget) {
+        if (now < armedConfirmReadyAt) {
+          return;
+        }
+        go(prevTarget, 'prev');
+        return;
+      }
+      if (event.deltaY > 10 && now >= armedLockUntil) {
+        closePrevPull();
+      }
+      return;
+    }
+
+    if (event.deltaY < -12 && atTop && prevTarget) {
+      event.preventDefault();
+      openPrevPull();
+      return;
+    }
+
+    if (event.deltaY > 12 && atBottom && nextTarget) {
+      event.preventDefault();
+      closePrevPull();
+      go(nextTarget, 'next');
+      return;
+    }
+
+    if (!atTop || event.deltaY > 6) {
+      closePrevPull();
+    }
+  }, { passive: false });
+
+  window.addEventListener('scroll', function () {
+    if (prevArmed) {
+      if (window.scrollY > threshold + 2) {
+        window.scrollTo(0, 0);
+      }
+      return;
+    }
+
+    if (window.scrollY > threshold + 2) {
+      closePrevPull();
+    }
+  }, { passive: true });})();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
