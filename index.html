@@ -1,103 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Within · 协作同行</title>
-<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { overflow-y: scroll; scrollbar-gutter: stable; }
-
-:root {
-  --text-main: #465564;
-  --text-dark: #243241;
-  --text-soft: #7d8f9f;
-  --cyan: #8ab4c4;
-  --cyan-deep: #5b9aa0;
-  --blue: #6b8fa3;
-  --border: rgba(112,136,160,0.14);
-}
-
-body {
-  min-height: 100vh;
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: var(--text-main);
-  background:
-    radial-gradient(circle at 14% 14%, rgba(138,180,196,0.12), transparent 28%),
-    radial-gradient(circle at 84% 18%, rgba(196,168,130,0.10), transparent 30%),
-    linear-gradient(180deg, #f6f8fb 0%, #eef2f6 46%, #edf1f4 100%);
-  overflow-x: hidden;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.025;
-  background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.9) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.55) 49%, transparent 50%);
-  background-size: 92px 92px, 126px 126px;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 6;
-  opacity: 0;
-  background:
-    radial-gradient(circle at 50% 42%, rgba(255,255,255,0.72), rgba(241,246,249,0.96) 58%, rgba(238,242,246,1) 100%);
-  transition: opacity .48s ease;
-}
-
-body.is-leaving::after {
-  opacity: 1;
-}
-
-.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 20;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  backdrop-filter: blur(16px);
-  background: rgba(246,248,251,0.68);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav a {
-  padding: 10px 18px;
-  border-radius: 999px;
-  color: var(--text-soft);
-  font-size: 14px;
-  text-decoration: none;
-  transition: all .25s ease;
-}
-
-.nav a:hover,
-.nav a.active {
-  color: var(--text-main);
-  background: rgba(138,180,196,0.12);
-}
-
-.nav,
-.logo,
-.poly {
-  transition: opacity .42s ease, transform .48s ease, filter .48s ease;
-}
-
-body.is-leaving .nav {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
+<link rel="stylesheet" href="shared.css">
+<style id="page-styles">
 .cover {
   position: relative;
   z-index: 1;
@@ -122,7 +30,7 @@ body.is-leaving .nav {
   box-shadow: 0 18px 42px rgba(95, 118, 138, 0.05);
 }
 
-body.is-leaving .poly {
+body.is-leaving-next .poly {
   opacity: 0;
   transform: translateY(24px) scale(0.96);
 }
@@ -199,7 +107,7 @@ body.is-leaving .poly {
   text-align: center;
 }
 
-body.is-leaving .logo {
+body.is-leaving-next .logo {
   opacity: 0;
   transform: translateY(-18px) scale(0.985);
   filter: blur(3px);
@@ -252,7 +160,7 @@ body.is-leaving .logo {
   opacity: 0.85;
 }
 
-body.is-leaving .scroll-hint {
+body.is-leaving-next .scroll-hint {
   opacity: 0;
   transform: translateX(-50%) translateY(10px);
 }
@@ -276,18 +184,6 @@ body.is-leaving .scroll-hint {
 }
 
 @media (max-width: 860px) {
-  .nav {
-    justify-content: flex-start;
-    overflow-x: auto;
-    gap: 6px;
-  }
-
-  .nav a {
-    white-space: nowrap;
-    padding: 8px 14px;
-    font-size: 13px;
-  }
-
   .cover {
     padding: 84px 14px 20px;
   }
@@ -320,8 +216,10 @@ body.is-leaving .scroll-hint {
 }
 </style>
 </head>
-<body>
+<body class="page-index">
+
 <nav class="nav">
+  <span class="nav-indicator" aria-hidden="true"></span>
   <a href="index.html" class="active">首页</a>
   <a href="about/index.html">项目介绍</a>
   <a href="research/index.html">问题研究</a>
@@ -330,100 +228,36 @@ body.is-leaving .scroll-hint {
   <a href="process/index.html">制作过程</a>
   <a href="thanks/index.html">感谢</a>
 </nav>
+<div class="next-arm-hint" aria-hidden="true"></div>
 
-<main class="cover">
-  <div class="poly-bg" aria-hidden="true">
-    <div class="poly poly-1"></div>
-    <div class="poly poly-2"></div>
-    <div class="poly poly-3"></div>
-    <div class="poly poly-4"></div>
-    <div class="poly poly-5"></div>
-    <div class="poly poly-6"></div>
-  </div>
-  <div class="logo-shell" aria-label="Within 协作同行">
-    <div class="logo">
-      <img class="logo-image" src="title.png" alt="Within 协作同行">
-      <div class="logo-caption">具身认知视角下大学生社交数字化设计研究</div>
+<div id="page-content">
+  <main class="cover">
+    <div class="poly-bg" aria-hidden="true">
+      <div class="poly poly-1"></div>
+      <div class="poly poly-2"></div>
+      <div class="poly poly-3"></div>
+      <div class="poly poly-4"></div>
+      <div class="poly poly-5"></div>
+      <div class="poly poly-6"></div>
     </div>
-  </div>
-  <a class="scroll-hint" href="about/index.html" aria-label="向下进入项目介绍"></a>
-</main>
-<script>
-(function () {
-  var target = 'about/index.html';
-  var navigating = false;
-  var touchStartY = null;
-  var delay = 430;
-  var hint = document.querySelector('.scroll-hint');
+    <div class="logo-shell" aria-label="Within 协作同行">
+      <div class="logo">
+        <img class="logo-image" src="title.png" alt="Within 协作同行">
+        <div class="logo-caption">具身认知视角下大学生社交数字化设计研究</div>
+      </div>
+    </div>
+    <a class="scroll-hint" href="about/index.html" aria-label="向下进入项目介绍"></a>
+  </main>
+</div>
 
-  function navigateTo(targetHref, event) {
-    if (navigating || !targetHref) return;
-    if (event) event.preventDefault();
-    navigating = true;
-    document.body.classList.add('is-leaving');
-    window.setTimeout(function () {
-      window.location.href = targetHref;
-    }, delay);
-  }
-
-  function goNext(event) {
-    navigateTo(target, event);
-  }
-
-  function bindNavLinks() {
-    var navLinks = document.querySelectorAll('.nav a[href]');
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        if (navigating) {
-          event.preventDefault();
-          return;
-        }
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-        var href = link.getAttribute('href');
-        if (!href || link.classList.contains('active')) return;
-        navigateTo(href, event);
-      });
-    });
-  }
-
-  window.addEventListener('wheel', function (event) {
-    if (event.deltaY > 8) {
-      goNext(event);
-    }
-  }, { passive: true });
-
-  window.addEventListener('keydown', function (event) {
-    if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
-      goNext(event);
-    }
-  });
-
-  window.addEventListener('touchstart', function (event) {
-    if (!event.touches || !event.touches.length) return;
-    touchStartY = event.touches[0].clientY;
-  }, { passive: true });
-
-  window.addEventListener('touchend', function (event) {
-    if (touchStartY === null || !event.changedTouches || !event.changedTouches.length) return;
-    var deltaY = event.changedTouches[0].clientY - touchStartY;
-    touchStartY = null;
-    if (deltaY < -24) {
-      goNext();
-    }
-  }, { passive: true });
-
-  if (hint) {
-    hint.addEventListener('click', goNext);
-  }
-
-  bindNavLinks();
-})();
+<script id="page-config">
+window.__pageConfig = {
+  current: 'index',
+  prev: null,
+  next: 'about/index.html'
+};
 </script>
+<script src="shell.js"></script>
+
 </body>
 </html>
-
-
-
-

@@ -1,301 +1,358 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>制作过程 — Within · 协作同行</title>
-<style>
-/* ========== Within 制作过程页 ========== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
-
-body {
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: #4a5560;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
-    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
-    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
-  overflow-x: hidden;
-  overflow-y: clip;
-}
-body::before {
-  content: ""; position: fixed; inset: 0;
-  pointer-events: none; z-index: 0; opacity: 0.03;
-  background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
-  background-size: 72px 72px, 96px 96px;
-}
-
-.nav {
-  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
-  display: flex; justify-content: center; gap: 10px;
-  padding: 16px;
-  backdrop-filter: blur(16px);
-  background: rgba(245,247,250,0.65);
-  border-bottom: 1px solid rgba(112,136,160,0.16);
-}
-.nav a {
-  padding: 10px 18px; border-radius: 999px;
-  color: #8899a8; font-size: 14px;
-  text-decoration: none;
-  transition: all .25s ease;
-}
-.nav a:hover, .nav a.active {
-  color: #4a5560;
-  background: rgba(138,180,196,0.14);
-}
-
-.nav,
-.wrap,
-footer {
-  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
-}
-
-body.is-leaving-next .nav,
-body.is-leaving-next .wrap,
-body.is-leaving-next footer {
-  opacity: 0;
-  transform: translateY(-24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-prev .nav,
-body.is-leaving-prev .wrap,
-body.is-leaving-prev footer {
-  opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
-}
-
-.prev-arm-hint {
-  position: fixed;
-  left: 50%;
-  top: 156px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.prev-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-left: 1.5px solid rgba(91,154,160,0.9);
-  border-top: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-28%) rotate(45deg);
-}
-
-.prev-arm-hint::after {
-  content: "滚轮上滑，回到前一页";
-}
-
-body.is-prev-armed .prev-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-.next-arm-hint {
-  position: fixed;
-  left: 50%;
-  bottom: 84px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(-6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.next-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid rgba(91,154,160,0.9);
-  border-bottom: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-72%) rotate(45deg);
-}
-
-.next-arm-hint::after {
-  content: "滚轮下滑，前往下一页";
-}
-
-body.is-next-armed .next-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-
+<link rel="stylesheet" href="../shared.css">
+<style id="page-styles">
 .wrap {
-  position: relative; z-index: 1;
-  width: min(1120px, calc(100% - 36px));
-  margin: 0 auto;
-  padding: 104px 0 72px;
-}
-
-.eyebrow {
-  color: #6b8fa3; letter-spacing: .18em;
-  font-size: 13px; margin-bottom: 14px;
-  text-transform: uppercase;
+  width: min(1520px, calc(100% - 56px));
 }
 h2 {
-  font-size: 38px; color: #2c3a4a;
-  margin-bottom: 16px; line-height: 1.2;
+  font-size: 38px;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  line-height: 1.2;
 }
 .lead {
-  font-size: 17px; line-height: 1.9;
-  color: #8899a8; max-width: 680px;
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--text-soft);
+  max-width: 860px;
   margin-bottom: 32px;
 }
-
-.grid-2 {
+.chapter-stack {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
+  gap: 28px;
 }
-
-.card {
+.chapter-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-areas:
+    "media body"
+    "gallery gallery";
+  gap: 26px;
+  align-items: stretch;
+  padding: 22px;
+  border-radius: 30px;
   background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
-  border: 1px solid rgba(148,176,200,0.20);
+  border: 1px solid rgba(148,176,200,0.18);
+  box-shadow: 0 20px 54px rgba(99,124,148,0.08);
+}
+.chapter-section.is-reversed {
+  grid-template-areas:
+    "body media"
+    "gallery gallery";
+}
+.chapter-media {
+  grid-area: media;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.chapter-video-shell {
+  padding: 16px;
   border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
-  padding: 28px;
-  position: relative; overflow: hidden;
-  transition: transform .3s, box-shadow .3s;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(148,176,200,0.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
 }
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 64px rgba(99,124,148,0.14);
+.chapter-video-shell video {
+  width: 100%;
+  border-radius: 18px;
+  display: block;
+  background: #dfe9ef;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
-.card::before {
-  content: ""; position: absolute; top: 0; right: 0;
-  width: 120px; height: 120px;
-  background: linear-gradient(135deg, rgba(138,180,196,0.15), transparent 70%);
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
-  pointer-events: none;
+.chapter-file {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.66);
+  border: 1px solid rgba(148,176,200,0.18);
+  color: #6f8799;
+  font-size: 12px;
+  letter-spacing: .04em;
 }
-.card h3 {
-  font-size: 20px; color: #2c3a4a;
+.chapter-body {
+  grid-area: body;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 6px;
+}
+.chapter-kicker {
+  color: var(--cyan-deep);
+  font-size: 12px;
+  letter-spacing: .18em;
+  margin-bottom: 10px;
+}
+.chapter-body h3 {
+  color: var(--text-dark);
+  font-size: 28px;
+  line-height: 1.26;
+  margin-bottom: 14px;
+}
+.chapter-body > p {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.95;
+}
+.chapter-gallery {
+  grid-area: gallery;
+  margin-top: 2px;
+}
+.chapter-gallery-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
   margin-bottom: 12px;
 }
-.card p {
-  font-size: 15px; line-height: 1.95;
-  color: #8899a8;
+.chapter-gallery-title {
+  color: var(--text-dark);
+  font-size: 14px;
+  letter-spacing: .08em;
 }
-
-.video-box {
-  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
-  border: 1px solid rgba(148,176,200,0.20);
-  border-radius: 28px;
-  box-shadow: 0 20px 60px rgba(99,124,148,0.10);
-  padding: 20px;
+.chapter-gallery-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-video {
-  width: 100%; border-radius: 20px;
-  display: block; background: #dfe9ef;
+.chapter-gallery-count {
+  color: #7d92a3;
+  font-size: 12px;
+}
+.gallery-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(148,176,200,0.18);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.72);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.gallery-btn:hover {
+  background: rgba(255,255,255,0.92);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(99,124,148,0.10);
+}
+.gallery-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 26%);
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+.gallery-track::-webkit-scrollbar {
+  height: 8px;
+}
+.gallery-track::-webkit-scrollbar-thumb {
+  background: rgba(112,136,160,0.24);
+  border-radius: 999px;
+}
+.gallery-card {
+  display: block;
+  padding: 0;
+  border: 1px solid rgba(148,176,200,0.18);
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.72);
+  box-shadow: 0 12px 30px rgba(99,124,148,0.08);
+  cursor: zoom-in;
+  text-align: left;
+  scroll-snap-align: start;
+  transition: transform .24s ease, box-shadow .24s ease;
+}
+.gallery-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(99,124,148,0.12);
+}
+.gallery-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: #edf2f6;
+}
+.gallery-card span {
+  display: block;
+  padding: 11px 12px 12px;
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.chapter-points {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+.chapter-point {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.54);
+  border: 1px solid rgba(148,176,200,0.14);
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.chapter-point strong {
+  color: var(--text-dark);
 }
 .video-tip {
-  margin-top: 14px; color: #8899a8;
-  font-size: 14px; line-height: 1.8;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.8;
 }
 .video-tip code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   background: rgba(255,255,255,0.70);
   border: 1px solid rgba(112,136,160,0.16);
-  padding: 2px 8px; border-radius: 999px;
-  color: #5a7a8c; font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: #5a7a8c;
+  font-size: 12px;
 }
-
-.steps { display: grid; gap: 14px; }
-.step {
-  padding: 18px 20px; border-radius: 18px;
-  background: rgba(255,255,255,0.56);
-  border: 1px solid rgba(148,176,200,0.16);
-  transition: transform .2s, box-shadow .2s;
+.section-block {
+  margin-top: 44px;
 }
-.step:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(99,124,148,0.08);
+.section-label {
+  color: var(--cyan-deep);
+  font-size: 12px;
+  letter-spacing: .18em;
+  margin-bottom: 8px;
 }
-.step strong {
-  display: block; margin-bottom: 6px;
-  color: #2c3a4a; font-size: 15px;
+.section-title {
+  font-size: 24px;
+  color: var(--text-dark);
+  line-height: 1.3;
 }
-.step span {
-  color: #8899a8; line-height: 1.85; font-size: 15px;
+.section-copy {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+  max-width: 860px;
 }
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 24px;
-}
-.gallery-item {
-  border-radius: 16px; overflow: hidden;
+.replace-note {
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.48));
   border: 1px solid rgba(148,176,200,0.18);
-  background: rgba(255,255,255,0.50);
-  aspect-ratio: 4/3;
-  display: flex; align-items: center; justify-content: center;
-  color: #aabbcc; font-size: 14px;
+  box-shadow: 0 18px 46px rgba(99,124,148,0.08);
 }
-.gallery-item img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
+.replace-note strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+  font-size: 18px;
 }
-
-footer {
-  text-align: center; padding: 24px;
-  color: #8899a8; font-size: 13px;
-  position: relative; z-index: 1;
+.replace-note p {
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.9;
 }
-
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease;
+}
+.lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(22,30,38,0.62);
+  backdrop-filter: blur(10px);
+}
+.lightbox-figure {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, calc(100vw - 64px));
+  max-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+.lightbox-image {
+  width: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 130px);
+  border-radius: 22px;
+  box-shadow: 0 28px 80px rgba(8,16,24,0.30);
+  will-change: transform, opacity;
+}
+.lightbox-caption {
+  color: rgba(245,247,250,0.9);
+  font-size: 14px;
+  line-height: 1.8;
+  text-align: center;
+  max-width: 820px;
+}
+.lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.18);
+  color: #f5f7fa;
+  font-size: 26px;
+  cursor: pointer;
+}
 @media (max-width: 900px) {
-  .grid-2 { grid-template-columns: 1fr; }
-  .gallery { grid-template-columns: repeat(2, 1fr); }
-  h2 { font-size: 28px; }
+  .chapter-section {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "media"
+      "body"
+      "gallery";
+  }
+  .chapter-section.is-reversed {
+    grid-template-areas:
+      "media"
+      "body"
+      "gallery";
+  }
+  .gallery-track {
+    grid-auto-columns: minmax(220px, 78%);
+  }
+  h2 {
+    font-size: 28px;
+  }
 }
 @media (max-width: 700px) {
-  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
-  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
-  .wrap { width: min(100%, calc(100% - 28px)); padding: 84px 0 40px; }
-  .prev-arm-hint { top: 124px; font-size: 11px; padding: 7px 12px 7px 30px; }
-  .gallery { grid-template-columns: 1fr; }
+  .lightbox {
+    padding: 18px;
+  }
 }
 </style>
 </head>
-<body>
+<body class="page-process">
 
 <nav class="nav">
+  <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../index.html">首页</a>
   <a href="../about/index.html">项目介绍</a>
   <a href="../research/index.html">问题研究</a>
@@ -306,291 +363,340 @@ footer {
 </nav>
 <div class="prev-arm-hint" aria-hidden="true"></div>
 <div class="next-arm-hint" aria-hidden="true"></div>
-<div class="wrap">
-  <div class="eyebrow">PROCESS & VIDEO</div>
-  <h2>制作过程</h2>
-  <p class="lead">
-    从概念草图到 VR 场景搭建，从交互逻辑调试到用户测试迭代——
-    Within 的每一步都记录着对"用设计回应社交困境"的思考。
-  </p>
 
-  <div class="grid-2">
-    <!-- 左侧：本地视频 -->
-    <div class="video-box">
-      <!-- 
-        这里改视频路径 —— 把本地视频放到项目文件夹，修改下面的 src
-        poster 是视频封面图，也可以替换
-      -->
-      <!--
-        视频播放器
-        - poster：视频封面图，建议放一张 16:9 的截图或标题卡
-        - src：视频文件路径
-      -->
-      <video controls preload="metadata" poster="">
-        <source src="videos/within-process.mp4" type="video/mp4" />
-        你的浏览器不支持 video 标签。
-      </video>
-      <p class="video-tip">
-        💡 把本地视频放到 <code>videos/within-process.mp4</code> 即可播放。<br>
-        如需设置封面图，修改上面的 <code>poster=""</code> 为图片路径，例如 <code>poster="videos/cover.jpg"</code>
-      </p>
+<div id="page-content">
+  <div class="wrap">
+    <div class="eyebrow">PROCESS & VIDEO</div>
+    <h2>制作过程</h2>
+    <p class="lead">
+      从概念草图到 VR 场景搭建，从交互逻辑调试到用户测试迭代——
+      Within 的每一步都记录着对"用设计回应社交困境"的思考。
+    </p>
+
+    <div class="chapter-stack">
+      <section class="chapter-section">
+        <div class="chapter-media">
+          <div class="chapter-video-shell">
+            <video controls preload="metadata" poster="">
+              <source src="media/videos/chapter-01.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </div>
+          <span class="chapter-file">视频文件：process/media/videos/chapter-01.mp4</span>
+          <p class="video-tip">
+            概念阶段建议替换为独立视频，展示海报草图、色调尝试与四章结构推演。当前暂用 <code>process/media/videos/chapter-01.mp4</code> 占位。
+          </p>
+        </div>
+        <div class="chapter-body">
+          <div class="chapter-kicker">CHAPTER 01</div>
+          <h3>概念与视觉建立</h3>
+          <p>确定 Low-Poly 美术风格，绘制主视觉海报，构建四章叙事结构与情绪节奏。这个阶段的重点不是单纯做出一张海报，而是把“孤独如何被看见、协作如何被感知、共情如何被触发”先变成明确的视觉与叙事框架。</p>
+          <div class="chapter-points">
+            <div class="chapter-point"><strong>视觉方向：</strong>统一海报、网页与 VR 场景的色调、材质与几何气质。</div>
+            <div class="chapter-point"><strong>章节结构：</strong>梳理四章叙事节奏，明确每一章的情绪起伏与互动目标。</div>
+            <div class="chapter-point"><strong>前期产出：</strong>草图推演、主视觉海报、章节命名与整体展示基调。</div>
+          </div>
+        </div>
+        <div class="chapter-gallery" data-gallery>
+          <div class="chapter-gallery-head">
+            <div class="chapter-gallery-title">阶段图像记录</div>
+            <div class="chapter-gallery-controls">
+              <span class="chapter-gallery-count">4 张占位图</span>
+              <button class="gallery-btn" type="button" data-gallery-prev aria-label="查看上一张">‹</button>
+              <button class="gallery-btn" type="button" data-gallery-next aria-label="查看下一张">›</button>
+            </div>
+          </div>
+          <div class="gallery-track" data-gallery-track>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-01-01.png" data-lightbox-alt="章节 1 占位图 1" data-lightbox-caption="概念阶段占位图：当前使用项目内 `title.png` 测试横向图片带与放大效果。">
+              <img src="media/images/chapter-01-01.png" alt="章节 1 占位图 1">
+              <span>主标题与封面气质测试</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-01-02.png" data-lightbox-alt="章节 1 占位图 2" data-lightbox-caption="概念阶段占位图：当前使用 Low-Poly 风格参考图占位。">
+              <img src="media/images/chapter-01-02.png" alt="章节 1 占位图 2">
+              <span>Low-Poly 方向确认</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-01-03.png" data-lightbox-alt="章节 1 占位图 3" data-lightbox-caption="概念阶段占位图：当前使用写实风格图测试多图节奏。">
+              <img src="media/images/chapter-01-03.png" alt="章节 1 占位图 3">
+              <span>风格对比参考</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-01-04.png" data-lightbox-alt="章节 1 占位图 4" data-lightbox-caption="概念阶段占位图：当前使用像素风格图测试滑动与放大。">
+              <img src="media/images/chapter-01-04.png" alt="章节 1 占位图 4">
+              <span>章节风格分支测试</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter-section is-reversed">
+        <div class="chapter-media">
+          <div class="chapter-video-shell">
+            <video controls preload="metadata" poster="">
+              <source src="media/videos/chapter-02.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </div>
+          <span class="chapter-file">视频文件：process/media/videos/chapter-02.mp4</span>
+          <p class="video-tip">
+            开发阶段建议放入场景搭建、交互测试与头显内录。当前暂用 <code>process/media/videos/chapter-02.mp4</code> 占位。
+          </p>
+        </div>
+        <div class="chapter-body">
+          <div class="chapter-kicker">CHAPTER 02</div>
+          <h3>Unity / VR 开发</h3>
+          <p>使用 Unity 2022.3 + XR Interaction Toolkit + PICO SDK 搭建场景，实现抓取、瞬移、绘画等核心交互。这个阶段把前期叙事转化成可体验的空间行动，让用户不只是“看见主题”，而是通过身体参与真正进入情境。</p>
+          <div class="chapter-points">
+            <div class="chapter-point"><strong>场景搭建：</strong>完成四章空间原型、灯光氛围与关键道具布置。</div>
+            <div class="chapter-point"><strong>交互实现：</strong>打通移动、抓取、触发与任务推进等核心 XR 逻辑。</div>
+            <div class="chapter-point"><strong>设备适配：</strong>围绕 PICO 一体机稳定性与体验门槛持续做性能和提示优化。</div>
+          </div>
+        </div>
+        <div class="chapter-gallery" data-gallery>
+          <div class="chapter-gallery-head">
+            <div class="chapter-gallery-title">阶段图像记录</div>
+            <div class="chapter-gallery-controls">
+              <span class="chapter-gallery-count">4 张占位图</span>
+              <button class="gallery-btn" type="button" data-gallery-prev aria-label="查看上一张">‹</button>
+              <button class="gallery-btn" type="button" data-gallery-next aria-label="查看下一张">›</button>
+            </div>
+          </div>
+          <div class="gallery-track" data-gallery-track>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-02-01.jpg" data-lightbox-alt="章节 2 占位图 1" data-lightbox-caption="开发阶段占位图：当前使用项目中的主视觉海报图测试视频下方图带效果。">
+              <img src="media/images/chapter-02-01.jpg" alt="章节 2 占位图 1">
+              <span>Unity 场景视觉占位</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-02-02.png" data-lightbox-alt="章节 2 占位图 2" data-lightbox-caption="开发阶段占位图：当前使用项目内部图像文件占位。">
+              <img src="media/images/chapter-02-02.png" alt="章节 2 占位图 2">
+              <span>交互节点调试记录</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-02-03.png" data-lightbox-alt="章节 2 占位图 3" data-lightbox-caption="开发阶段占位图：可替换成头显内录截图或 Unity 编辑器截图。">
+              <img src="media/images/chapter-02-03.png" alt="章节 2 占位图 3">
+              <span>场景迭代版本对比</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-02-04.png" data-lightbox-alt="章节 2 占位图 4" data-lightbox-caption="开发阶段占位图：当前用于测试多图横向滑动长度。">
+              <img src="media/images/chapter-02-04.png" alt="章节 2 占位图 4">
+              <span>XR 交互细节占位</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter-section">
+        <div class="chapter-media">
+          <div class="chapter-video-shell">
+            <video controls preload="metadata" poster="">
+              <source src="media/videos/chapter-03.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </div>
+          <span class="chapter-file">视频文件：process/media/videos/chapter-03.mp4</span>
+          <p class="video-tip">
+            这一章建议展示大屏同步、实体卡片与移动端协作的联动过程。当前暂用 <code>process/media/videos/chapter-03.mp4</code> 占位。
+          </p>
+        </div>
+        <div class="chapter-body">
+          <div class="chapter-kicker">CHAPTER 03</div>
+          <h3>跨媒介系统整合</h3>
+          <p>设计同步显示大屏、实体协作卡片、移动端回应者等辅助媒介，构建完整的信息流闭环。这里的重点不是“再加几个展示物”，而是让 VR 体验真正和现实中的社交回应方式发生连接，形成更完整的协作链路。</p>
+          <div class="chapter-points">
+            <div class="chapter-point"><strong>大屏联动：</strong>同步展示章节状态和协作结果，增强围观者的理解路径。</div>
+            <div class="chapter-point"><strong>实体媒介：</strong>加入可触摸、可传递的协作卡片，补强现实中的参与感。</div>
+            <div class="chapter-point"><strong>信息流闭环：</strong>把头显体验、外部反馈与展示系统组织成一条连续叙事。</div>
+          </div>
+        </div>
+        <div class="chapter-gallery" data-gallery>
+          <div class="chapter-gallery-head">
+            <div class="chapter-gallery-title">阶段图像记录</div>
+            <div class="chapter-gallery-controls">
+              <span class="chapter-gallery-count">4 张占位图</span>
+              <button class="gallery-btn" type="button" data-gallery-prev aria-label="查看上一张">‹</button>
+              <button class="gallery-btn" type="button" data-gallery-next aria-label="查看下一张">›</button>
+            </div>
+          </div>
+          <div class="gallery-track" data-gallery-track>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-03-01.png" data-lightbox-alt="章节 3 占位图 1" data-lightbox-caption="跨媒介阶段占位图：可替换成大屏联动或实体媒介照片。">
+              <img src="media/images/chapter-03-01.png" alt="章节 3 占位图 1">
+              <span>大屏同步信息测试</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-03-02.png" data-lightbox-alt="章节 3 占位图 2" data-lightbox-caption="跨媒介阶段占位图：当前用项目内图像测试卡片点击放大。">
+              <img src="media/images/chapter-03-02.png" alt="章节 3 占位图 2">
+              <span>实体卡片阶段占位</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-03-03.png" data-lightbox-alt="章节 3 占位图 3" data-lightbox-caption="跨媒介阶段占位图：后续可替换为信息流草图。">
+              <img src="media/images/chapter-03-03.png" alt="章节 3 占位图 3">
+              <span>协作信息流草图</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-03-04.png" data-lightbox-alt="章节 3 占位图 4" data-lightbox-caption="跨媒介阶段占位图：测试更长图片列时的滚动体验。">
+              <img src="media/images/chapter-03-04.png" alt="章节 3 占位图 4">
+              <span>多终端联动记录</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter-section is-reversed">
+        <div class="chapter-media">
+          <div class="chapter-video-shell">
+            <video controls preload="metadata" poster="">
+              <source src="media/videos/chapter-04.mp4" type="video/mp4" />
+              你的浏览器不支持 video 标签。
+            </video>
+          </div>
+          <span class="chapter-file">视频文件：process/media/videos/chapter-04.mp4</span>
+          <p class="video-tip">
+            建议放入试玩现场、问题记录与版本对比片段。当前暂用 <code>process/media/videos/chapter-04.mp4</code> 占位。
+          </p>
+        </div>
+        <div class="chapter-body">
+          <div class="chapter-kicker">CHAPTER 04</div>
+          <h3>用户测试与迭代</h3>
+          <p>邀请 20 名大学生参与测试，根据反馈优化交互难度、叙事节奏与社交引导机制。这个阶段让作品从“可以运行”逐步转向“可以被理解、愿意被参与、能够真正引发交流”的状态。</p>
+          <div class="chapter-points">
+            <div class="chapter-point"><strong>测试对象：</strong>围绕大学生用户收集初次体验、理解成本与情绪反馈。</div>
+            <div class="chapter-point"><strong>主要调整：</strong>优化提示节奏、互动难度、任务压力与章节衔接方式。</div>
+            <div class="chapter-point"><strong>最终目标：</strong>让体验不只是完成任务，而是更自然地引导沟通、协作与共情。</div>
+          </div>
+        </div>
+        <div class="chapter-gallery" data-gallery>
+          <div class="chapter-gallery-head">
+            <div class="chapter-gallery-title">阶段图像记录</div>
+            <div class="chapter-gallery-controls">
+              <span class="chapter-gallery-count">4 张占位图</span>
+              <button class="gallery-btn" type="button" data-gallery-prev aria-label="查看上一张">‹</button>
+              <button class="gallery-btn" type="button" data-gallery-next aria-label="查看下一张">›</button>
+            </div>
+          </div>
+          <div class="gallery-track" data-gallery-track>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-04-01.png" data-lightbox-alt="章节 4 占位图 1" data-lightbox-caption="测试阶段占位图：可替换为现场试玩照片或问题记录截图。">
+              <img src="media/images/chapter-04-01.png" alt="章节 4 占位图 1">
+              <span>测试现场记录</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-04-02.png" data-lightbox-alt="章节 4 占位图 2" data-lightbox-caption="测试阶段占位图：后续可替换成反馈表单、手写标注等素材。">
+              <img src="media/images/chapter-04-02.png" alt="章节 4 占位图 2">
+              <span>反馈收集与整理</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-04-03.png" data-lightbox-alt="章节 4 占位图 3" data-lightbox-caption="测试阶段占位图：适合替换为改版前后对比图。">
+              <img src="media/images/chapter-04-03.png" alt="章节 4 占位图 3">
+              <span>问题点与迭代对比</span>
+            </button>
+            <button class="gallery-card" type="button" data-lightbox-src="media/images/chapter-04-04.png" data-lightbox-alt="章节 4 占位图 4" data-lightbox-caption="测试阶段占位图：当前用项目图测试最后一章的图片带完整性。">
+              <img src="media/images/chapter-04-04.png" alt="章节 4 占位图 4">
+              <span>最终体验修整</span>
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <!-- 右侧：制作步骤 -->
-    <div class="steps">
-      <div class="step">
-        <strong>01｜概念与视觉建立</strong>
-        <span>确定 Low-Poly 美术风格，绘制主视觉海报，构建四章叙事结构与情绪节奏。</span>
-      </div>
-      <div class="step">
-        <strong>02｜Unity / VR 开发</strong>
-        <span>使用 Unity 2022.3 + XR Interaction Toolkit + PICO SDK 搭建场景，实现抓取、瞬移、绘画等核心交互。</span>
-      </div>
-      <div class="step">
-        <strong>03｜跨媒介系统整合</strong>
-        <span>设计同步显示大屏、实体协作卡片、移动端回应者等辅助媒介，构建完整的信息流闭环。</span>
-      </div>
-      <div class="step">
-        <strong>04｜用户测试与迭代</strong>
-        <span>邀请 20 名大学生参与测试，根据反馈优化交互难度、叙事节奏与社交引导机制。</span>
+    <div class="section-block">
+      <div class="replace-note">
+        <strong>替换方式</strong>
+        <p>当前占位素材已统一放在 <code>process/media/videos/</code> 和 <code>process/media/images/</code>。后续只需要用同名文件直接覆盖，例如把第一章视频替换成 <code>chapter-01.mp4</code>，把第一章图片继续按 <code>chapter-01-01</code>、<code>chapter-01-02</code> 这样的命名覆盖或新增即可；如果某一章图片超过 4 张，继续往后补成 <code>chapter-01-05</code>、<code>chapter-01-06</code>，再在这一章的图片带里复制一个卡片节点就能继续扩展。</p>
       </div>
     </div>
   </div>
 
-  <!-- 图片展示区 —— 可以替换成你的概念图、草图、截图 -->
-  <div style="margin-top:50px;">
-    <h3 style="font-size:22px;color:#2c3a4a;margin-bottom:20px;">过程记录</h3>
-    <div class="gallery">
-      <!-- 这里改制作过程图片 —— 替换 src 为你的草图/截图/照片 -->
-      <div class="gallery-item">
-        <img src="../images/剪贴板图片.jpg" alt="概念草图" />
-      </div>
-      <div class="gallery-item">
-        <img src="../images/剪贴板图片.jpg" alt="场景搭建" />
-      </div>
-      <div class="gallery-item">
-        <img src="../images/剪贴板图片.jpg" alt="测试记录" />
-      </div>
-    </div>
+  <div class="lightbox" id="process-lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <button class="lightbox-close" type="button" aria-label="关闭大图" data-lightbox-close>×</button>
+    <figure class="lightbox-figure">
+      <img class="lightbox-image" alt="">
+      <figcaption class="lightbox-caption"></figcaption>
+    </figure>
   </div>
+
+  <footer>Within · 协作同行 ｜ 制作过程记录</footer>
 </div>
 
-<footer>
-  Within · 协作同行 ｜ 制作过程记录
-</footer>
-
-<script>
-(function () {
-  var prevTarget = '../chapters/index.html';
-  var nextTarget = '../thanks/index.html';
-  var wrap = document.querySelector('.wrap');
-  var navigating = false;
-  var prevArmed = false;
-  var nextArmed = false;
-  var threshold = 4;
-  var delay = 420;
-  var pullOpenDistance = 240;
-  var armedLockUntil = 0;
-  var armedGraceMs = 960;
-  var armedConfirmReadyAt = 0;
-  var armedConfirmCooldownMs = 360;
-  var nextLockUntil = 0;
-  var nextGraceMs = 960;
-  var nextConfirmReadyAt = 0;
-  var nextConfirmCooldownMs = 360;
-  function applyPull(distance) {
-    if (wrap) {
-      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
-    }
-  }
-
-  function clearPrevArm() {
-    prevArmed = false;
-    armedLockUntil = 0;
-    armedConfirmReadyAt = 0;
-    document.body.classList.remove('is-prev-armed');
-  }
-
-  function clearNextArm() {
-    nextArmed = false;
-    nextLockUntil = 0;
-    nextConfirmReadyAt = 0;
-    document.body.classList.remove('is-next-armed');
-  }
-
-  function openPrevPull() {
-    if (!prevTarget || navigating) return;
-    var now = Date.now();
-    clearNextArm();
-    prevArmed = true;
-    armedLockUntil = now + armedGraceMs;
-    armedConfirmReadyAt = now + armedConfirmCooldownMs;
-    document.body.classList.add('is-prev-armed');
-    applyPull(pullOpenDistance);
-  }
-
-  function openNextPull() {
-    if (!nextTarget || navigating) return;
-    var now = Date.now();
-    clearPrevArm();
-    nextArmed = true;
-    nextLockUntil = now + nextGraceMs;
-    nextConfirmReadyAt = now + nextConfirmCooldownMs;
-    document.body.classList.add('is-next-armed');
-    applyPull(-pullOpenDistance);
-  }
-
-  function closePull() {
-    clearPrevArm();
-    clearNextArm();
-    applyPull(0);
-  }
-
-  function getMaxScroll() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
-
-  function go(target, direction) {
-    if (!target || navigating) return;
-    navigating = true;
-    closePull();
-    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
-    window.setTimeout(function () {
-      window.location.href = target;
-    }, delay);
-  }
-
-  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
-  var currentPage = 'process';
-
-  function normalizeNavTarget(href) {
-    if (!href) return null;
-    if (href.indexOf('about/index.html') !== -1) return 'about';
-    if (href.indexOf('research/index.html') !== -1) return 'research';
-    if (href.indexOf('design/index.html') !== -1) return 'design';
-    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
-    if (href.indexOf('process/index.html') !== -1) return 'process';
-    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
-    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
-    return null;
-  }
-
-  function getNavDirection(href) {
-    var targetKey = normalizeNavTarget(href);
-    var currentIndex = pageOrder.indexOf(currentPage);
-    var targetIndex = pageOrder.indexOf(targetKey);
-    if (currentIndex === -1 || targetIndex === -1) return 'next';
-    return targetIndex < currentIndex ? 'prev' : 'next';
-  }
-
-  function bindNavLinks() {
-    var navLinks = document.querySelectorAll('.nav a[href]');
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        if (navigating) {
-          event.preventDefault();
-          return;
-        }
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-        var href = link.getAttribute('href');
-        if (!href || link.classList.contains('active')) return;
-        event.preventDefault();
-        go(href, getNavDirection(href));
-      });
-    });
-  }
-
-  bindNavLinks();
-  window.addEventListener('wheel', function (event) {
-    if (navigating) {
-      event.preventDefault();
-      return;
-    }
-
-    var atTop = window.scrollY <= threshold;
-    var maxScroll = getMaxScroll();
-    var atBottom = window.scrollY >= maxScroll - threshold;
-
-    if (prevArmed) {
-      event.preventDefault();
-      var now = Date.now();
-      if (event.deltaY < -8 && prevTarget) {
-        if (now < armedConfirmReadyAt) {
-          return;
-        }
-        go(prevTarget, 'prev');
-        return;
-      }
-      if (event.deltaY > 10 && now >= armedLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      event.preventDefault();
-      var nowNext = Date.now();
-      if (event.deltaY > 8 && nextTarget) {
-        if (nowNext < nextConfirmReadyAt) {
-          return;
-        }
-        go(nextTarget, 'next');
-        return;
-      }
-      if (event.deltaY < -10 && nowNext >= nextLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (event.deltaY < -12 && atTop && prevTarget) {
-      event.preventDefault();
-      openPrevPull();
-      return;
-    }
-
-    if (event.deltaY > 12 && atBottom && nextTarget) {
-      event.preventDefault();
-      openNextPull();
-      return;
-    }
-
-    if (!atTop && !atBottom) {
-      closePull();
-    }
-  }, { passive: false });
-
-  window.addEventListener('scroll', function () {
-    var maxScroll = getMaxScroll();
-
-    if (prevArmed) {
-      if (window.scrollY > threshold + 2) {
-        window.scrollTo(0, 0);
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      if (window.scrollY < maxScroll - threshold - 2) {
-        window.scrollTo(0, maxScroll);
-      }
-      return;
-    }
-
-    if (window.scrollY > threshold + 2 && window.scrollY < maxScroll - threshold - 2) {
-      closePull();
-    }
-  }, { passive: true });
-})();
+<script id="page-config">
+window.__pageConfig = {
+  current: 'process',
+  prev: '../chapters/index.html',
+  next: '../thanks/index.html'
+};
 </script>
+<script id="page-script">
+var processLightbox = document.getElementById('process-lightbox');
+if (processLightbox) {
+  var processLightboxImage = processLightbox.querySelector('.lightbox-image');
+  var processLightboxCaption = processLightbox.querySelector('.lightbox-caption');
+  var processLastTrigger = null;
+
+  function closeProcessLightbox() {
+    if (!processLightbox.classList.contains('is-open')) return;
+    processLightbox.classList.remove('is-open');
+    processLightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    window.setTimeout(function () {
+      processLightboxImage.removeAttribute('src');
+      processLightboxCaption.textContent = '';
+    }, 260);
+  }
+
+  function openProcessLightbox(button) {
+    if (!button) return;
+    processLastTrigger = button;
+    processLightboxImage.src = button.getAttribute('data-lightbox-src') || '';
+    processLightboxImage.alt = button.getAttribute('data-lightbox-alt') || '';
+    processLightboxCaption.textContent = button.getAttribute('data-lightbox-caption') || '';
+    processLightbox.setAttribute('aria-hidden', 'false');
+    processLightbox.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+
+    var thumb = button.querySelector('img');
+    if (thumb) {
+      var rect = thumb.getBoundingClientRect();
+      var targetRect = processLightboxImage.getBoundingClientRect();
+      var scaleX = rect.width / Math.max(targetRect.width, 1);
+      var scaleY = rect.height / Math.max(targetRect.height, 1);
+      var translateX = rect.left + rect.width / 2 - (targetRect.left + targetRect.width / 2);
+      var translateY = rect.top + rect.height / 2 - (targetRect.top + targetRect.height / 2);
+      processLightboxImage.style.transition = 'none';
+      processLightboxImage.style.transform = 'translate(' + translateX + 'px,' + translateY + 'px) scale(' + scaleX + ',' + scaleY + ')';
+      processLightboxImage.style.opacity = '0.72';
+      processLightboxImage.offsetWidth;
+      processLightboxImage.style.transition = 'transform .34s cubic-bezier(.22,1,.36,1), opacity .24s ease';
+      processLightboxImage.style.transform = 'translate(0,0) scale(1,1)';
+      processLightboxImage.style.opacity = '1';
+    }
+  }
+
+  document.querySelectorAll('[data-gallery]').forEach(function (gallery) {
+    var track = gallery.querySelector('[data-gallery-track]');
+    var prev = gallery.querySelector('[data-gallery-prev]');
+    var next = gallery.querySelector('[data-gallery-next]');
+    if (track && prev) {
+      prev.addEventListener('click', function () {
+        track.scrollBy({ left: -Math.max(track.clientWidth * 0.82, 260), behavior: 'smooth' });
+      });
+    }
+    if (track && next) {
+      next.addEventListener('click', function () {
+        track.scrollBy({ left: Math.max(track.clientWidth * 0.82, 260), behavior: 'smooth' });
+      });
+    }
+  });
+
+  document.querySelectorAll('.gallery-card').forEach(function (button) {
+    button.addEventListener('click', function () {
+      openProcessLightbox(button);
+    });
+  });
+
+  processLightbox.querySelectorAll('[data-lightbox-close]').forEach(function (closeButton) {
+    closeButton.addEventListener('click', closeProcessLightbox);
+  });
+
+  window.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      closeProcessLightbox();
+      if (processLastTrigger) {
+        processLastTrigger.focus();
+      }
+    }
+  });
+}
+</script>
+<script src="../shell.js"></script>
 
 </body>
 </html>
-
-
-
-
-
-

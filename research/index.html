@@ -1,199 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>问题研究 — Within · 协作同行</title>
-<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
-
-:root {
-  --text-main: #4a5560;
-  --text-dark: #2c3a4a;
-  --text-soft: #8899a8;
-  --blue: #6b8fa3;
-  --cyan: #8ab4c4;
-  --cyan-deep: #5b9aa0;
-  --purple: #9385bf;
-  --warm: #c4a882;
-  --border: rgba(112,136,160,0.16);
-  --shadow: 0 20px 60px rgba(99,124,148,0.10);
-  --shadow-hover: 0 24px 64px rgba(99,124,148,0.14);
-}
-
-body {
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: var(--text-main);
-  background:
-    radial-gradient(circle at 20% 15%, rgba(138,180,196,0.10), transparent 35%),
-    radial-gradient(circle at 80% 35%, rgba(212,196,168,0.10), transparent 35%),
-    linear-gradient(180deg, #f5f7fa 0%, #eef1f5 50%, #edf0f4 100%);
-  overflow-x: hidden;
-  overflow-y: clip;
-}
-body::before {
-  content: ""; position: fixed; inset: 0;
-  pointer-events: none; z-index: 0; opacity: 0.03;
-  background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
-  background-size: 72px 72px, 96px 96px;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 35;
-  opacity: 0;
-  background: linear-gradient(180deg, rgba(245,247,250,0.14), rgba(238,241,245,0.94) 68%, rgba(237,240,244,1));
-  transition: opacity .42s ease;
-}
-
-body.is-leaving-prev::after,
-body.is-leaving-next::after {
-  opacity: 1;
-}
-
-.nav {
-  position: fixed; top: 0; left: 0; width: 100%; z-index: 30;
-  display: flex; justify-content: center; gap: 10px;
-  padding: 16px;
-  backdrop-filter: blur(16px);
-  background: rgba(245,247,250,0.65);
-  border-bottom: 1px solid var(--border);
-}
-.nav a {
-  padding: 10px 18px; border-radius: 999px;
-  color: var(--text-soft); font-size: 14px;
-  text-decoration: none;
-  transition: all .25s ease;
-}
-.nav a:hover, .nav a.active {
-  color: var(--text-main);
-  background: rgba(138,180,196,0.14);
-}
-
-.nav,
-.wrap,
-footer {
-  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
-}
-
-body.is-leaving-next .nav,
-body.is-leaving-next .wrap,
-body.is-leaving-next footer {
-  opacity: 0;
-  transform: translateY(-24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-prev .nav,
-body.is-leaving-prev .wrap,
-body.is-leaving-prev footer {
-  opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
-}
-
-.prev-arm-hint {
-  position: fixed;
-  left: 50%;
-  top: 156px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.prev-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-left: 1.5px solid rgba(91,154,160,0.9);
-  border-top: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-28%) rotate(45deg);
-}
-
-.prev-arm-hint::after {
-  content: "滚轮上滑，回到前一页";
-}
-
-body.is-prev-armed .prev-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-.next-arm-hint {
-  position: fixed;
-  left: 50%;
-  bottom: 84px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(-6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.next-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid rgba(91,154,160,0.9);
-  border-bottom: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-72%) rotate(45deg);
-}
-
-.next-arm-hint::after {
-  content: "滚轮下滑，前往下一页";
-}
-
-body.is-next-armed .next-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-
+<link rel="stylesheet" href="../shared.css">
+<style id="page-styles">
 .wrap {
-  position: relative; z-index: 1;
   width: min(1520px, calc(100% - 56px));
-  margin: 0 auto;
-  padding: 104px 0 72px;
-}
-
-.eyebrow {
-  color: var(--blue); letter-spacing: .18em;
-  font-size: 13px; margin-bottom: 14px;
-  text-transform: uppercase;
 }
 
 h1 {
@@ -348,19 +162,33 @@ h1 {
 
 .table-wrap {
   overflow-x: auto;
+  padding: 0 14px;
 }
 
 table {
   width: 100%;
   min-width: 760px;
   border-collapse: collapse;
+  table-layout: auto;
+  margin: 0 auto;
+}
+
+colgroup col:nth-child(1) { width: 28%; }
+colgroup col:nth-child(2) { width: 14%; }
+colgroup col:nth-child(3) { width: 14%; }
+colgroup col:nth-child(4) { width: 44%; }
+
+th:first-child,
+td:first-child {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 th, td {
-  padding: 15px 16px;
+  padding: 16px 18px;
   border-bottom: 1px solid rgba(148,176,200,0.14);
-  text-align: left;
-  vertical-align: top;
+  text-align: center;
+  vertical-align: middle;
   font-size: 14px;
   line-height: 1.8;
 }
@@ -369,6 +197,24 @@ th {
   background: rgba(255,255,255,0.58);
   color: var(--text-dark);
   font-weight: 600;
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-align: center;
+}
+
+th:nth-child(2),
+th:nth-child(3),
+td:nth-child(2),
+td:nth-child(3) {
+  white-space: nowrap;
+}
+
+td:first-child {
+  color: var(--text-dark);
+}
+
+td:last-child {
+  color: #6f8090;
 }
 
 td {
@@ -411,6 +257,15 @@ tbody tr:last-child td {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
   align-items: stretch;
+}
+
+.chart-grid > .chart-card:not(.wide) {
+  align-items: center;
+}
+
+.chart-grid > .chart-card:not(.wide) > h3,
+.chart-grid > .chart-card:not(.wide) > p {
+  text-align: center;
 }
 
 .donut-grid {
@@ -497,28 +352,32 @@ tbody tr:last-child td {
   fill: none;
   stroke-width: 18;
   cursor: pointer;
-  opacity: 1;
-  transition: opacity .2s ease, transform .2s ease, stroke-width .2s ease, filter .2s ease, stroke .2s ease;
+  opacity: .94;
+  transition: opacity .24s ease, transform .24s ease, stroke-width .24s ease, filter .24s ease, stroke .24s ease;
   transform-origin: 50% 50%;
   outline: none;
 }
 
 .donut-segment.is-max {
   opacity: 1;
-  stroke-width: 18;
-  filter: drop-shadow(0 4px 10px rgba(78, 96, 116, 0.16));
+  stroke-width: 22;
+  filter: drop-shadow(0 8px 18px rgba(78, 96, 116, 0.22));
 }
 
 .donut-segment:hover,
 .donut-segment:focus {
   opacity: 1;
-  stroke-width: 20;
+  stroke-width: 26;
+  transform: scale(1.08);
+  filter: drop-shadow(0 10px 22px rgba(78, 96, 116, 0.28));
 }
 
 .donut-segment.is-max:hover,
 .donut-segment.is-max:focus {
   opacity: 1;
-  stroke-width: 20;
+  stroke-width: 28;
+  transform: scale(1.1);
+  filter: drop-shadow(0 12px 26px rgba(78, 96, 116, 0.32));
 }
 
 .donut-segment:focus-visible {
@@ -599,7 +458,7 @@ tbody tr:last-child td {
 }
 
 .style-legend {
-  margin: 14px auto 18px;
+  margin: 18px auto 0;
   padding: 10px 14px;
   border-radius: 999px;
   background: rgba(255,255,255,0.58);
@@ -641,12 +500,27 @@ tbody tr:last-child td {
   color: var(--text-dark);
   font-size: 16px;
   margin-bottom: 8px;
+  text-align: center;
 }
 
 .chart-subsection p {
   color: var(--text-soft);
   font-size: 13px;
   line-height: 1.8;
+}
+
+.chart-card.wide > h3,
+.chart-card.wide > p {
+  text-align: center;
+}
+
+.chart-card.wide > p {
+  max-width: 44em;
+  margin: 0 auto;
+}
+
+.matrix-header {
+  display: none;
 }
 
 .likert-list {
@@ -809,12 +683,6 @@ tbody tr:last-child td {
   color: rgba(244,247,250,0.86);
 }
 
-.chart-footnote {
-  margin-top: 18px;
-  color: var(--text-soft);
-  font-size: 12px;
-  line-height: 1.8;
-}
 
 .summary-grid {
   display: grid;
@@ -837,12 +705,6 @@ tbody tr:last-child td {
   color: var(--text-soft);
   font-size: 14px;
   line-height: 1.9;
-}
-
-footer {
-  text-align: center; padding: 24px;
-  color: var(--text-soft); font-size: 13px;
-  position: relative; z-index: 1;
 }
 
 @media (max-width: 1280px) {
@@ -894,25 +756,12 @@ footer {
     min-width: 760px;
   }
 }
-@media (max-width: 700px) {
-  .nav { justify-content: flex-start; overflow-x: auto; gap: 6px; }
-  .nav a { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
-  .prev-arm-hint {
-    top: 124px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
-  }
-  .next-arm-hint {
-    bottom: 60px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
-  }
-}
 </style>
 </head>
-<body>
+<body class="page-research">
 
 <nav class="nav">
+  <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../index.html">首页</a>
   <a href="../about/index.html">项目介绍</a>
   <a href="../research/index.html" class="active">问题研究</a>
@@ -923,210 +772,221 @@ footer {
 </nav>
 <div class="prev-arm-hint" aria-hidden="true"></div>
 <div class="next-arm-hint" aria-hidden="true"></div>
-<div class="wrap">
-  <div class="eyebrow">PROBLEM STUDY</div>
-  <h1>问题研究</h1>
-  <p class="lead">
-    这一页集中梳理大学生社交困境、问卷调查结果与设计机会点，用研究证据说明 Within 为什么需要被设计出来。
-  </p>
 
-  <div class="hero-note">
-    <p>
-      研究从“<strong>线上活跃、线下疏离</strong>”的大学生社交状态切入，
-      重点关注现实社交中的启动门槛、评价压力与浅层联结问题。
-      问卷与前期分析并不是为了证明技术新奇，而是为了找到 XR 与 <strong>跨媒介协作</strong> 真正能够介入社交行为的切口。
+<div id="page-content">
+  <div class="wrap">
+    <div class="eyebrow">PROBLEM STUDY</div>
+    <h1>问题研究</h1>
+    <p class="lead">
+      这一页集中梳理大学生社交困境、问卷调查结果与设计机会点，用研究证据说明 Within 为什么需要被设计出来。
     </p>
-  </div>
 
-  <div class="section">
-    <div class="section-head">
-      <h2>研究锚点</h2>
-      <p>这一页集中建立研究问题、理论基础、方法链路与数据依据，把项目判断从“感觉”转为可解释、可追溯的研究结论。</p>
+    <div class="hero-note">
+      <p>
+        研究从"<strong>线上活跃、线下疏离</strong>"的大学生社交状态切入，
+        重点关注现实社交中的启动门槛、评价压力与浅层联结问题。
+        问卷与前期分析并不是为了证明技术新奇，而是为了找到 XR 与 <strong>跨媒介协作</strong> 真正能够介入社交行为的切口。
+      </p>
     </div>
 
-    <div class="grid-3">
-      <div class="card accent-cyan">
-        <h3>研究问题</h3>
-        <p>
-          当代大学生在数字媒介环境下呈现出明显的“线上亲近、线下疏离”状态。
-          项目聚焦的不是抽象社交命题，而是现实社交中真实存在的启动门槛、评价压力与联结浅层化问题。
-        </p>
+    <div class="section">
+      <div class="section-head">
+        <h2>研究锚点</h2>
+        <p>这一页集中建立研究问题、理论基础、方法链路与数据依据，把项目判断从"感觉"转为可解释、可追溯的研究结论。</p>
       </div>
-      <div class="card accent-purple">
-        <h3>理论视角</h3>
-        <p>
-          项目以具身认知为核心理论支撑，将社交理解为身体、环境与任务共同参与的过程。
-          社交不只是语言交换，而是发生在身体在场、多感官参与与情境嵌入中的认知与行为生成。
-        </p>
-      </div>
-      <div class="card accent-warm">
-        <h3>作品定位</h3>
-        <p>
-          Within 将 XR 重新定义为“社交引导媒介”。
-          它通过叙事空间、角色差异和信息分配，把用户从任务协作逐步引向现实中的自然交流，而非停留在头显内部体验。
-        </p>
-      </div>
-    </div>
-  </div>
 
-  <div class="section">
-    <div class="section-head">
-      <h2>机制与方法</h2>
-      <p>研究方法与样本信息共同构成证据基础，既回答“问题从哪里来”，也回答“设计判断如何被验证”。</p>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <h3>跨媒介协作机制</h3>
-        <p>
-          项目通过 XR 虚拟场景、同步显示界面、实体线索和线下空间互动的组合，
-          形成非对称的信息分配关系。不同参与者无法单独完成全部任务，因此沟通与协作成为推进体验的必要条件。
-        </p>
-        <div class="feature-list">
-          <div class="feature-item">XR 场景承担沉浸探索与具身操作</div>
-          <div class="feature-item">同步大屏承担观察、共享与策略提示</div>
-          <div class="feature-item">实体线索承担信息转译与协作触发</div>
-          <div class="feature-item">现实空间承担关系延伸与面对面交流</div>
+      <div class="grid-3">
+        <div class="card accent-cyan">
+          <h3>研究问题</h3>
+          <p>
+            当代大学生在数字媒介环境下呈现出明显的"线上亲近、线下疏离"状态。
+            项目聚焦的不是抽象社交命题，而是现实社交中真实存在的启动门槛、评价压力与联结浅层化问题。
+          </p>
         </div>
-      </div>
-      <div class="card">
-        <h3>研究方法</h3>
-        <p>
-          论文采用文献研究、问卷调查、案例分析与实践创作法，
-          从前期调研、中期开发到后期测试，形成从理论构建到原型验证的完整闭环。
-        </p>
-        <div class="tag-list">
-          <span class="tag">文献研究</span>
-          <span class="tag">问卷调查</span>
-          <span class="tag">案例分析</span>
-          <span class="tag">实践创作</span>
-          <span class="tag">Unity / XR</span>
+        <div class="card accent-purple">
+          <h3>理论视角</h3>
+          <p>
+            项目以具身认知为核心理论支撑，将社交理解为身体、环境与任务共同参与的过程。
+            社交不只是语言交换，而是发生在身体在场、多感官参与与情境嵌入中的认知与行为生成。
+          </p>
+        </div>
+        <div class="card accent-warm">
+          <h3>作品定位</h3>
+          <p>
+            Within 将 XR 重新定义为"社交引导媒介"。
+            它通过叙事空间、角色差异和信息分配，把用户从任务协作逐步引向现实中的自然交流，而非停留在头显内部体验。
+          </p>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-head">
-      <h2>调研图表</h2>
-      <p>问卷数据以图表方式重组，重点呈现社交偏好、线下痛点、线上行为与视觉交互需求之间的结构关系。</p>
-    </div>
-
-    <div class="table-shell">
-      <div class="table-head">
-        <h3>表 1 · 问卷基本信息</h3>
-        <p>这里汇总两份问卷的样本量、题目方向与分析重点，作为后续图表阅读的总入口。</p>
+    <div class="section">
+      <div class="section-head">
+        <h2>机制与方法</h2>
+        <p>研究方法与样本信息共同构成证据基础，既回答"问题从哪里来"，也回答"设计判断如何被验证"。</p>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>调研名称</th>
-              <th>发放份数</th>
-              <th>有效问卷</th>
-              <th>调研重点</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>大学生社交互动偏好调研</td>
-              <td>130</td>
-              <td>117</td>
-              <td>虚拟场景接受度、线下社交痛点、线上社交偏好、场景与交互体验</td>
-            </tr>
-            <tr>
-              <td>虚拟环境风格偏好与交互需求调研</td>
-              <td>127</td>
-              <td>117</td>
-              <td>美术风格偏好、空间设计诉求、氛围营造需求、具身交互反馈</td>
-            </tr>
-          </tbody>
-        </table>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>跨媒介协作机制</h3>
+          <p>
+            项目通过 XR 虚拟场景、同步显示界面、实体线索和线下空间互动的组合，
+            形成非对称的信息分配关系。不同参与者无法单独完成全部任务，因此沟通与协作成为推进体验的必要条件。
+          </p>
+          <div class="feature-list">
+            <div class="feature-item">XR 场景承担沉浸探索与具身操作</div>
+            <div class="feature-item">同步大屏承担观察、共享与策略提示</div>
+            <div class="feature-item">实体线索承担信息转译与协作触发</div>
+            <div class="feature-item">现实空间承担关系延伸与面对面交流</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>研究方法</h3>
+          <p>
+            论文采用文献研究、问卷调查、案例分析与实践创作法，
+            从前期调研、中期开发到后期测试，形成从理论构建到原型验证的完整闭环。
+          </p>
+          <div class="tag-list">
+            <span class="tag">文献研究</span>
+            <span class="tag">问卷调查</span>
+            <span class="tag">案例分析</span>
+            <span class="tag">实践创作</span>
+            <span class="tag">Unity / XR</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="chart-grid">
-      <div class="chart-card">
-        <h3>虚拟场景与协作偏好</h3>
-        <p>聚焦 XR 接受度、任务导向协作与私密空间偏好。悬浮到扇区可查看具体档位数据。</p>
-        <div class="donut-grid" id="virtual-social-charts"></div>
-        <div class="legend-list" id="social-legend"></div>
+    <div class="section">
+      <div class="section-head">
+        <h2>调研图表</h2>
+        <p>问卷数据以图表方式重组，重点呈现社交偏好、线下痛点、线上行为与视觉交互需求之间的结构关系。</p>
       </div>
 
-      <div class="chart-card">
-        <h3>线下社交场景痛点</h3>
-        <p>聚焦沉默倾向、开口压力、被评价感与线下社交后的疲惫恢复。</p>
-        <div class="donut-grid" id="offline-social-charts"></div>
-        <div class="legend-list" id="offline-legend"></div>
+      <div class="table-shell">
+        <div class="table-head">
+          <h3>表 1 · 问卷基本信息</h3>
+          <p>这里汇总两份问卷的样本量、题目方向与分析重点，作为后续图表阅读的总入口。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <colgroup>
+              <col>
+              <col>
+              <col>
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>调研名称</th>
+                <th>发放份数</th>
+                <th>有效问卷</th>
+                <th>调研重点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>大学生社交互动偏好调研</td>
+                <td>130</td>
+                <td>117</td>
+                <td>虚拟场景接受度、线下社交痛点、线上社交偏好、场景与交互体验</td>
+              </tr>
+              <tr>
+                <td>虚拟环境风格偏好与交互需求调研</td>
+                <td>127</td>
+                <td>117</td>
+                <td>美术风格偏好、空间设计诉求、氛围营造需求、具身交互反馈</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="chart-card">
-        <h3>线上社交行为偏好</h3>
-        <p>聚焦社交媒体自我展示、虚拟语境活跃度与低暴露度表达偏好。</p>
-        <div class="donut-grid" id="online-social-charts"></div>
-        <div class="legend-list" id="online-legend"></div>
-      </div>
-
-      <div class="chart-card wide">
-        <h3>视觉与交互需求</h3>
-        <p>这一块不再硬做成一堆饼图，而是基于你现有统计图的数据，拆成“风格选择环图 + 需求分布条”。悬浮到任意色块即可看到题项、选项和百分比。</p>
-
-        <div class="chart-subsection style-subsection">
-          <h4>风格偏好</h4>
-          <p>保留你原始图里最关键的风格对比：写实、像素与 Low-Poly。这样既能对应论文里的视觉结论，也能直接说明最终为何选择 Low-Poly 方向。</p>
-          <div class="legend-list style-legend" id="design-legend"></div>
-          <div class="donut-grid style-grid" id="style-choice-charts"></div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h3>虚拟场景与协作偏好</h3>
+          <p>聚焦 XR 接受度、任务导向协作与私密空间偏好。</p>
+          <div class="donut-grid" id="virtual-social-charts"></div>
+          <div class="legend-list" id="social-legend"></div>
         </div>
 
-        <div class="chart-subsection">
-          <h4>空间与氛围需求</h4>
-          <p>这一部分改成矩阵式对照，五档倾向会直接横向展开，读数关系比长条更清楚，也不会显得太碎。</p>
-          <div class="likert-matrix" id="space-visual-matrix"></div>
+        <div class="chart-card">
+          <h3>线下社交场景痛点</h3>
+          <p>聚焦沉默倾向、开口压力、被评价感与线下社交后的疲惫恢复。</p>
+          <div class="donut-grid" id="offline-social-charts"></div>
+          <div class="legend-list" id="offline-legend"></div>
         </div>
 
-        <div class="chart-subsection">
-          <h4>交互反馈需求</h4>
-          <p>交互相关题项保留 Likert 分布结构，这样更容易读出“比较符合”与“非常符合”的整体聚集趋势。</p>
-          <div class="likert-list" id="interaction-bars"></div>
+        <div class="chart-card">
+          <h3>线上社交行为偏好</h3>
+          <p>聚焦社交媒体自我展示、虚拟语境活跃度与低暴露度表达偏好。</p>
+          <div class="donut-grid" id="online-social-charts"></div>
+          <div class="legend-list" id="online-legend"></div>
         </div>
-        <div class="chart-footnote">注：风格与交互需求部分的原始统计表按 118 份汇总，当前先保留这一口径以对应现有源数据。</div>
+
+        <div class="chart-card wide">
+          <h3>视觉与交互需求调查问卷统计</h3>
+
+          <div class="chart-subsection style-subsection">
+            <h4>风格偏好</h4>
+            <div class="donut-grid style-grid" id="style-choice-charts"></div>
+            <div class="legend-list style-legend" id="design-legend"></div>
+          </div>
+
+          <div class="chart-subsection">
+            <h4>空间与氛围需求</h4>
+            <div class="likert-matrix" id="space-visual-matrix"></div>
+          </div>
+
+          <div class="chart-subsection">
+            <h4>交互反馈需求</h4>
+            <div class="likert-list" id="interaction-bars"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <h2>设计机会点</h2>
+        <p>结合问卷结果与前期论述，可以把研究结论收束为以下三个设计机会点，它们共同推动 Within 的叙事、空间与交互方向。</p>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-box">
+          <h3>降低社交启动压力</h3>
+          <p>通过私密尺度、渐进式任务和低暴露度互动，把"主动社交"转化为"在情境中自然发生的协作"。</p>
+        </div>
+        <div class="summary-box">
+          <h3>强化具身反馈</h3>
+          <p>通过即时视觉反馈、多感官线索和环境联动，让用户在行动中获得明确的身体在场感与情境理解。</p>
+        </div>
+        <div class="summary-box">
+          <h3>用风格承接情绪</h3>
+          <p>采用 Low-Poly 与超现实倾向的风格化空间，使视觉表达与情绪引导、社交节奏和叙事推进形成统一结构。</p>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="section">
-    <div class="section-head">
-      <h2>设计机会点</h2>
-      <p>结合问卷结果与前期论述，可以把研究结论收束为以下三个设计机会点，它们共同推动 Within 的叙事、空间与交互方向。</p>
-    </div>
-
-    <div class="summary-grid">
-      <div class="summary-box">
-        <h3>降低社交启动压力</h3>
-        <p>通过私密尺度、渐进式任务和低暴露度互动，把“主动社交”转化为“在情境中自然发生的协作”。</p>
-      </div>
-      <div class="summary-box">
-        <h3>强化具身反馈</h3>
-        <p>通过即时视觉反馈、多感官线索和环境联动，让用户在行动中获得明确的身体在场感与情境理解。</p>
-      </div>
-      <div class="summary-box">
-        <h3>用风格承接情绪</h3>
-        <p>采用 Low-Poly 与超现实倾向的风格化空间，使视觉表达与情绪引导、社交节奏和叙事推进形成统一结构。</p>
-      </div>
-    </div>
-  </div>
+  <footer>
+    Within · 协作同行 ｜ 问题研究整理
+  </footer>
 </div>
 
-<footer>
-  Within · 协作同行 ｜ 问题研究整理
-</footer>
+<script id="page-config">
+window.__pageConfig = {
+  current: 'research',
+  prev: '../about/index.html',
+  next: '../design/index.html'
+};
+</script>
+<script src="../shell.js"></script>
+<script id="page-script">
+var likertLabels = ["非常不符合", "比较不符合", "一般", "比较符合", "非常符合"];
+var socialPalette = ["#4f5d9d", "#7288d8", "#cfd5e6", "#91b7db", "#78c9bd"];
+var designPalette = ["#c96f5b", "#d89a5b", "#c8b86a", "#8fb28a", "#67b8b2"];
 
-<script>
-const likertLabels = ["非常不符合", "比较不符合", "一般", "比较符合", "非常符合"];
-const socialPalette = ["#3f427e", "#6a6fb8", "#9a9bb8", "#8aa2cf", "#73c2bf"];
-const designPalette = ["#d95c47", "#e38833", "#e6b61c", "#8bbd60", "#62bcb5"];
-
-const virtualSocialCharts = [
+var virtualSocialCharts = [
   {
     code: "01",
     sample: 117,
@@ -1153,7 +1013,7 @@ const virtualSocialCharts = [
   }
 ];
 
-const offlineSocialCharts = [
+var offlineSocialCharts = [
   {
     code: "01",
     sample: 117,
@@ -1180,7 +1040,7 @@ const offlineSocialCharts = [
   }
 ];
 
-const onlineSocialCharts = [
+var onlineSocialCharts = [
   {
     code: "01",
     sample: 117,
@@ -1201,7 +1061,7 @@ const onlineSocialCharts = [
   }
 ];
 
-const styleChoiceCharts = [
+var styleChoiceCharts = [
   {
     code: "01",
     sample: 118,
@@ -1231,7 +1091,7 @@ const styleChoiceCharts = [
   }
 ];
 
-const spaceVisualBars = [
+var spaceVisualBars = [
   {
     sample: 118,
     question: "相比于写实场景，我更偏好具有艺术加工感或超现实元素的场景设计。",
@@ -1259,7 +1119,7 @@ const spaceVisualBars = [
   }
 ];
 
-const interactionBars = [
+var interactionBars = [
   {
     sample: 118,
     question: "当我产生交互行为时，我希望场景能够给予及时的视觉反馈。",
@@ -1278,20 +1138,17 @@ const interactionBars = [
 ];
 
 function createLegend(containerId, palette) {
-  const host = document.getElementById(containerId);
+  var host = document.getElementById(containerId);
   if (!host) return;
   host.innerHTML = "";
-  likertLabels.forEach((label, index) => {
-    const item = document.createElement("div");
+  likertLabels.forEach(function(label, index) {
+    var item = document.createElement("div");
     item.className = "legend-item";
-
-    const swatch = document.createElement("span");
+    var swatch = document.createElement("span");
     swatch.className = "legend-swatch";
     swatch.style.background = palette[index];
-
-    const text = document.createElement("span");
+    var text = document.createElement("span");
     text.textContent = label;
-
     item.appendChild(swatch);
     item.appendChild(text);
     host.appendChild(item);
@@ -1299,7 +1156,7 @@ function createLegend(containerId, palette) {
 }
 
 function ensureTooltip() {
-  let tooltip = document.querySelector(".chart-tooltip");
+  var tooltip = document.querySelector(".chart-tooltip");
   if (!tooltip) {
     tooltip = document.createElement("div");
     tooltip.className = "chart-tooltip";
@@ -1309,36 +1166,36 @@ function ensureTooltip() {
 }
 
 function showTooltip(event, lines) {
-  const tooltip = ensureTooltip();
-  tooltip.innerHTML = lines.map((line) => `<span>${line}</span>`).join("");
+  var tooltip = ensureTooltip();
+  tooltip.innerHTML = lines.map(function(line) { return "<span>" + line + "</span>"; }).join("");
   tooltip.classList.add("visible");
   moveTooltip(event);
 }
 
 function moveTooltip(event) {
-  const tooltip = ensureTooltip();
-  const offset = 18;
-  const tooltipWidth = tooltip.offsetWidth || 240;
-  const tooltipHeight = tooltip.offsetHeight || 80;
-  let left = event.clientX + offset;
-  let top = event.clientY + offset;
+  var tooltip = ensureTooltip();
+  var offset = 18;
+  var tooltipWidth = tooltip.offsetWidth || 240;
+  var tooltipHeight = tooltip.offsetHeight || 80;
+  var left = event.clientX + offset;
+  var top = event.clientY + offset;
   if (left + tooltipWidth > window.innerWidth - 12) left = event.clientX - tooltipWidth - offset;
   if (top + tooltipHeight > window.innerHeight - 12) top = event.clientY - tooltipHeight - offset;
-  tooltip.style.left = `${left}px`;
-  tooltip.style.top = `${top}px`;
+  tooltip.style.left = left + "px";
+  tooltip.style.top = top + "px";
 }
 
 function hideTooltip() {
-  const tooltip = ensureTooltip();
+  var tooltip = ensureTooltip();
   tooltip.classList.remove("visible");
 }
 
 function bindTooltip(node, lines) {
-  node.addEventListener("pointerenter", (event) => showTooltip(event, lines));
+  node.addEventListener("pointerenter", function(event) { showTooltip(event, lines); });
   node.addEventListener("pointermove", moveTooltip);
   node.addEventListener("pointerleave", hideTooltip);
-  node.addEventListener("focus", () => {
-    const rect = node.getBoundingClientRect();
+  node.addEventListener("focus", function() {
+    var rect = node.getBoundingClientRect();
     showTooltip({ clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 }, lines);
   });
   node.addEventListener("blur", hideTooltip);
@@ -1349,96 +1206,82 @@ function positiveShare(values) {
 }
 
 function countsFromPercentages(sample, percentages) {
-  const raw = percentages.map((value) => sample * value / 100);
-  const counts = raw.map((value) => Math.floor(value));
-  let remainder = sample - counts.reduce((sum, value) => sum + value, 0);
-
-  const order = raw
-    .map((value, index) => ({ index, fraction: value - Math.floor(value) }))
-    .sort((a, b) => b.fraction - a.fraction);
-
-  for (let i = 0; i < remainder; i += 1) {
+  var raw = percentages.map(function(value) { return sample * value / 100; });
+  var counts = raw.map(function(value) { return Math.floor(value); });
+  var remainder = sample - counts.reduce(function(sum, value) { return sum + value; }, 0);
+  var order = raw
+    .map(function(value, index) { return { index: index, fraction: value - Math.floor(value) }; })
+    .sort(function(a, b) { return b.fraction - a.fraction; });
+  for (var i = 0; i < remainder; i += 1) {
     counts[order[i % order.length].index] += 1;
   }
-
   return counts;
 }
 
 function renderDonutCharts(containerId, charts, palette) {
-  const host = document.getElementById(containerId);
+  var host = document.getElementById(containerId);
   if (!host) return;
-  const svgNS = "http://www.w3.org/2000/svg";
-  const circumference = 2 * Math.PI * 42;
-
-  charts.forEach((chart) => {
-    const counts = countsFromPercentages(chart.sample, chart.values);
-    const maxValue = Math.max(...chart.values);
-    const item = document.createElement("div");
+  var svgNS = "http://www.w3.org/2000/svg";
+  var circumference = 2 * Math.PI * 42;
+  charts.forEach(function(chart) {
+    var counts = countsFromPercentages(chart.sample, chart.values);
+    var maxValue = Math.max.apply(null, chart.values);
+    var item = document.createElement("div");
     item.className = "donut-item";
-    const isStyleCard = Boolean(chart.image && chart.label);
+    var isStyleCard = Boolean(chart.image && chart.label);
     if (isStyleCard) {
       item.classList.add("style-card");
     }
-
-    const top = document.createElement("div");
+    var top = document.createElement("div");
     top.className = "donut-top";
-
-    const frame = document.createElement("div");
+    var frame = document.createElement("div");
     frame.className = "donut-frame";
-
-    const svg = document.createElementNS(svgNS, "svg");
+    var svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("viewBox", "0 0 140 140");
     svg.setAttribute("class", "donut-svg");
     svg.style.setProperty("--donut-rotation", donutRotationFor(host.children.length, chart));
-
-    const track = document.createElementNS(svgNS, "circle");
+    var track = document.createElementNS(svgNS, "circle");
     track.setAttribute("cx", "70");
     track.setAttribute("cy", "70");
     track.setAttribute("r", "42");
     track.setAttribute("class", "donut-track");
     svg.appendChild(track);
-
-    let offset = 0;
-    chart.values.forEach((value, index) => {
+    var offset = 0;
+    chart.values.forEach(function(value, index) {
       if (value <= 0) return;
-      const segment = document.createElementNS(svgNS, "circle");
-      const segmentLength = circumference * (value / 100);
+      var segment = document.createElementNS(svgNS, "circle");
+      var segmentLength = circumference * (value / 100);
       segment.setAttribute("cx", "70");
       segment.setAttribute("cy", "70");
       segment.setAttribute("r", "42");
       segment.setAttribute("class", "donut-segment");
-      segment.setAttribute("stroke", value === maxValue ? palette[index] : softenedRgba(palette[index], 0.62, 0.92));
-      segment.setAttribute("stroke-dasharray", `${segmentLength} ${circumference - segmentLength}`);
-      segment.setAttribute("stroke-dashoffset", `${-offset}`);
+      segment.setAttribute("stroke", value === maxValue ? palette[index] : softenedRgba(palette[index], 0.32, 0.96));
+      segment.setAttribute("stroke-dasharray", segmentLength + " " + (circumference - segmentLength));
+      segment.setAttribute("stroke-dashoffset", "" + (-offset));
       segment.setAttribute("tabindex", "0");
-      segment.setAttribute("aria-label", `${likertLabels[index]} ${value}%`);
+      segment.setAttribute("aria-label", likertLabels[index] + " " + value + "%");
       if (value === maxValue) {
         segment.classList.add("is-max");
       }
       bindTooltip(segment, [
-        `${likertLabels[index]}：${counts[index]} 人`,
-        `占比：${value}%`
+        likertLabels[index] + "：" + counts[index] + " 人",
+        "占比：" + value + "%"
       ]);
       svg.appendChild(segment);
       offset += segmentLength;
     });
-
     frame.appendChild(svg);
-
-    const summary = document.createElement("div");
+    var summary = document.createElement("div");
     summary.className = "donut-summary";
-    summary.innerHTML = `<div class="donut-title">${chart.question}</div>`;
-
+    summary.innerHTML = "<div class=\"donut-title\">" + chart.question + "</div>";
     if (isStyleCard) {
-      const image = document.createElement("img");
+      var image = document.createElement("img");
       image.className = "donut-image";
       image.src = chart.image;
       image.alt = chart.imageAlt || chart.question;
-
-      const label = document.createElement("div");
+      var label = document.createElement("div");
       label.className = "style-name";
       label.textContent = chart.label;
-
       top.appendChild(frame);
       item.appendChild(image);
       item.appendChild(label);
@@ -1453,35 +1296,30 @@ function renderDonutCharts(containerId, charts, palette) {
 }
 
 function renderLikertBars(containerId, rows, palette) {
-  const host = document.getElementById(containerId);
+  var host = document.getElementById(containerId);
   if (!host) return;
-
-  rows.forEach((row) => {
-    const counts = countsFromPercentages(row.sample, row.values);
-    const wrapper = document.createElement("div");
+  rows.forEach(function(row) {
+    var counts = countsFromPercentages(row.sample, row.values);
+    var wrapper = document.createElement("div");
     wrapper.className = "likert-row";
-
-    const head = document.createElement("div");
+    var head = document.createElement("div");
     head.className = "likert-head";
-    head.innerHTML = `<div class="likert-label">${row.question}</div>`;
-
-    const bar = document.createElement("div");
+    head.innerHTML = "<div class=\"likert-label\">" + row.question + "</div>";
+    var bar = document.createElement("div");
     bar.className = "likert-bar";
-
-    row.values.forEach((value, index) => {
-      const segment = document.createElement("div");
+    row.values.forEach(function(value, index) {
+      var segment = document.createElement("div");
       segment.className = "likert-segment";
-      segment.style.width = `${value}%`;
+      segment.style.width = value + "%";
       segment.style.background = palette[index];
       segment.setAttribute("tabindex", "0");
-      segment.setAttribute("aria-label", `${likertLabels[index]} ${value}%`);
+      segment.setAttribute("aria-label", likertLabels[index] + " " + value + "%");
       bindTooltip(segment, [
-        `${likertLabels[index]}：${counts[index]} 人`,
-        `占比：${value}%`
+        likertLabels[index] + "：" + counts[index] + " 人",
+        "占比：" + value + "%"
       ]);
       bar.appendChild(segment);
     });
-
     wrapper.appendChild(head);
     wrapper.appendChild(bar);
     host.appendChild(wrapper);
@@ -1489,63 +1327,60 @@ function renderLikertBars(containerId, rows, palette) {
 }
 
 function matrixCellColor(hex, value) {
-  const safe = Math.max(0.24, Math.min(0.92, value / 100));
-  const normalized = hex.replace("#", "");
-  const r = parseInt(normalized.slice(0, 2), 16);
-  const g = parseInt(normalized.slice(2, 4), 16);
-  const b = parseInt(normalized.slice(4, 6), 16);
-  return `rgba(${r}, ${g}, ${b}, ${safe})`;
+  var safe = Math.max(0.24, Math.min(0.92, value / 100));
+  var normalized = hex.replace("#", "");
+  var r = parseInt(normalized.slice(0, 2), 16);
+  var g = parseInt(normalized.slice(2, 4), 16);
+  var b = parseInt(normalized.slice(4, 6), 16);
+  return "rgba(" + r + ", " + g + ", " + b + ", " + safe + ")";
 }
 
-function softenedRgba(hex, blend = 0.62, alpha = 0.92) {
-  const normalized = hex.replace("#", "");
-  const r = parseInt(normalized.slice(0, 2), 16);
-  const g = parseInt(normalized.slice(2, 4), 16);
-  const b = parseInt(normalized.slice(4, 6), 16);
-  const nr = Math.round(r + (255 - r) * blend);
-  const ng = Math.round(g + (255 - g) * blend);
-  const nb = Math.round(b + (255 - b) * blend);
-  return `rgba(${nr}, ${ng}, ${nb}, ${alpha})`;
+function softenedRgba(hex, blend, alpha) {
+  if (blend === undefined) blend = 0.62;
+  if (alpha === undefined) alpha = 0.92;
+  var normalized = hex.replace("#", "");
+  var r = parseInt(normalized.slice(0, 2), 16);
+  var g = parseInt(normalized.slice(2, 4), 16);
+  var b = parseInt(normalized.slice(4, 6), 16);
+  var nr = Math.round(r + (255 - r) * blend);
+  var ng = Math.round(g + (255 - g) * blend);
+  var nb = Math.round(b + (255 - b) * blend);
+  return "rgba(" + nr + ", " + ng + ", " + nb + ", " + alpha + ")";
 }
 
 function donutRotationFor(index, chart) {
-  const preset = [-78, -104, -64, -122, -88, -136];
-  const offset = chart.values.findIndex((value) => value === Math.max(...chart.values));
-  return `${preset[(index + Math.max(offset, 0)) % preset.length]}deg`;
+  var preset = [-78, -104, -64, -122, -88, -136];
+  var offset = chart.values.findIndex(function(value) { return value === Math.max.apply(null, chart.values); });
+  return preset[(index + Math.max(offset, 0)) % preset.length] + "deg";
 }
 
 function renderLikertMatrix(containerId, rows, palette) {
-  const host = document.getElementById(containerId);
+  var host = document.getElementById(containerId);
   if (!host) return;
-
-  const header = document.createElement("div");
+  var header = document.createElement("div");
   header.className = "matrix-header";
-  header.innerHTML = `<span class="matrix-corner">题目</span>${likertLabels.map((label) => `<span>${label}</span>`).join("")}`;
+  header.innerHTML = "<span class=\"matrix-corner\">题目</span>" + likertLabels.map(function(label) { return "<span>" + label + "</span>"; }).join("");
   host.appendChild(header);
-
-  rows.forEach((row) => {
-    const counts = countsFromPercentages(row.sample, row.values);
-    const rowEl = document.createElement("div");
+  rows.forEach(function(row) {
+    var counts = countsFromPercentages(row.sample, row.values);
+    var rowEl = document.createElement("div");
     rowEl.className = "matrix-row";
-
-    const question = document.createElement("div");
+    var question = document.createElement("div");
     question.className = "matrix-question";
     question.textContent = row.question;
     rowEl.appendChild(question);
-
-    row.values.forEach((value, index) => {
-      const cell = document.createElement("div");
+    row.values.forEach(function(value, index) {
+      var cell = document.createElement("div");
       cell.className = "matrix-cell";
-      cell.textContent = `${value}%`;
+      cell.textContent = value + "%";
       cell.setAttribute("tabindex", "0");
-      cell.setAttribute("aria-label", `${likertLabels[index]} ${value}%`);
+      cell.setAttribute("aria-label", likertLabels[index] + " " + value + "%");
       bindTooltip(cell, [
-        `${likertLabels[index]}：${counts[index]} 人`,
-        `占比：${value}%`
+        likertLabels[index] + "：" + counts[index] + " 人",
+        "占比：" + value + "%"
       ]);
       rowEl.appendChild(cell);
     });
-
     host.appendChild(rowEl);
   });
 }
@@ -1563,226 +1398,5 @@ renderLikertMatrix("space-visual-matrix", spaceVisualBars, designPalette);
 renderLikertBars("interaction-bars", interactionBars, designPalette);
 </script>
 
-<script>
-(function () {
-  var prevTarget = '../about/index.html';
-  var nextTarget = '../design/index.html';
-  var wrap = document.querySelector('.wrap');
-  var navigating = false;
-  var prevArmed = false;
-  var nextArmed = false;
-  var threshold = 4;
-  var delay = 420;
-  var pullOpenDistance = 240;
-  var armedLockUntil = 0;
-  var armedGraceMs = 960;
-  var armedConfirmReadyAt = 0;
-  var armedConfirmCooldownMs = 360;
-  var nextLockUntil = 0;
-  var nextGraceMs = 960;
-  var nextConfirmReadyAt = 0;
-  var nextConfirmCooldownMs = 360;
-  function applyPull(distance) {
-    if (wrap) {
-      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
-    }
-  }
-
-  function clearPrevArm() {
-    prevArmed = false;
-    armedLockUntil = 0;
-    armedConfirmReadyAt = 0;
-    document.body.classList.remove('is-prev-armed');
-  }
-
-  function clearNextArm() {
-    nextArmed = false;
-    nextLockUntil = 0;
-    nextConfirmReadyAt = 0;
-    document.body.classList.remove('is-next-armed');
-  }
-
-  function openPrevPull() {
-    if (!prevTarget || navigating) return;
-    var now = Date.now();
-    clearNextArm();
-    prevArmed = true;
-    armedLockUntil = now + armedGraceMs;
-    armedConfirmReadyAt = now + armedConfirmCooldownMs;
-    document.body.classList.add('is-prev-armed');
-    applyPull(pullOpenDistance);
-  }
-
-  function openNextPull() {
-    if (!nextTarget || navigating) return;
-    var now = Date.now();
-    clearPrevArm();
-    nextArmed = true;
-    nextLockUntil = now + nextGraceMs;
-    nextConfirmReadyAt = now + nextConfirmCooldownMs;
-    document.body.classList.add('is-next-armed');
-    applyPull(-pullOpenDistance);
-  }
-
-  function closePull() {
-    clearPrevArm();
-    clearNextArm();
-    applyPull(0);
-  }
-
-  function getMaxScroll() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
-
-  function go(target, direction) {
-    if (!target || navigating) return;
-    navigating = true;
-    closePull();
-    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
-    window.setTimeout(function () {
-      window.location.href = target;
-    }, delay);
-  }
-
-  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
-  var currentPage = 'research';
-
-  function normalizeNavTarget(href) {
-    if (!href) return null;
-    if (href.indexOf('about/index.html') !== -1) return 'about';
-    if (href.indexOf('research/index.html') !== -1) return 'research';
-    if (href.indexOf('design/index.html') !== -1) return 'design';
-    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
-    if (href.indexOf('process/index.html') !== -1) return 'process';
-    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
-    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
-    return null;
-  }
-
-  function getNavDirection(href) {
-    var targetKey = normalizeNavTarget(href);
-    var currentIndex = pageOrder.indexOf(currentPage);
-    var targetIndex = pageOrder.indexOf(targetKey);
-    if (currentIndex === -1 || targetIndex === -1) return 'next';
-    return targetIndex < currentIndex ? 'prev' : 'next';
-  }
-
-  function bindNavLinks() {
-    var navLinks = document.querySelectorAll('.nav a[href]');
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        if (navigating) {
-          event.preventDefault();
-          return;
-        }
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-        var href = link.getAttribute('href');
-        if (!href || link.classList.contains('active')) return;
-        event.preventDefault();
-        go(href, getNavDirection(href));
-      });
-    });
-  }
-
-  bindNavLinks();
-  window.addEventListener('wheel', function (event) {
-    if (navigating) {
-      event.preventDefault();
-      return;
-    }
-
-    var atTop = window.scrollY <= threshold;
-    var maxScroll = getMaxScroll();
-    var atBottom = window.scrollY >= maxScroll - threshold;
-
-    if (prevArmed) {
-      event.preventDefault();
-      var now = Date.now();
-      if (event.deltaY < -8 && prevTarget) {
-        if (now < armedConfirmReadyAt) {
-          return;
-        }
-        go(prevTarget, 'prev');
-        return;
-      }
-      if (event.deltaY > 10 && now >= armedLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      event.preventDefault();
-      var nowNext = Date.now();
-      if (event.deltaY > 8 && nextTarget) {
-        if (nowNext < nextConfirmReadyAt) {
-          return;
-        }
-        go(nextTarget, 'next');
-        return;
-      }
-      if (event.deltaY < -10 && nowNext >= nextLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (event.deltaY < -12 && atTop && prevTarget) {
-      event.preventDefault();
-      openPrevPull();
-      return;
-    }
-
-    if (event.deltaY > 12 && atBottom && nextTarget) {
-      event.preventDefault();
-      openNextPull();
-      return;
-    }
-
-    if (!atTop && !atBottom) {
-      closePull();
-    }
-  }, { passive: false });
-
-  window.addEventListener('scroll', function () {
-    var maxScroll = getMaxScroll();
-
-    if (prevArmed) {
-      if (window.scrollY > threshold + 2) {
-        window.scrollTo(0, 0);
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      if (window.scrollY < maxScroll - threshold - 2) {
-        window.scrollTo(0, maxScroll);
-      }
-      return;
-    }
-
-    if (window.scrollY > threshold + 2 && window.scrollY < maxScroll - threshold - 2) {
-      closePull();
-    }
-  }, { passive: true });})();
-</script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,46 +1,26 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>项目介绍 — Within · 协作同行</title>
-<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
-
-:root {
-  --text-main: #465564;
+<link rel="stylesheet" href="../shared.css">
+<style id="page-styles">
+body.page-about {
   --text-dark: #243241;
   --text-soft: #7d8f9f;
-  --cyan: #8ab4c4;
-  --cyan-deep: #5b9aa0;
-  --blue: #6b8fa3;
-  --purple: #9385bf;
-  --warm: #c4a882;
   --border: rgba(112,136,160,0.14);
   --panel: rgba(255,255,255,0.74);
   --panel-soft: rgba(255,255,255,0.58);
   --shadow: 0 22px 70px rgba(73, 97, 122, 0.10);
   --shadow-hover: 0 28px 82px rgba(73, 97, 122, 0.14);
-}
-
-body {
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: var(--text-main);
   background:
     radial-gradient(circle at 14% 14%, rgba(138,180,196,0.12), transparent 28%),
     radial-gradient(circle at 84% 18%, rgba(196,168,130,0.10), transparent 30%),
     linear-gradient(180deg, #f6f8fb 0%, #eef2f6 46%, #edf1f4 100%);
-  overflow-x: hidden;
-  overflow-y: clip;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+body.page-about::before {
   opacity: 0.025;
   background-image:
     linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.9) 49%, transparent 50%),
@@ -48,165 +28,12 @@ body::before {
   background-size: 92px 92px, 126px 126px;
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
+body.page-about::after {
   z-index: 45;
-  opacity: 0;
-  background: linear-gradient(180deg, rgba(246,248,251,0.14), rgba(238,242,246,0.94) 68%, rgba(237,241,244,1));
-  transition: opacity .44s ease;
-}
-
-body.is-leaving-prev::after,
-body.is-leaving-next::after {
-  opacity: 1;
-}
-
-.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 40;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  backdrop-filter: blur(16px);
-  background: rgba(246,248,251,0.68);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav a {
-  padding: 10px 18px;
-  border-radius: 999px;
-  color: var(--text-soft);
-  font-size: 14px;
-  text-decoration: none;
-  transition: all .25s ease;
-}
-
-.nav a:hover,
-.nav a.active {
-  color: var(--text-main);
-  background: rgba(138,180,196,0.12);
-}
-
-.nav,
-.wrap,
-footer {
-  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
-}
-
-body.is-leaving-next .nav,
-body.is-leaving-next .wrap,
-body.is-leaving-next footer {
-  opacity: 0;
-  transform: translateY(-24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-prev .nav,
-body.is-leaving-prev .wrap,
-body.is-leaving-prev footer {
-  opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
-}
-
-.prev-arm-hint {
-  position: fixed;
-  left: 50%;
-  top: 156px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.prev-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-left: 1.5px solid rgba(91,154,160,0.9);
-  border-top: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-28%) rotate(45deg);
-}
-
-.prev-arm-hint::after {
-  content: "滚轮上滑，回到前一页";
-}
-
-body.is-prev-armed .prev-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-.next-arm-hint {
-  position: fixed;
-  left: 50%;
-  bottom: 84px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(-6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.next-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid rgba(91,154,160,0.9);
-  border-bottom: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-72%) rotate(45deg);
-}
-
-.next-arm-hint::after {
-  content: "滚轮下滑，前往下一页";
-}
-
-body.is-next-armed .next-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
 }
 
 .wrap {
-  position: relative;
-  z-index: 1;
   width: min(1520px, calc(100% - 56px));
-  margin: 0 auto;
-  padding: 104px 0 72px;
 }
 
 .hero {
@@ -635,12 +462,7 @@ body.is-next-armed .next-arm-hint {
 }
 
 footer {
-  text-align: center;
   padding: 28px 24px 36px;
-  color: var(--text-soft);
-  font-size: 13px;
-  position: relative;
-  z-index: 1;
 }
 
 @media (max-width: 1180px) {
@@ -661,18 +483,6 @@ footer {
 }
 
 @media (max-width: 860px) {
-  .nav {
-    justify-content: flex-start;
-    overflow-x: auto;
-    gap: 6px;
-  }
-
-  .nav a {
-    white-space: nowrap;
-    padding: 8px 14px;
-    font-size: 13px;
-  }
-
   .wrap {
     width: min(100%, calc(100% - 28px));
     padding: 84px 0 40px;
@@ -709,22 +519,13 @@ footer {
     font-size: 26px;
     margin-bottom: 10px;
   }
-
-  .prev-arm-hint {
-    top: 124px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
-  }
-  .next-arm-hint {
-    bottom: 60px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
-  }
 }
 </style>
 </head>
-<body>
+<body class="page-about">
+
 <nav class="nav">
+  <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../index.html">首页</a>
   <a href="../about/index.html" class="active">项目介绍</a>
   <a href="../research/index.html">问题研究</a>
@@ -735,469 +536,261 @@ footer {
 </nav>
 <div class="prev-arm-hint" aria-hidden="true"></div>
 <div class="next-arm-hint" aria-hidden="true"></div>
-<div class="wrap">
-  <section class="hero">
-    <div class="hero-copy">
-      <div class="hero-badge">MASTER PROJECT · XR / 互动叙事 / 社交设计</div>
-      <h1>Within</h1>
-      <div class="cn-title">协作同<span>行</span></div>
-      <p class="desc">
-        一项从具身认知视角出发的社交数字化设计研究，
-        也是一段关于成长、共情与协作的 VR 互动叙事旅程。
-        这不是单纯的头显体验，而是一个把虚拟协作延伸到现实交流中的跨媒介社交系统。
-      </p>
-      <div class="hero-meta">
-        研究方向：大学生社交数字化设计<br>
-        项目形式：XR 互动体验 / 跨媒介协作 / Low-Poly 叙事空间
-      </div>
-      <div class="hero-actions">
-        <a href="../research/index.html" class="btn btn-primary">进入问题研究</a>
-        <a href="../design/index.html" class="btn btn-secondary">进入核心设计</a>
-        <a href="../chapters/index.html" class="btn btn-secondary">进入章节导览</a>
-      </div>
-    </div>
 
-    <div class="hero-side">
-      <div class="hero-panel">
-        <div class="panel-kicker">PROJECT FOCUS</div>
-        <div class="panel-title">不是展示一张海报，<br>而是进入一段协作旅程</div>
-        <div class="panel-copy">
-          项目试图回应大学生“线上活跃、线下疏离”的现实处境，
-          将 XR 从单纯沉浸内容转化为社交引导媒介，让沟通、配合与共同判断成为体验推进的必要条件。
+<div id="page-content">
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="hero-badge">MASTER PROJECT · XR / 互动叙事 / 社交设计</div>
+        <h1>Within</h1>
+        <div class="cn-title">协作同<span>行</span></div>
+        <p class="desc">
+          一项从具身认知视角出发的社交数字化设计研究，
+          也是一段关于成长、共情与协作的 VR 互动叙事旅程。
+          这不是单纯的头显体验，而是一个把虚拟协作延伸到现实交流中的跨媒介社交系统。
+        </p>
+        <div class="hero-meta">
+          研究方向：大学生社交数字化设计<br>
+          项目形式：XR 互动体验 / 跨媒介协作 / Low-Poly 叙事空间
         </div>
-        <div class="panel-lines">
-          <div class="panel-line">具身认知作为方法切入</div>
-          <div class="panel-line">XR 作为社交引导媒介</div>
-          <div class="panel-line">协作从任务走向现实交流</div>
+        <div class="hero-actions">
+          <a href="../research/index.html" class="btn btn-primary">进入问题研究</a>
+          <a href="../design/index.html" class="btn btn-secondary">进入核心设计</a>
+          <a href="../chapters/index.html" class="btn btn-secondary">进入章节导览</a>
         </div>
       </div>
 
-      <div class="stat-band">
-        <div class="hero-metric">
-          <strong>4</strong>
-          <span>叙事章节</span>
+      <div class="hero-side">
+        <div class="hero-panel">
+          <div class="panel-kicker">PROJECT FOCUS</div>
+          <div class="panel-title">不是展示一张海报，<br>而是进入一段协作旅程</div>
+          <div class="panel-copy">
+            项目试图回应大学生"线上活跃、线下疏离"的现实处境，
+            将 XR 从单纯沉浸内容转化为社交引导媒介，让沟通、配合与共同判断成为体验推进的必要条件。
+          </div>
+          <div class="panel-lines">
+            <div class="panel-line">具身认知作为方法切入</div>
+            <div class="panel-line">XR 作为社交引导媒介</div>
+            <div class="panel-line">协作从任务走向现实交流</div>
+          </div>
         </div>
-        <div class="hero-metric">
-          <strong>3</strong>
-          <span>角色分工层级</span>
-        </div>
-        <div class="hero-metric">
-          <strong>20</strong>
-          <span>测试样本</span>
-        </div>
-        <div class="hero-metric">
-          <strong>XR</strong>
-          <span>具身交互媒介</span>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="section-head">
-      <h2>研究锚点</h2>
-      <p>这一页集中说明项目为什么成立、依据什么展开，以及它最终试图带来的设计价值。</p>
-    </div>
-
-    <div class="grid-3">
-      <div class="card accent-cyan">
-        <h3>研究问题</h3>
-        <p>大学生群体存在明显的线下社交启动门槛。项目聚焦的不是抽象社交命题，而是现实社交中真实存在的启动压力、评价焦虑与联结浅层化问题。</p>
-      </div>
-      <div class="card accent-purple">
-        <h3>理论视角</h3>
-        <p>项目以具身认知为核心支撑，将社交理解为身体、环境与任务共同参与的过程，而不只是语言交换本身。</p>
-      </div>
-      <div class="card accent-warm">
-        <h3>作品定位</h3>
-        <p>Within 将 XR 重新定义为“社交引导媒介”，通过叙事空间、角色差异与信息分配，把用户从任务协作逐步引向现实中的自然交流。</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <h2>协作机制</h2>
-      <p>项目的核心不是让所有人看同一个画面，而是通过不同角色的职责差异与多媒介信息拆分，促使沟通在情境中自然发生。</p>
-    </div>
-
-    <div class="grid-3">
-      <div class="card accent-cyan">
-        <h3>探索者</h3>
-        <p>佩戴 XR 头显进入虚拟场景，以第一人称完成移动、抓取、绘画与探索，是具身体验的核心承载者。</p>
-        <div class="tag-list">
-          <span class="tag">XR头显</span>
-          <span class="tag">具身交互</span>
-          <span class="tag">场景探索</span>
+        <div class="stat-band">
+          <div class="hero-metric">
+            <strong>4</strong>
+            <span>叙事章节</span>
+          </div>
+          <div class="hero-metric">
+            <strong>3</strong>
+            <span>角色分工层级</span>
+          </div>
+          <div class="hero-metric">
+            <strong>20</strong>
+            <span>测试样本</span>
+          </div>
+          <div class="hero-metric">
+            <strong>XR</strong>
+            <span>具身交互媒介</span>
+          </div>
         </div>
       </div>
-      <div class="card accent-purple">
-        <h3>引导者</h3>
-        <p>借助同步大屏和实体线索卡掌握更完整的信息框架，通过语言提示与策略判断为探索者提供协作支持。</p>
-        <div class="tag-list">
-          <span class="tag">同步大屏</span>
-          <span class="tag">实体道具</span>
-          <span class="tag">策略指引</span>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>研究锚点</h2>
+        <p>这一页集中说明项目为什么成立、依据什么展开，以及它最终试图带来的设计价值。</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card accent-cyan">
+          <h3>研究问题</h3>
+          <p>大学生群体存在明显的线下社交启动门槛。项目聚焦的不是抽象社交命题，而是现实社交中真实存在的启动压力、评价焦虑与联结浅层化问题。</p>
+        </div>
+        <div class="card accent-purple">
+          <h3>理论视角</h3>
+          <p>项目以具身认知为核心支撑，将社交理解为身体、环境与任务共同参与的过程，而不只是语言交换本身。</p>
+        </div>
+        <div class="card accent-warm">
+          <h3>作品定位</h3>
+          <p>Within 将 XR 重新定义为"社交引导媒介"，通过叙事空间、角色差异与信息分配，把用户从任务协作逐步引向现实中的自然交流。</p>
         </div>
       </div>
-      <div class="card accent-warm">
-        <h3>回应者</h3>
-        <p>围观参与者通过轻量互动方式参与线索补充与反馈，让项目具备更大的社交覆盖面和现场活力。</p>
-        <div class="tag-list">
-          <span class="tag">移动端</span>
-          <span class="tag">轻量参与</span>
-          <span class="tag">社交暖场</span>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>协作机制</h2>
+        <p>项目的核心不是让所有人看同一个画面，而是通过不同角色的职责差异与多媒介信息拆分，促使沟通在情境中自然发生。</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card accent-cyan">
+          <h3>探索者</h3>
+          <p>佩戴 XR 头显进入虚拟场景，以第一人称完成移动、抓取、绘画与探索，是具身体验的核心承载者。</p>
+          <div class="tag-list">
+            <span class="tag">XR头显</span>
+            <span class="tag">具身交互</span>
+            <span class="tag">场景探索</span>
+          </div>
+        </div>
+        <div class="card accent-purple">
+          <h3>引导者</h3>
+          <p>借助同步大屏和实体线索卡掌握更完整的信息框架，通过语言提示与策略判断为探索者提供协作支持。</p>
+          <div class="tag-list">
+            <span class="tag">同步大屏</span>
+            <span class="tag">实体道具</span>
+            <span class="tag">策略指引</span>
+          </div>
+        </div>
+        <div class="card accent-warm">
+          <h3>回应者</h3>
+          <p>围观参与者通过轻量互动方式参与线索补充与反馈，让项目具备更大的社交覆盖面和现场活力。</p>
+          <div class="tag-list">
+            <span class="tag">移动端</span>
+            <span class="tag">轻量参与</span>
+            <span class="tag">社交暖场</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="media-strip">
-      <div class="media-box">XR虚拟场景<small>沉浸情境构建</small></div>
-      <div class="media-box">同步显示大屏<small>共享全局信息</small></div>
-      <div class="media-box">实体协作卡片<small>线索分配与触发</small></div>
-      <div class="media-box">线下空间互动<small>面对面交流延伸</small></div>
-    </div>
-  </section>
+      <div class="media-strip">
+        <div class="media-box">XR虚拟场景<small>沉浸情境构建</small></div>
+        <div class="media-box">同步显示大屏<small>共享全局信息</small></div>
+        <div class="media-box">实体协作卡片<small>线索分配与触发</small></div>
+        <div class="media-box">线下空间互动<small>面对面交流延伸</small></div>
+      </div>
+    </section>
 
-  <section class="section">
-    <div class="section-head">
-      <h2>章节预览</h2>
-      <p>作品通过四段递进式叙事旅程，将情绪铺垫、协作强度与关系深化组织成完整体验结构。</p>
-    </div>
+    <section class="section">
+      <div class="section-head">
+        <h2>章节预览</h2>
+        <p>作品通过四段递进式叙事旅程，将情绪铺垫、协作强度与关系深化组织成完整体验结构。</p>
+      </div>
 
-    <div class="grid-4">
-      <div class="chapter-card">
-        <div class="chapter-num">CHAPTER 01</div>
-        <h3>孤独的城市</h3>
-        <p>以雨夜城市的疏离感作为开端，让用户先进入萨沙的内心状态，为后续协作的发生建立情绪底座。</p>
-        <a class="chapter-link" href="../chapters/chapter-1/index.html">进入第一章 →</a>
+      <div class="grid-4">
+        <div class="chapter-card">
+          <div class="chapter-num">CHAPTER 01</div>
+          <h3>孤独的城市</h3>
+          <p>以雨夜城市的疏离感作为开端，让用户先进入萨沙的内心状态，为后续协作的发生建立情绪底座。</p>
+          <a class="chapter-link" href="../chapters/chapter-1/index.html">进入第一章 →</a>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">CHAPTER 02</div>
+          <h3>萨沙的家</h3>
+          <p>在较为私密和安全的空间中启动轻量协作，让沟通第一次以低门槛、低风险的形式自然发生。</p>
+          <a class="chapter-link" href="../chapters/chapter-2/index.html">进入第二章 →</a>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">CHAPTER 03</div>
+          <h3>皮埃尔的梦想</h3>
+          <p>通过梦境化场景承载更复杂的共同决策与协同解谜，把伙伴关系从配合推进到理解与共创。</p>
+          <a class="chapter-link" href="../chapters/chapter-3/index.html">进入第三章 →</a>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">CHAPTER 04</div>
+          <h3>太空之梦</h3>
+          <p>在高强度协作中抵达终章，使用户在完成任务后自然过渡到现实层面的自由交流与情感沉淀。</p>
+          <a class="chapter-link" href="../chapters/chapter-4/index.html">进入第四章 →</a>
+        </div>
       </div>
-      <div class="chapter-card">
-        <div class="chapter-num">CHAPTER 02</div>
-        <h3>萨沙的家</h3>
-        <p>在较为私密和安全的空间中启动轻量协作，让沟通第一次以低门槛、低风险的形式自然发生。</p>
-        <a class="chapter-link" href="../chapters/chapter-2/index.html">进入第二章 →</a>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">CHAPTER 03</div>
-        <h3>皮埃尔的梦想</h3>
-        <p>通过梦境化场景承载更复杂的共同决策与协同解谜，把伙伴关系从配合推进到理解与共创。</p>
-        <a class="chapter-link" href="../chapters/chapter-3/index.html">进入第三章 →</a>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">CHAPTER 04</div>
-        <h3>太空之梦</h3>
-        <p>在高强度协作中抵达终章，使用户在完成任务后自然过渡到现实层面的自由交流与情感沉淀。</p>
-        <a class="chapter-link" href="../chapters/chapter-4/index.html">进入第四章 →</a>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="section-head">
-      <h2>设计机会点</h2>
-      <p>在总体层面，Within 的设计价值最终落在降低启动压力、强化具身反馈与用风格承接情绪三个方向上。</p>
-    </div>
+    <section class="section">
+      <div class="section-head">
+        <h2>设计机会点</h2>
+        <p>在总体层面，Within 的设计价值最终落在降低启动压力、强化具身反馈与用风格承接情绪三个方向上。</p>
+      </div>
 
-    <div class="summary-grid">
-      <div class="summary-box">
-        <h3>降低社交启动压力</h3>
-        <p>通过私密尺度、渐进式任务和低暴露度互动，把“主动社交”转化为“在情境中自然发生的协作”。</p>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <h3>降低社交启动压力</h3>
+          <p>通过私密尺度、渐进式任务和低暴露度互动，把"主动社交"转化为"在情境中自然发生的协作"。</p>
+        </div>
+        <div class="summary-box">
+          <h3>强化具身反馈</h3>
+          <p>通过即时视觉反馈、多感官线索和环境联动，让用户在行动中获得明确的身体在场感与情境理解。</p>
+        </div>
+        <div class="summary-box">
+          <h3>用风格承接情绪</h3>
+          <p>采用 Low-Poly 与超现实倾向的风格化空间，使视觉表达与情绪引导、社交节奏和叙事推进形成统一结构。</p>
+        </div>
       </div>
-      <div class="summary-box">
-        <h3>强化具身反馈</h3>
-        <p>通过即时视觉反馈、多感官线索和环境联动，让用户在行动中获得明确的身体在场感与情境理解。</p>
-      </div>
-      <div class="summary-box">
-        <h3>用风格承接情绪</h3>
-        <p>采用 Low-Poly 与超现实倾向的风格化空间，使视觉表达与情绪引导、社交节奏和叙事推进形成统一结构。</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="section-head">
-      <h2>结果验证</h2>
-      <p>作品不只建立了理论与叙事框架，也通过实际测试验证了其在社交引导上的正向作用。</p>
-    </div>
+    <section class="section">
+      <div class="section-head">
+        <h2>结果验证</h2>
+        <p>作品不只建立了理论与叙事框架，也通过实际测试验证了其在社交引导上的正向作用。</p>
+      </div>
 
-    <div class="grid-2">
-      <div class="card">
-        <h3>测试结论</h3>
-        <p>20 名大学生参与测试后，项目在“降低与陌生人沟通的尴尬感”“让任务中的交流变得自然”“促进体验结束后的继续交流”等维度上，都呈现出明确的正向反馈。</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>测试结论</h3>
+          <p>20 名大学生参与测试后，项目在"降低与陌生人沟通的尴尬感""让任务中的交流变得自然""促进体验结束后的继续交流"等维度上，都呈现出明确的正向反馈。</p>
+        </div>
+        <div class="card">
+          <h3>核心验证</h3>
+          <p>具身交互让用户更容易进入情境；渐进式协作让沟通不再突兀；跨媒介信息差则把现实交流变成了体验推进的必要条件。</p>
+        </div>
       </div>
-      <div class="card">
-        <h3>核心验证</h3>
-        <p>具身交互让用户更容易进入情境；渐进式协作让沟通不再突兀；跨媒介信息差则把现实交流变成了体验推进的必要条件。</p>
-      </div>
-    </div>
 
-    <div class="stats-wide">
-      <div class="stat-card">
-        <div class="stat-num">18/20</div>
-        <div class="stat-desc">缓解与陌生人交流的尴尬感</div>
+      <div class="stats-wide">
+        <div class="stat-card">
+          <div class="stat-num">18/20</div>
+          <div class="stat-desc">缓解与陌生人交流的尴尬感</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">18/20</div>
+          <div class="stat-desc">愿意与本次搭档继续交流</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">75%</div>
+          <div class="stat-desc">认可任务让沟通更自然</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">70%</div>
+          <div class="stat-desc">对视觉风格给出正向评价</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-num">18/20</div>
-        <div class="stat-desc">愿意与本次搭档继续交流</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">75%</div>
-        <div class="stat-desc">认可任务让沟通更自然</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">70%</div>
-        <div class="stat-desc">对视觉风格给出正向评价</div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="section-head">
-      <h2>继续深入</h2>
-      <p>如果这一页负责建立项目全貌，那么后续页面就分别承接研究证据、设计落地、章节细看与过程记录。</p>
-    </div>
+    <section class="section">
+      <div class="section-head">
+        <h2>继续深入</h2>
+        <p>如果这一页负责建立项目全貌，那么后续页面就分别承接研究证据、设计落地、章节细看与过程记录。</p>
+      </div>
 
-    <div class="grid-3">
-      <a class="entry-card" href="../research/index.html">
-        <h3>问题研究</h3>
-        <p>查看大学生社交困境、问卷分析、图表证据与设计机会点。</p>
-        <div class="entry-link">进入页面 →</div>
-      </a>
-      <a class="entry-card" href="../design/index.html">
-        <h3>核心设计</h3>
-        <p>查看论文第四章中的方案定位、机制设计、技术实现与体验流程。</p>
-        <div class="entry-link">进入页面 →</div>
-      </a>
-      <a class="entry-card" href="../process/index.html">
-        <h3>制作过程</h3>
-        <p>查看从概念、视觉到 Unity / XR 落地的开发过程与过程素材。</p>
-        <div class="entry-link">进入页面 →</div>
-      </a>
-    </div>
-  </section>
+      <div class="grid-3">
+        <a class="entry-card" href="../research/index.html">
+          <h3>问题研究</h3>
+          <p>查看大学生社交困境、问卷分析、图表证据与设计机会点。</p>
+          <div class="entry-link">进入页面 →</div>
+        </a>
+        <a class="entry-card" href="../design/index.html">
+          <h3>核心设计</h3>
+          <p>查看论文第四章中的方案定位、机制设计、技术实现与体验流程。</p>
+          <div class="entry-link">进入页面 →</div>
+        </a>
+        <a class="entry-card" href="../process/index.html">
+          <h3>制作过程</h3>
+          <p>查看从概念、视觉到 Unity / XR 落地的开发过程与过程素材。</p>
+          <div class="entry-link">进入页面 →</div>
+        </a>
+      </div>
+    </section>
+  </div>
+  <footer>Within · 协作同行 ｜ 基于具身认知视角的大学生社交数字化设计研究</footer>
 </div>
 
-<footer>
-  Within · 协作同行 ｜ 基于具身认知视角的大学生社交数字化设计研究
-</footer>
-<script>
-(function () {
-  var prevTarget = '../index.html';
-  var nextTarget = '../research/index.html';
-  var wrap = document.querySelector('.wrap');
-  var navigating = false;
-  var prevArmed = false;
-  var nextArmed = false;
-  var threshold = 4;
-  var delay = 420;
-  var pullOpenDistance = 240;
-  var armedLockUntil = 0;
-  var armedGraceMs = 960;
-  var armedConfirmReadyAt = 0;
-  var armedConfirmCooldownMs = 360;
-  var nextLockUntil = 0;
-  var nextGraceMs = 960;
-  var nextConfirmReadyAt = 0;
-  var nextConfirmCooldownMs = 360;
-  function applyPull(distance) {
-    if (wrap) {
-      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
-    }
-  }
-
-  function clearPrevArm() {
-    prevArmed = false;
-    armedLockUntil = 0;
-    armedConfirmReadyAt = 0;
-    document.body.classList.remove('is-prev-armed');
-  }
-
-  function clearNextArm() {
-    nextArmed = false;
-    nextLockUntil = 0;
-    nextConfirmReadyAt = 0;
-    document.body.classList.remove('is-next-armed');
-  }
-
-  function openPrevPull() {
-    if (!prevTarget || navigating) return;
-    var now = Date.now();
-    clearNextArm();
-    prevArmed = true;
-    armedLockUntil = now + armedGraceMs;
-    armedConfirmReadyAt = now + armedConfirmCooldownMs;
-    document.body.classList.add('is-prev-armed');
-    applyPull(pullOpenDistance);
-  }
-
-  function openNextPull() {
-    if (!nextTarget || navigating) return;
-    var now = Date.now();
-    clearPrevArm();
-    nextArmed = true;
-    nextLockUntil = now + nextGraceMs;
-    nextConfirmReadyAt = now + nextConfirmCooldownMs;
-    document.body.classList.add('is-next-armed');
-    applyPull(-pullOpenDistance);
-  }
-
-  function closePull() {
-    clearPrevArm();
-    clearNextArm();
-    applyPull(0);
-  }
-
-  function getMaxScroll() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
-
-  function go(target, direction) {
-    if (!target || navigating) return;
-    navigating = true;
-    closePull();
-    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
-    window.setTimeout(function () {
-      window.location.href = target;
-    }, delay);
-  }
-
-  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
-  var currentPage = 'about';
-
-  function normalizeNavTarget(href) {
-    if (!href) return null;
-    if (href.indexOf('about/index.html') !== -1) return 'about';
-    if (href.indexOf('research/index.html') !== -1) return 'research';
-    if (href.indexOf('design/index.html') !== -1) return 'design';
-    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
-    if (href.indexOf('process/index.html') !== -1) return 'process';
-    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
-    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
-    return null;
-  }
-
-  function getNavDirection(href) {
-    var targetKey = normalizeNavTarget(href);
-    var currentIndex = pageOrder.indexOf(currentPage);
-    var targetIndex = pageOrder.indexOf(targetKey);
-    if (currentIndex === -1 || targetIndex === -1) return 'next';
-    return targetIndex < currentIndex ? 'prev' : 'next';
-  }
-
-  function bindNavLinks() {
-    var navLinks = document.querySelectorAll('.nav a[href]');
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        if (navigating) {
-          event.preventDefault();
-          return;
-        }
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-        var href = link.getAttribute('href');
-        if (!href || link.classList.contains('active')) return;
-        event.preventDefault();
-        go(href, getNavDirection(href));
-      });
-    });
-  }
-
-  bindNavLinks();
-  window.addEventListener('wheel', function (event) {
-    if (navigating) {
-      event.preventDefault();
-      return;
-    }
-
-    var atTop = window.scrollY <= threshold;
-    var maxScroll = getMaxScroll();
-    var atBottom = window.scrollY >= maxScroll - threshold;
-
-    if (prevArmed) {
-      event.preventDefault();
-      var now = Date.now();
-      if (event.deltaY < -8 && prevTarget) {
-        if (now < armedConfirmReadyAt) {
-          return;
-        }
-        go(prevTarget, 'prev');
-        return;
-      }
-      if (event.deltaY > 10 && now >= armedLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      event.preventDefault();
-      var nowNext = Date.now();
-      if (event.deltaY > 8 && nextTarget) {
-        if (nowNext < nextConfirmReadyAt) {
-          return;
-        }
-        go(nextTarget, 'next');
-        return;
-      }
-      if (event.deltaY < -10 && nowNext >= nextLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (event.deltaY < -12 && atTop && prevTarget) {
-      event.preventDefault();
-      openPrevPull();
-      return;
-    }
-
-    if (event.deltaY > 12 && atBottom && nextTarget) {
-      event.preventDefault();
-      openNextPull();
-      return;
-    }
-
-    if (!atTop && !atBottom) {
-      closePull();
-    }
-  }, { passive: false });
-
-  window.addEventListener('scroll', function () {
-    var maxScroll = getMaxScroll();
-
-    if (prevArmed) {
-      if (window.scrollY > threshold + 2) {
-        window.scrollTo(0, 0);
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      if (window.scrollY < maxScroll - threshold - 2) {
-        window.scrollTo(0, maxScroll);
-      }
-      return;
-    }
-
-    if (window.scrollY > threshold + 2 && window.scrollY < maxScroll - threshold - 2) {
-      closePull();
-    }
-  }, { passive: true });})();
+<script id="page-config">
+window.__pageConfig = {
+  current: 'about',
+  prev: '../index.html',
+  next: '../research/index.html'
+};
 </script>
+<script src="../shell.js"></script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

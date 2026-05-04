@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -62,7 +62,7 @@ body.is-leaving-next::after {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 20;
+  z-index: 30;
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -72,19 +72,44 @@ body.is-leaving-next::after {
   border-bottom: 1px solid var(--border);
 }
 
+.nav-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-radius: 999px;
+  background: rgba(59,75,92,0.88);
+  box-shadow: 0 10px 24px rgba(59,75,92,0.18);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, width, height, opacity;
+  transition: transform .42s cubic-bezier(.22,1,.36,1), width .42s cubic-bezier(.22,1,.36,1), height .42s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+}
+
+.nav.is-indicator-ready .nav-indicator {
+  opacity: 1;
+}
 .nav a {
+  position: relative;
+  z-index: 1;
   padding: 10px 18px;
   border-radius: 999px;
   color: var(--text-soft);
-  text-decoration: none;
   font-size: 14px;
-  transition: all .25s ease;
+  text-decoration: none;
+  background: transparent;
+  transition: color .25s ease, background .25s ease;
 }
 
-.nav a:hover,
-.nav a.active {
+.nav a:hover {
   color: var(--text-main);
-  background: var(--accent-soft);
+  background: rgba(138,180,196,0.12);
+}
+.nav a.active {
+  color: #f5f7fa;
+  background: transparent;
+  box-shadow: none;
 }
 
 .nav,
@@ -93,20 +118,28 @@ footer {
   transition: opacity .4s ease, transform .46s ease, filter .46s ease;
 }
 
-body.is-leaving-next .nav,
 body.is-leaving-next .wrap,
 body.is-leaving-next footer {
   opacity: 0;
-  transform: translateY(-26px);
+  transform: translateY(-24px);
   filter: blur(3px);
 }
 
-body.is-leaving-prev .nav,
 body.is-leaving-prev .wrap,
 body.is-leaving-prev footer {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(24px);
   filter: blur(3px);
+}
+
+body.is-leaving-click::after {
+  opacity: 1;
+}
+body.is-leaving-click .wrap,
+body.is-leaving-click footer {
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity .22s ease, transform .26s cubic-bezier(.4,0,.2,1);
 }
 
 .prev-arm-hint {
@@ -453,6 +486,7 @@ footer {
 </head>
 <body>
 <nav class="nav">
+  <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../../index.html">首页</a>
   <a href="../../about/index.html">项目介绍</a>
   <a href="../../research/index.html">问题研究</a>
@@ -551,7 +585,7 @@ footer {
 <script>
 (function () {
   var prevTarget = '../chapter-3/index.html';
-  var nextTarget = '../index.html';
+  var nextTarget = '../../process/index.html';
   var wrap = document.querySelector('.wrap');
   var navigating = false;
   var prevArmed = false;
@@ -619,18 +653,131 @@ footer {
     return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
   }
 
-  function go(target, direction) {
+  function go(target, direction, mode) {
     if (!target || navigating) return;
     navigating = true;
+    if (mode !== 'click') {
+      rememberCurrentNavIndicator();
+    }
     closePull();
-    document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
-    window.setTimeout(function () {
-      window.location.href = target;
-    }, delay);
+    if (mode === 'click') {
+      document.body.classList.add('is-leaving-click');
+      window.setTimeout(function () {
+        window.location.href = target;
+      }, 260);
+    } else {
+      document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
+      window.setTimeout(function () {
+        window.location.href = target;
+      }, delay);
+    }
   }
 
   var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
   var currentPage = 'chapters';
+
+  var nav = document.querySelector('.nav');
+  var navIndicator = nav ? nav.querySelector('.nav-indicator') : null;
+  var navActiveLink = nav ? nav.querySelector('.nav a.active') : null;
+  var navIndicatorStorageKey = 'within-nav-indicator';
+
+  function getNavIndicatorMetrics(link) {
+    if (!nav || !link) return null;
+    return {
+      x: link.offsetLeft,
+      y: link.offsetTop,
+      width: link.offsetWidth,
+      height: link.offsetHeight
+    };
+  }
+
+  function applyNavIndicator(metrics, immediate) {
+    if (!nav || !navIndicator || !metrics) return;
+    if (immediate) {
+      var previousTransition = navIndicator.style.transition;
+      navIndicator.style.transition = 'none';
+      navIndicator.style.width = metrics.width + 'px';
+      navIndicator.style.height = metrics.height + 'px';
+      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
+      navIndicator.offsetWidth;
+      navIndicator.style.transition = previousTransition;
+    } else {
+      navIndicator.style.width = metrics.width + 'px';
+      navIndicator.style.height = metrics.height + 'px';
+      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
+    }
+    nav.classList.add('is-indicator-ready');
+  }
+
+  function saveNavIndicatorMetrics(metrics, pageKey) {
+    if (!metrics) return;
+    try {
+      sessionStorage.setItem(navIndicatorStorageKey, JSON.stringify({
+        page: pageKey || null,
+        x: metrics.x,
+        y: metrics.y,
+        width: metrics.width,
+        height: metrics.height
+      }));
+    } catch (error) {
+      // Ignore storage errors.
+    }
+  }
+
+  function syncActiveNavIndicator(immediate) {
+    if (!nav) return;
+    var activeLink = nav.querySelector('.nav a.active');
+    if (!activeLink) return;
+    navActiveLink = activeLink;
+    var metrics = getNavIndicatorMetrics(activeLink);
+    applyNavIndicator(metrics, immediate);
+    saveNavIndicatorMetrics(metrics, currentPage);
+  }
+
+  function animateNavIndicatorFromPrevious() {
+    if (!navIndicator || !navActiveLink) return;
+    var currentMetrics = getNavIndicatorMetrics(navActiveLink);
+    if (!currentMetrics) return;
+    var previousMetrics = null;
+    try {
+      previousMetrics = JSON.parse(sessionStorage.getItem(navIndicatorStorageKey) || 'null');
+    } catch (error) {
+      previousMetrics = null;
+    }
+    if (
+      previousMetrics &&
+      typeof previousMetrics.x === 'number' &&
+      typeof previousMetrics.y === 'number' &&
+      typeof previousMetrics.width === 'number' &&
+      typeof previousMetrics.height === 'number'
+    ) {
+      applyNavIndicator(previousMetrics, true);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          applyNavIndicator(currentMetrics, false);
+          saveNavIndicatorMetrics(currentMetrics, currentPage);
+        });
+      });
+    } else {
+      applyNavIndicator(currentMetrics, true);
+      saveNavIndicatorMetrics(currentMetrics, currentPage);
+    }
+  }
+
+  function rememberCurrentNavIndicator() {
+    if (!nav) return;
+    var activeLink = nav.querySelector('.nav a.active');
+    if (!activeLink) return;
+    saveNavIndicatorMetrics(getNavIndicatorMetrics(activeLink), currentPage);
+  }
+
+  function moveNavIndicatorToLink(link) {
+    if (!link) return;
+    var metrics = getNavIndicatorMetrics(link);
+    if (!metrics) return;
+    applyNavIndicator(metrics, false);
+    saveNavIndicatorMetrics(metrics, normalizeNavTarget(link.getAttribute('href')) || currentPage);
+  }
 
   function normalizeNavTarget(href) {
     if (!href) return null;
@@ -666,12 +813,27 @@ footer {
         var href = link.getAttribute('href');
         if (!href || link.classList.contains('active')) return;
         event.preventDefault();
-        go(href, getNavDirection(href));
+        moveNavIndicatorToLink(link);
+        go(href, getNavDirection(href), 'click');
       });
     });
   }
 
   bindNavLinks();
+  animateNavIndicatorFromPrevious();
+  window.addEventListener('resize', function () {
+    syncActiveNavIndicator(true);
+  }, { passive: true });
+  if (nav) {
+    nav.addEventListener('scroll', function () {
+      syncActiveNavIndicator(true);
+    }, { passive: true });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      syncActiveNavIndicator(true);
+    });
+  }
   window.addEventListener('wheel', function (event) {
     if (navigating) {
       event.preventDefault();
@@ -755,6 +917,7 @@ footer {
 </script>
 </body>
 </html>
+
 
 
 
