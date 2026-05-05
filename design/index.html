@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -212,6 +212,7 @@ overflow: hidden;
 background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.48));
 border: 1px solid rgba(148,176,200,0.20);
 box-shadow: var(--shadow);
+padding: 20px 20px 16px;
 }
 
 .mechanism-figure-shell::before {
@@ -225,13 +226,264 @@ radial-gradient(circle at 82% 32%, rgba(147,133,191,0.10), transparent 45%);
 opacity: 0.9;
 }
 
-.mechanism-image {
+.mechanism-svg-wrap {
 position: relative;
 z-index: 1;
-width: 100%;
+border-radius: 20px;
+overflow: hidden;
+background: rgba(255,255,255,0.34);
+}
+
+.mechanism-diagram {
 display: block;
-object-fit: contain;
-background: rgba(255,255,255,0.40);
+width: 100%;
+height: auto;
+}
+
+.mechanism-diagram [data-step],
+.mechanism-diagram [data-node] {
+cursor: pointer;
+}
+
+.mechanism-svg-note {
+position: relative;
+z-index: 1;
+margin-top: 12px;
+padding: 0 2px;
+font-size: 12px;
+letter-spacing: .04em;
+color: #6d7f92;
+}
+
+.diagram-step-frame,
+.diagram-node-card,
+.diagram-stage-pill,
+.diagram-flow-pill,
+.diagram-summary-band,
+.diagram-summary-chip,
+.diagram-target-box,
+.diagram-target-pill,
+.diagram-target-line {
+transition: fill .22s ease, stroke .22s ease, opacity .22s ease, filter .22s ease, transform .22s ease;
+}
+
+.diagram-step-frame {
+fill: rgba(255,255,255,0.78);
+stroke: rgba(148,176,200,0.18);
+stroke-width: 1.8;
+}
+
+.diagram-node-card {
+fill: rgba(255,255,255,0.82);
+stroke: rgba(148,176,200,0.24);
+stroke-width: 2;
+}
+
+.diagram-stage-pill {
+stroke: rgba(148,176,200,0.24);
+stroke-width: 2;
+}
+
+.diagram-stage-pill--cyan { fill: rgba(219,229,245,0.96); }
+.diagram-stage-pill--green { fill: rgba(230,236,223,0.96); }
+.diagram-stage-pill--warm { fill: rgba(243,234,205,0.96); }
+.diagram-stage-pill--purple { fill: rgba(239,230,241,0.98); }
+
+.diagram-flow-pill {
+fill: rgba(231,239,245,0.92);
+stroke: rgba(148,176,200,0.22);
+stroke-width: 2;
+}
+
+.diagram-media-cluster {
+fill: rgba(228,238,247,0.34);
+stroke: rgba(113,150,190,0.42);
+stroke-width: 2;
+stroke-dasharray: 7 7;
+}
+
+.diagram-summary-band {
+fill: rgba(235,238,242,0.92);
+stroke: rgba(148,176,200,0.14);
+stroke-width: 1.6;
+}
+
+.diagram-summary-chip {
+fill: rgba(244,241,226,0.90);
+stroke: rgba(220,204,151,0.55);
+stroke-width: 2;
+}
+
+.diagram-target-box {
+fill: rgba(241,243,249,0.94);
+stroke: rgba(148,176,200,0.26);
+stroke-width: 2;
+stroke-dasharray: 8 8;
+}
+
+.diagram-target-pill,
+.diagram-target-line {
+fill: rgba(255,255,255,0.86);
+stroke: rgba(120,126,156,0.42);
+stroke-width: 2;
+}
+
+.diagram-step-group.is-step-active .diagram-step-frame {
+fill: rgba(255,255,255,0.90);
+stroke: rgba(91,154,160,0.44);
+filter: drop-shadow(0 16px 34px rgba(91,154,160,0.10));
+}
+
+.diagram-step-group.is-step-active .diagram-stage-pill {
+stroke: rgba(91,154,160,0.46);
+}
+
+.diagram-node.is-step-active .diagram-node-card,
+.diagram-node.is-step-active .diagram-target-pill,
+.diagram-node.is-step-active .diagram-target-line,
+.diagram-node.is-step-active .diagram-summary-chip {
+stroke: rgba(91,154,160,0.34);
+}
+
+.diagram-node.is-node-active .diagram-node-card,
+.diagram-node.is-node-active .diagram-target-pill,
+.diagram-node.is-node-active .diagram-target-line,
+.diagram-node.is-node-active .diagram-summary-chip,
+.diagram-node.is-node-active .diagram-flow-pill {
+fill: rgba(255,255,255,0.98);
+stroke: rgba(91,154,160,0.72);
+filter: drop-shadow(0 18px 34px rgba(91,154,160,0.18));
+}
+
+.diagram-node.is-node-active .diagram-node-text-strong,
+.diagram-step-group.is-step-active .diagram-step-title {
+fill: #234154;
+}
+
+.diagram-link {
+fill: none;
+stroke: rgba(143,156,170,0.28);
+stroke-width: 3.2;
+stroke-linecap: round;
+stroke-linejoin: round;
+marker-end: url(#diagramArrow);
+opacity: 0.72;
+filter: drop-shadow(0 3px 10px rgba(104,118,132,0.06));
+transition: stroke .22s ease, opacity .22s ease, stroke-width .22s ease, filter .22s ease;
+}
+
+.diagram-link.is-active {
+stroke: rgba(104,166,172,0.92);
+opacity: 1;
+stroke-width: 4;
+filter: drop-shadow(0 6px 18px rgba(104,166,172,0.20));
+}
+
+.diagram-link--main {
+stroke: rgba(134,148,163,0.42);
+stroke-width: 4.2;
+opacity: 0.9;
+}
+
+.diagram-link--aux {
+stroke: rgba(154,167,181,0.24);
+stroke-width: 2.4;
+opacity: 0.76;
+marker-end: none;
+filter: none;
+}
+
+.diagram-link--inner {
+stroke: rgba(148,163,179,0.26);
+stroke-width: 2.2;
+opacity: 0.74;
+marker-end: url(#diagramArrow);
+}
+
+.diagram-node-hit {
+fill: transparent;
+}
+
+.diagram-node:focus-visible .diagram-focus-ring,
+.diagram-node.is-node-active .diagram-focus-ring,
+.diagram-step-group:focus-visible .diagram-focus-ring,
+.diagram-step-group.is-step-active .diagram-focus-ring {
+opacity: 1;
+}
+
+.diagram-focus-ring {
+fill: none;
+stroke: rgba(91,154,160,0.78);
+stroke-width: 3;
+stroke-dasharray: 8 7;
+opacity: 0;
+pointer-events: none;
+}
+
+.diagram-icon-fill-cyan { fill: #6a87b5; }
+.diagram-icon-fill-green { fill: #7dab66; }
+.diagram-icon-fill-warm { fill: #d2a04a; }
+.diagram-icon-fill-purple { fill: #7380b1; }
+.diagram-icon-fill-slate { fill: #7a8798; }
+.diagram-icon-fill-dark { fill: #4f5f70; }
+.diagram-icon-fill-light { fill: #dfe7ee; }
+
+.diagram-label-soft {
+font-size: 15px;
+font-weight: 600;
+letter-spacing: .08em;
+fill: #6b8093;
+}
+
+.diagram-step-title {
+font-size: 18px;
+font-weight: 700;
+fill: #2e3f52;
+}
+
+.diagram-step-subtitle {
+font-size: 11px;
+fill: #75879a;
+}
+
+.diagram-node-text-strong {
+font-size: 15px;
+font-weight: 700;
+fill: #33495d;
+}
+
+.diagram-node-text {
+font-size: 11px;
+fill: #7b8c9d;
+}
+
+.diagram-summary-title {
+font-size: 18px;
+font-weight: 700;
+fill: #2f4052;
+}
+
+.diagram-summary-copy {
+font-size: 11px;
+fill: #56697d;
+}
+
+.diagram-target-copy {
+font-size: 12px;
+font-weight: 700;
+fill: #59697a;
+}
+
+.diagram-target-subcopy {
+font-size: 10px;
+fill: #728395;
+}
+
+.diagram-step-num {
+font-size: 13px;
+font-weight: 700;
+letter-spacing: .16em;
+fill: #607487;
 }
 
 .mechanism-hotspots {
@@ -318,6 +570,81 @@ display: block;
 color: var(--text-dark);
 font-size: 16px;
 margin-bottom: 10px;
+}
+
+.mechanism-node-panel {
+padding: 16px 16px 18px;
+border-radius: 18px;
+background: rgba(255,255,255,0.66);
+border: 1px solid rgba(148,176,200,0.14);
+}
+
+.mechanism-node-label {
+display: inline-flex;
+padding: 5px 10px;
+border-radius: 999px;
+font-size: 11px;
+letter-spacing: .08em;
+color: #6b7f92;
+background: rgba(138,180,196,0.10);
+border: 1px solid rgba(148,176,200,0.14);
+margin-bottom: 10px;
+}
+
+.mechanism-node-panel h3 {
+font-size: 20px;
+color: var(--text-dark);
+margin-bottom: 8px;
+}
+
+.mechanism-node-panel p {
+font-size: 14px;
+line-height: 1.9;
+color: var(--text-soft);
+}
+
+.mechanism-preview-card {
+margin-top: 14px;
+padding: 12px;
+border-radius: 18px;
+background: rgba(255,255,255,0.56);
+border: 1px solid rgba(148,176,200,0.12);
+}
+
+.mechanism-preview-frame {
+position: relative;
+border-radius: 14px;
+overflow: hidden;
+border: 1px solid rgba(148,176,200,0.14);
+background:
+linear-gradient(180deg, rgba(249,251,253,0.96), rgba(238,242,247,0.92));
+aspect-ratio: 16 / 10;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.mechanism-preview-frame img {
+display: block;
+width: 100%;
+height: 100%;
+object-fit: contain;
+object-position: center center;
+}
+
+.mechanism-preview-empty {
+padding: 0 22px;
+text-align: center;
+font-size: 13px;
+line-height: 1.8;
+color: #7c90a2;
+}
+
+.mechanism-preview-note {
+margin-top: 10px;
+font-size: 12px;
+line-height: 1.8;
+color: #7b8ea1;
 }
 
 .mechanism-step {
@@ -445,18 +772,397 @@ cursor: grab;
 
 .diagram-lightbox-viewport:active { cursor: grabbing; }
 
-.diagram-lightbox-image {
+.diagram-lightbox-content {
 position: absolute;
 left: 50%;
 top: 50%;
 transform: translate(-50%, -50%) scale(1);
 transform-origin: 50% 50%;
-max-width: none;
-max-height: none;
-width: auto;
+user-select: none;
+}
+
+.diagram-lightbox-canvas {
+pointer-events: none;
+}
+
+.diagram-lightbox-canvas svg {
+display: block;
+width: min(1220px, calc(100vw - 120px));
+height: auto;
+}
+
+.design-subnav {
+margin: 28px 0 18px;
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+}
+
+.design-subnav a {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 10px 16px;
+border-radius: 999px;
+border: 1px solid rgba(148,176,200,0.18);
+background: rgba(255,255,255,0.72);
+color: #62798d;
+font-size: 13px;
+letter-spacing: .06em;
+text-decoration: none;
+transition: transform .22s ease, box-shadow .22s ease, background .22s ease, color .22s ease;
+}
+
+.design-subnav a:hover {
+transform: translateY(-1px);
+background: rgba(255,255,255,0.92);
+box-shadow: 0 14px 34px rgba(99,124,148,0.10);
+color: var(--text-dark);
+}
+
+.design-anchor-section {
+scroll-margin-top: 106px;
+}
+
+.diagram-stack {
+display: grid;
+gap: 22px;
+}
+
+.interactive-diagram {
+display: grid;
+grid-template-columns: minmax(0, 1.06fr) minmax(330px, 0.94fr);
+gap: 22px;
+align-items: stretch;
+}
+
+.interactive-stage-shell,
+.interactive-panel {
+border-radius: 24px;
+background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.52));
+border: 1px solid rgba(148,176,200,0.20);
+box-shadow: var(--shadow);
+}
+
+.interactive-stage-shell {
+padding: 18px 18px 16px;
+position: relative;
+overflow: hidden;
+display: flex;
+flex-direction: column;
+min-height: 100%;
+}
+
+.interactive-stage-shell::before {
+content: "";
+position: absolute;
+inset: 0;
+pointer-events: none;
+background:
+radial-gradient(circle at 18% 18%, rgba(138,180,196,0.10), transparent 36%),
+radial-gradient(circle at 82% 28%, rgba(147,133,191,0.08), transparent 34%);
+}
+
+.interactive-stage-top {
+position: relative;
+z-index: 1;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 12px;
+margin-bottom: 12px;
+}
+
+.interactive-stage-label {
+display: inline-flex;
+align-items: center;
+padding: 6px 10px;
+border-radius: 999px;
+border: 1px solid rgba(148,176,200,0.18);
+background: rgba(255,255,255,0.70);
+color: #688196;
+font-size: 11px;
+letter-spacing: .10em;
+}
+
+.interactive-stage-tip {
+color: #8094a6;
+font-size: 12px;
+letter-spacing: .04em;
+}
+
+.interactive-stage {
+position: relative;
+z-index: 1;
+border-radius: 20px;
+overflow: hidden;
+background: rgba(255,255,255,0.44);
+flex: 1 1 auto;
+}
+
+.interactive-stage img {
+display: block;
+width: 100%;
 height: auto;
 user-select: none;
+}
+
+.interactive-hotspot {
+position: absolute;
+border-radius: 18px;
+border: 1px solid rgba(148,176,200,0.04);
+background: rgba(138,180,196,0.02);
+cursor: pointer;
+transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease, transform .2s ease;
+}
+
+.interactive-hotspot:hover,
+.interactive-hotspot:focus-visible {
+background: rgba(138,180,196,0.12);
+border-color: rgba(91,154,160,0.30);
+box-shadow: 0 14px 34px rgba(91,154,160,0.14);
+outline: none;
+}
+
+.interactive-hotspot.is-active {
+background: rgba(91,154,160,0.10);
+border-color: rgba(91,154,160,0.46);
+box-shadow: 0 16px 40px rgba(91,154,160,0.16);
+}
+
+.interactive-hotspot.is-muted {
+opacity: 0.24;
+box-shadow: none;
+}
+
+.interactive-hotspot.is-pill {
+border-radius: 999px;
+}
+
+.interactive-hotspot.is-circle {
+border-radius: 999px;
+}
+
+[data-interactive-diagram="space-layout"][data-disable-hover="true"] .interactive-hotspot,
+[data-interactive-diagram="space-layout"][data-disable-hover="true"] .interactive-hotspot:hover,
+[data-interactive-diagram="space-layout"][data-disable-hover="true"] .interactive-hotspot:focus-visible,
+[data-interactive-diagram="space-layout"][data-disable-hover="true"] .interactive-hotspot.is-active,
+[data-interactive-diagram="space-layout"][data-disable-hover="true"] .interactive-hotspot.is-muted {
+background: transparent;
+border-color: transparent;
+box-shadow: none;
+opacity: 1;
 pointer-events: none;
+cursor: default;
+}
+
+.interactive-caption {
+position: relative;
+z-index: 1;
+margin-top: 12px;
+padding: 0 2px;
+font-size: 12px;
+line-height: 1.8;
+color: #74889a;
+}
+
+.interactive-panel {
+padding: 22px 24px 24px;
+}
+
+.interactive-panel-badge {
+display: inline-flex;
+align-items: center;
+padding: 6px 10px;
+border-radius: 999px;
+border: 1px solid rgba(148,176,200,0.18);
+background: rgba(138,180,196,0.10);
+color: #688196;
+font-size: 11px;
+letter-spacing: .10em;
+margin-bottom: 12px;
+}
+
+.interactive-panel h3 {
+font-size: 28px;
+line-height: 1.2;
+color: var(--text-dark);
+margin-bottom: 6px;
+}
+
+.interactive-panel-subtitle {
+font-size: 13px;
+letter-spacing: .12em;
+color: var(--cyan-deep);
+margin-bottom: 14px;
+text-transform: uppercase;
+}
+
+.interactive-panel-summary {
+font-size: 15px;
+line-height: 1.95;
+color: var(--text-soft);
+margin-bottom: 18px;
+}
+
+.interactive-panel-grid {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 12px;
+}
+
+.interactive-panel-field {
+padding: 14px 14px 15px;
+border-radius: 18px;
+background: rgba(255,255,255,0.54);
+border: 1px solid rgba(148,176,200,0.12);
+}
+
+.interactive-panel-field strong {
+display: block;
+color: var(--text-dark);
+font-size: 13px;
+letter-spacing: .08em;
+margin-bottom: 8px;
+}
+
+.interactive-panel-field p {
+font-size: 13px;
+line-height: 1.85;
+color: var(--text-soft);
+}
+
+.interactive-panel-tags {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-top: 16px;
+}
+
+.interactive-panel-tags span {
+padding: 6px 12px;
+border-radius: 999px;
+font-size: 12px;
+color: #5e7c90;
+background: rgba(138,180,196,0.10);
+border: 1px solid rgba(148,176,200,0.14);
+}
+
+.interactive-filter-row {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 16px;
+}
+
+.interactive-filter {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 9px 14px;
+border-radius: 999px;
+border: 1px solid rgba(148,176,200,0.18);
+background: rgba(255,255,255,0.70);
+color: #688196;
+font-size: 12px;
+letter-spacing: .06em;
+cursor: pointer;
+transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.interactive-filter:hover {
+transform: translateY(-1px);
+background: rgba(255,255,255,0.90);
+}
+
+.interactive-filter.is-active {
+background: rgba(91,154,160,0.12);
+color: #345264;
+border-color: rgba(91,154,160,0.28);
+box-shadow: 0 14px 34px rgba(91,154,160,0.10);
+}
+
+.interactive-side-note {
+margin-top: 14px;
+font-size: 12px;
+line-height: 1.8;
+color: #7b8ea1;
+}
+
+.space-model-shell {
+padding: 22px 24px 24px;
+border-radius: 24px;
+background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.52));
+border: 1px solid rgba(148,176,200,0.20);
+box-shadow: var(--shadow);
+display: flex;
+flex-direction: column;
+gap: 14px;
+min-height: 100%;
+}
+
+.space-model-head {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 12px;
+}
+
+.space-model-head strong {
+display: block;
+color: var(--text-dark);
+font-size: 22px;
+line-height: 1.2;
+}
+
+.space-model-head span {
+display: inline-flex;
+align-items: center;
+padding: 6px 10px;
+border-radius: 999px;
+background: rgba(138,180,196,0.10);
+border: 1px solid rgba(148,176,200,0.16);
+color: #688196;
+font-size: 11px;
+letter-spacing: .08em;
+white-space: nowrap;
+}
+
+.space-model-copy {
+font-size: 14px;
+line-height: 1.9;
+color: var(--text-soft);
+}
+
+.space-model-viewer-shell {
+border-radius: 22px;
+overflow: hidden;
+border: 1px solid rgba(148,176,200,0.16);
+background:
+radial-gradient(circle at 24% 18%, rgba(138,180,196,0.10), transparent 36%),
+linear-gradient(180deg, rgba(248,250,252,0.96), rgba(235,240,245,0.94));
+min-height: 460px;
+position: relative;
+}
+
+.space-model-viewer {
+width: 100%;
+height: 460px;
+background: transparent;
+}
+
+.space-model-note {
+font-size: 12px;
+line-height: 1.85;
+color: #7b8ea1;
+}
+
+.space-model-note code {
+font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+background: rgba(255,255,255,0.72);
+border: 1px solid rgba(148,176,200,0.14);
+padding: 2px 8px;
+border-radius: 999px;
 }
 
 .stage-num {
@@ -502,6 +1208,18 @@ grid-template-columns: repeat(2, minmax(0, 1fr));
 grid-template-columns: 1fr;
 }
 
+.interactive-diagram,
+.mechanism-map,
+.interactive-panel-grid {
+grid-template-columns: 1fr;
+}
+
+.space-model-viewer-shell,
+.space-model-viewer {
+min-height: 360px;
+height: 360px;
+}
+
 .section-head {
 display: block;
 }
@@ -541,7 +1259,7 @@ grid-template-columns: 1fr;
     <div class="eyebrow">CORE DESIGN</div>
     <h1>核心设计</h1>
     <p class="lead">
-      这一页对应论文第四章"具身认知视角下大学生社交数字化设计实践"，集中展开 Within 的方案定位、核心目标、跨媒介协作机制、技术实现与落地体验流程。
+      这一页对应论文第四章"具身认知视角下大学生社交数字化设计实践"，集中展开 Within 的方案定位、角色分配、协作机制、空间布置、技术实现与落地体验流程。
     </p>
 
     <div class="hero-note">
@@ -549,6 +1267,11 @@ grid-template-columns: 1fr;
         Within 不是将 XR 当作孤立的沉浸设备，而是把它放进一个由 <strong>头显、大屏、实体卡片、移动端与现实空间</strong> 共同构成的协作系统中。
         核心逻辑是"<strong>虚拟体验为内核，现实互动为延伸</strong>"，让沟通、判断、配合与共创成为体验推进的必要条件，并最终推动虚拟协作自然转化为现实交流。
       </p>
+    </div>
+
+    <div class="design-subnav" aria-label="核心设计图示分区">
+      <a href="#design-mechanism-map">01 协作机制图示</a>
+      <a href="#design-space-map">02 空间布置图示</a>
     </div>
 
     <div class="section">
@@ -660,79 +1383,297 @@ grid-template-columns: 1fr;
       </div>
     </div>
 
-    <div class="section">
+    <div class="section design-anchor-section" id="design-mechanism-map">
       <div class="section-head">
         <h2>跨媒介协作机制</h2>
         <p>这是论文第四章最关键的设计结构。不同角色拥有不同权限、视角和信息来源，只有持续沟通，体验才会继续推进。</p>
       </div>
 
-      <div class="grid-3">
-        <div class="card accent-cyan">
-          <h3>探索者</h3>
-          <p>佩戴 XR 头显，负责第一人称视角下的沉浸探索、道具使用、场景移动与核心操作，是具身体验的执行者。</p>
-        </div>
-        <div class="card accent-purple">
-          <h3>引导者</h3>
-          <p>通过同步大屏与纸质卡片掌握更完整的信息结构，负责语言提示、线索拼合、策略判断与任务辅助。</p>
-        </div>
-        <div class="card accent-warm">
-          <h3>回应者</h3>
-          <p>以轻量方式加入协作闭环，在特定环节提供提示、反馈与氛围支撑，让围观群体也能参与社交过程。</p>
-        </div>
-      </div>
-
-      <div class="media-grid" style="margin-top:22px;">
-        <div class="media-box">
-          <strong>XR 头显</strong>
-          <h3>沉浸执行</h3>
-          <p>承载第一人称行动、感知与叙事体验，是具身交互的核心媒介。</p>
-        </div>
-        <div class="media-box">
-          <strong>同步大屏</strong>
-          <h3>全局观察</h3>
-          <p>向场外参与者展示画面、线索与整体情境，为沟通提供共同参照。</p>
-        </div>
-        <div class="media-box">
-          <strong>纸质卡片</strong>
-          <h3>线索拼合</h3>
-          <p>承载解谜信息、分支选择与创意任务，是连接虚拟与现实的重要纽带。</p>
-        </div>
-        <div class="media-box">
-          <strong>现实空间</strong>
-          <h3>关系延伸</h3>
-          <p>承担面对面交流、破冰、复盘与体验结束后的自由对话，让社交行为继续发生。</p>
-        </div>
-      </div>
-
       <div class="mechanism-map" data-mechanism-map>
         <div class="mechanism-figure-shell">
           <button class="mechanism-zoom-btn" type="button" data-map-zoom>查看大图</button>
-          <img class="mechanism-image" src="../images/mechanism-map.jpg" alt="跨媒介协作机制图" loading="lazy" decoding="async" data-map-image>
-          <div class="mechanism-hotspots" aria-hidden="true">
-            <button class="mechanism-hotspot is-active" type="button" data-step="1" style="left:3.2%;top:9.5%;width:22.0%;height:78.0%;"></button>
-            <button class="mechanism-hotspot" type="button" data-step="2" style="left:26.3%;top:9.5%;width:22.0%;height:78.0%;"></button>
-            <button class="mechanism-hotspot" type="button" data-step="3" style="left:49.4%;top:9.5%;width:22.0%;height:78.0%;"></button>
-            <button class="mechanism-hotspot" type="button" data-step="4" style="left:72.5%;top:9.5%;width:24.2%;height:78.0%;"></button>
+          <div class="mechanism-svg-wrap" data-map-diagram>
+            <svg class="mechanism-diagram" viewBox="0 0 1320 760" role="img" aria-label="跨媒介协作机制交互图，包含四个阶段、阶段内细项与目标转化路径">
+              <defs>
+                <marker id="diagramArrow" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto">
+                  <path d="M1 1 L12 7 L1 13 Q5 7 1 1 Z" fill="context-stroke"></path>
+                </marker>
+              </defs>
+              <path class="diagram-link diagram-link--main is-active" data-link="main-1-2" d="M286 58 H 336"></path>
+              <path class="diagram-link diagram-link--main" data-link="main-2-3" d="M584 58 H 636"></path>
+              <path class="diagram-link diagram-link--main" data-link="main-3-4" d="M884 58 H 934"></path>
+              <path class="diagram-link diagram-link--main" data-link="main-4-outcome" d="M1184 284 H 1228"></path>
+
+              <path class="diagram-link diagram-link--aux is-active" data-link="aux-1-space" d="M156 430 V 474"></path>
+              <path class="diagram-link diagram-link--aux" data-link="aux-1-summary" d="M156 548 V 634"></path>
+              <path class="diagram-link diagram-link--aux" data-link="aux-2-summary" d="M460 548 V 634"></path>
+              <path class="diagram-link diagram-link--aux" data-link="aux-3-summary" d="M760 548 V 634"></path>
+              <path class="diagram-link diagram-link--aux" data-link="aux-4-summary" d="M1060 548 V 634"></path>
+              <path class="diagram-link diagram-link--inner" data-link="aux-4-chain-1" d="M1060 242 V 274"></path>
+              <path class="diagram-link diagram-link--inner" data-link="aux-4-chain-2" d="M1060 332 V 364"></path>
+
+              <g class="diagram-step-group is-step-active" data-step="1" tabindex="0" role="button" aria-label="第一阶段：媒介组织">
+                <rect class="diagram-stage-pill diagram-stage-pill--cyan" x="38" y="22" width="248" height="56" rx="18"></rect>
+                <text x="162" y="49" text-anchor="middle" class="diagram-step-num">STAGE 01</text>
+                <text x="162" y="64" text-anchor="middle" class="diagram-step-title">① 媒介组织</text>
+                <text x="162" y="102" text-anchor="middle" class="diagram-step-subtitle">不同媒介承担差异化信息功能，形成层次网络</text>
+                <rect class="diagram-step-frame" x="38" y="130" width="248" height="420" rx="28"></rect>
+                <rect class="diagram-focus-ring" x="28" y="12" width="268" height="548" rx="34"></rect>
+                <rect class="diagram-media-cluster" x="58" y="152" width="208" height="278" rx="24"></rect>
+
+                <g class="diagram-node is-step-active is-node-active" data-step="1" data-node="headset" tabindex="0" role="button" aria-label="虚拟媒介">
+                  <rect class="diagram-node-card" x="74" y="170" width="176" height="68" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="66" y="162" width="192" height="84" rx="24"></rect>
+                  <circle cx="103" cy="204" r="18" class="diagram-icon-fill-light"></circle>
+                  <circle cx="98" cy="198" r="5" class="diagram-icon-fill-dark"></circle>
+                  <rect x="91" y="204" width="14" height="9" rx="4.5" class="diagram-icon-fill-dark"></rect>
+                  <path d="M97 209 Q103 201 109 209" fill="none" stroke="#4f5f70" stroke-width="2.6" stroke-linecap="round"></path>
+                  <text x="127" y="197" class="diagram-node-text-strong">虚拟媒介</text>
+                  <text x="127" y="214" class="diagram-node-text">提供沉浸式情境</text>
+                  <text x="127" y="229" class="diagram-node-text">与探索空间</text>
+                  <rect class="diagram-node-hit" x="74" y="170" width="176" height="68" rx="18"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="1" data-node="screen" tabindex="0" role="button" aria-label="同步媒介">
+                  <rect class="diagram-node-card" x="74" y="256" width="176" height="68" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="66" y="248" width="192" height="84" rx="24"></rect>
+                  <rect x="86" y="276" width="28" height="18" rx="4" class="diagram-icon-fill-light"></rect>
+                  <rect x="91" y="281" width="18" height="8" rx="2" class="diagram-icon-fill-dark"></rect>
+                  <rect x="97" y="295" width="6" height="6" rx="1.5" class="diagram-icon-fill-dark"></rect>
+                  <text x="127" y="283" class="diagram-node-text-strong">同步媒介</text>
+                  <text x="127" y="300" class="diagram-node-text">信息共享</text>
+                  <text x="127" y="315" class="diagram-node-text">外部观察</text>
+                  <rect class="diagram-node-hit" x="74" y="256" width="176" height="68" rx="18"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="1" data-node="card" tabindex="0" role="button" aria-label="实体媒介">
+                  <rect class="diagram-node-card" x="74" y="342" width="176" height="68" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="66" y="334" width="192" height="84" rx="24"></rect>
+                  <polygon points="101,357 115,365 115,381 101,389 87,381 87,365" class="diagram-icon-fill-green"></polygon>
+                  <path d="M93 386 L107 395 L124 383" fill="none" stroke="#7dab66" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <text x="127" y="369" class="diagram-node-text-strong">实体媒介</text>
+                  <text x="127" y="386" class="diagram-node-text">信息拼接</text>
+                  <text x="127" y="401" class="diagram-node-text">行为反馈</text>
+                  <rect class="diagram-node-hit" x="74" y="342" width="176" height="68" rx="18"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="1" data-node="flow" tabindex="0" role="button" aria-label="信息流动与重构">
+                  <rect class="diagram-flow-pill" x="274" y="210" width="28" height="168" rx="14"></rect>
+                  <rect class="diagram-focus-ring" x="266" y="202" width="44" height="184" rx="20"></rect>
+                  <text x="288" y="294" text-anchor="middle" class="diagram-label-soft" transform="rotate(90 288 294)">信息流动与重构</text>
+                  <rect class="diagram-node-hit" x="274" y="210" width="28" height="168" rx="14"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="1" data-node="space" tabindex="0" role="button" aria-label="现实空间">
+                  <rect class="diagram-flow-pill" x="74" y="476" width="176" height="58" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="66" y="468" width="192" height="74" rx="24"></rect>
+                  <rect x="89" y="493" width="12" height="18" rx="2.5" class="diagram-icon-fill-slate"></rect>
+                  <rect x="104" y="485" width="14" height="26" rx="2.5" class="diagram-icon-fill-slate"></rect>
+                  <rect x="121" y="495" width="10" height="16" rx="2.5" class="diagram-icon-fill-slate"></rect>
+                  <text x="145" y="500" class="diagram-node-text-strong">现实空间</text>
+                  <text x="145" y="517" class="diagram-node-text">行为发生</text>
+                  <text x="145" y="531" class="diagram-node-text">情境锚定</text>
+                  <rect class="diagram-node-hit" x="74" y="476" width="176" height="58" rx="18"></rect>
+                </g>
+              </g>
+
+              <g class="diagram-step-group" data-step="2" tabindex="0" role="button" aria-label="第二阶段：角色分配">
+                <rect class="diagram-stage-pill diagram-stage-pill--green" x="338" y="22" width="248" height="56" rx="18"></rect>
+                <text x="462" y="49" text-anchor="middle" class="diagram-step-num">STAGE 02</text>
+                <text x="462" y="64" text-anchor="middle" class="diagram-step-title">② 角色分配</text>
+                <text x="462" y="102" text-anchor="middle" class="diagram-step-subtitle">差异化的信息获取与任务参与，促成沟通方式差异</text>
+                <rect class="diagram-step-frame" x="338" y="130" width="248" height="420" rx="28"></rect>
+                <rect class="diagram-focus-ring" x="328" y="12" width="268" height="548" rx="34"></rect>
+
+                <g class="diagram-node" data-step="2" data-node="explorer" tabindex="0" role="button" aria-label="探索者">
+                  <rect class="diagram-node-card" x="364" y="170" width="196" height="72" rx="20"></rect>
+                  <rect class="diagram-focus-ring" x="356" y="162" width="212" height="88" rx="26"></rect>
+                  <circle cx="400" cy="206" r="18" class="diagram-icon-fill-cyan"></circle>
+                  <circle cx="516" cy="206" r="18" fill="#eef1f6" stroke="#9ab1c7" stroke-width="2"></circle>
+                  <path d="M504 206 q12 -15 24 0" fill="none" stroke="#4f5f70" stroke-width="2.8" stroke-linecap="round"></path>
+                  <rect x="506" y="206" width="20" height="8" rx="4" class="diagram-icon-fill-dark"></rect>
+                  <text x="430" y="198" class="diagram-node-text-strong">探索者</text>
+                  <text x="430" y="216" class="diagram-node-text">负责具身体验</text>
+                  <text x="430" y="231" class="diagram-node-text">第一视角体验</text>
+                  <rect class="diagram-node-hit" x="364" y="170" width="196" height="72" rx="20"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="2" data-node="guide" tabindex="0" role="button" aria-label="引导者">
+                  <rect class="diagram-node-card" x="364" y="258" width="196" height="72" rx="20"></rect>
+                  <rect class="diagram-focus-ring" x="356" y="250" width="212" height="88" rx="26"></rect>
+                  <circle cx="400" cy="294" r="18" class="diagram-icon-fill-green"></circle>
+                  <circle cx="510" cy="294" r="18" fill="#f2f5ef" stroke="#a8c18d" stroke-width="2"></circle>
+                  <circle cx="505" cy="294" r="2.6" fill="#6c8d58"></circle>
+                  <circle cx="510" cy="294" r="2.6" fill="#6c8d58"></circle>
+                  <circle cx="515" cy="294" r="2.6" fill="#6c8d58"></circle>
+                  <text x="430" y="286" class="diagram-node-text-strong">引导者</text>
+                  <text x="430" y="304" class="diagram-node-text">负责信息整合</text>
+                  <text x="430" y="319" class="diagram-node-text">与沟通推动</text>
+                  <rect class="diagram-node-hit" x="364" y="258" width="196" height="72" rx="20"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="2" data-node="responder" tabindex="0" role="button" aria-label="回应者">
+                  <rect class="diagram-node-card" x="364" y="346" width="196" height="72" rx="20"></rect>
+                  <rect class="diagram-focus-ring" x="356" y="338" width="212" height="88" rx="26"></rect>
+                  <circle cx="400" cy="382" r="18" class="diagram-icon-fill-warm"></circle>
+                  <rect x="498" y="366" width="26" height="26" rx="7" fill="#f9f2e2" stroke="#d5b46e" stroke-width="2"></rect>
+                  <path d="M503 387 L520 371" fill="none" stroke="#d2a04a" stroke-width="2.8" stroke-linecap="round"></path>
+                  <text x="430" y="374" class="diagram-node-text-strong">回应者</text>
+                  <text x="430" y="392" class="diagram-node-text">负责观察、理解</text>
+                  <text x="430" y="407" class="diagram-node-text">与协助反馈</text>
+                  <rect class="diagram-node-hit" x="364" y="346" width="196" height="72" rx="20"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="2" data-node="asymmetry" tabindex="0" role="button" aria-label="非对称性与互补依赖">
+                  <rect class="diagram-flow-pill" x="364" y="476" width="196" height="58" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="356" y="468" width="212" height="74" rx="24"></rect>
+                  <text x="462" y="499" text-anchor="middle" class="diagram-node-text-strong">非对称性 + 互补依赖</text>
+                  <text x="462" y="518" text-anchor="middle" class="diagram-node-text">沟通成为任务推进的必要条件</text>
+                  <rect class="diagram-node-hit" x="364" y="476" width="196" height="58" rx="18"></rect>
+                </g>
+              </g>
+
+              <g class="diagram-step-group" data-step="3" tabindex="0" role="button" aria-label="第三阶段：交互推进">
+                <rect class="diagram-stage-pill diagram-stage-pill--warm" x="638" y="22" width="248" height="56" rx="18"></rect>
+                <text x="762" y="49" text-anchor="middle" class="diagram-step-num">STAGE 03</text>
+                <text x="762" y="64" text-anchor="middle" class="diagram-step-title">③ 交互推进</text>
+                <text x="762" y="102" text-anchor="middle" class="diagram-step-subtitle">以任务为核心的动态互动，社交意向在协作中自然生成</text>
+                <rect class="diagram-step-frame" x="638" y="130" width="248" height="420" rx="28"></rect>
+                <rect class="diagram-focus-ring" x="628" y="12" width="268" height="548" rx="34"></rect>
+
+                <g class="diagram-node" data-step="3" data-node="goal" tabindex="0" role="button" aria-label="任务目标">
+                  <rect class="diagram-summary-chip" x="688" y="168" width="148" height="56" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="680" y="160" width="164" height="72" rx="24"></rect>
+                  <text x="762" y="202" text-anchor="middle" class="diagram-node-text-strong">任务目标</text>
+                  <rect class="diagram-node-hit" x="688" y="168" width="148" height="56" rx="18"></rect>
+                </g>
+
+                <circle cx="762" cy="324" r="94" fill="none" stroke="rgba(121,138,155,0.22)" stroke-width="2" stroke-dasharray="7 7"></circle>
+                <path class="diagram-link diagram-link--aux" d="M762 224 V 254"></path>
+                <path class="diagram-link diagram-link--aux" d="M676 324 H 714"></path>
+                <path class="diagram-link diagram-link--aux" d="M810 324 H 848"></path>
+                <path class="diagram-link diagram-link--aux" d="M762 394 V 426"></path>
+
+                <g class="diagram-node" data-step="3" data-node="goal-core" tabindex="0" role="button" aria-label="协作核心">
+                  <circle cx="762" cy="324" r="30" fill="#ffffff" stroke="rgba(148,176,200,0.28)" stroke-width="2"></circle>
+                  <rect class="diagram-focus-ring" x="724" y="286" width="76" height="76" rx="38"></rect>
+                  <circle cx="762" cy="312" r="8" class="diagram-icon-fill-cyan"></circle>
+                  <rect x="750" y="321" width="24" height="11" rx="5.5" class="diagram-icon-fill-cyan"></rect>
+                  <rect class="diagram-node-hit" x="726" y="288" width="72" height="72" rx="36"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="3" data-node="discussion" tabindex="0" role="button" aria-label="语言沟通">
+                  <rect class="diagram-node-card" x="646" y="294" width="112" height="60" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="638" y="286" width="128" height="76" rx="24"></rect>
+                  <text x="702" y="318" text-anchor="middle" class="diagram-node-text-strong">语言沟通</text>
+                  <text x="702" y="336" text-anchor="middle" class="diagram-node-text">信息转述与判断</text>
+                  <rect class="diagram-node-hit" x="646" y="294" width="112" height="60" rx="18"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="3" data-node="decision" tabindex="0" role="button" aria-label="动作配合">
+                  <rect class="diagram-node-card" x="766" y="294" width="112" height="60" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="758" y="286" width="128" height="76" rx="24"></rect>
+                  <text x="822" y="318" text-anchor="middle" class="diagram-node-text-strong">动作配合</text>
+                  <text x="822" y="336" text-anchor="middle" class="diagram-node-text">操作执行与回应</text>
+                  <rect class="diagram-node-hit" x="766" y="294" width="112" height="60" rx="18"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="3" data-node="shared-info" tabindex="0" role="button" aria-label="信息共享">
+                  <rect class="diagram-node-card" x="706" y="430" width="112" height="60" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="698" y="422" width="128" height="76" rx="24"></rect>
+                  <text x="762" y="454" text-anchor="middle" class="diagram-node-text-strong">信息共享</text>
+                  <text x="762" y="472" text-anchor="middle" class="diagram-node-text">反馈回流与修正</text>
+                  <rect class="diagram-node-hit" x="706" y="430" width="112" height="60" rx="18"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="3" data-node="multi-participation" tabindex="0" role="button" aria-label="多轮互动与行为调整">
+                  <rect class="diagram-summary-chip" x="648" y="500" width="228" height="46" rx="18"></rect>
+                  <rect class="diagram-focus-ring" x="640" y="492" width="244" height="62" rx="24"></rect>
+                  <text x="762" y="520" text-anchor="middle" class="diagram-node-text-strong">多轮互动与行为调整</text>
+                  <text x="762" y="537" text-anchor="middle" class="diagram-node-text">协同关系逐步建立</text>
+                  <rect class="diagram-node-hit" x="648" y="500" width="228" height="46" rx="18"></rect>
+                </g>
+              </g>
+
+              <g class="diagram-step-group" data-step="4" tabindex="0" role="button" aria-label="第四阶段：目标转化">
+                <rect class="diagram-stage-pill diagram-stage-pill--purple" x="938" y="22" width="248" height="56" rx="18"></rect>
+                <text x="1062" y="49" text-anchor="middle" class="diagram-step-num">STAGE 04</text>
+                <text x="1062" y="64" text-anchor="middle" class="diagram-step-title">④ 目标转化</text>
+                <text x="1062" y="102" text-anchor="middle" class="diagram-step-subtitle">从虚拟体验走向现实社交，形成可延伸的关系</text>
+                <rect class="diagram-step-frame" x="938" y="130" width="248" height="420" rx="28"></rect>
+                <rect class="diagram-focus-ring" x="928" y="12" width="268" height="548" rx="34"></rect>
+
+                <g class="diagram-node" data-step="4" data-node="cooperate" tabindex="0" role="button" aria-label="共同经历与协作">
+                  <rect class="diagram-target-pill" x="972" y="184" width="180" height="58" rx="28"></rect>
+                  <rect class="diagram-focus-ring" x="964" y="176" width="196" height="74" rx="34"></rect>
+                  <circle cx="1010" cy="212" r="12" class="diagram-icon-fill-cyan"></circle>
+                  <circle cx="1034" cy="212" r="12" class="diagram-icon-fill-green"></circle>
+                  <circle cx="1058" cy="212" r="12" class="diagram-icon-fill-warm"></circle>
+                  <text x="1072" y="217" text-anchor="middle" class="diagram-target-copy">共同经历与协作</text>
+                  <rect class="diagram-node-hit" x="972" y="184" width="180" height="58" rx="28"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="4" data-node="icebreak" tabindex="0" role="button" aria-label="初步社交联系">
+                  <rect class="diagram-target-line" x="972" y="274" width="180" height="58" rx="28"></rect>
+                  <rect class="diagram-focus-ring" x="964" y="266" width="196" height="74" rx="34"></rect>
+                  <circle cx="1006" cy="302" r="8" class="diagram-icon-fill-purple"></circle>
+                  <circle cx="1032" cy="302" r="8" fill="#ffffff" stroke="#8c98b9" stroke-width="2"></circle>
+                  <circle cx="1058" cy="302" r="8" fill="#ffffff" stroke="#8c98b9" stroke-width="2"></circle>
+                  <path d="M1014 302 H1024 M1040 302 H1050" fill="none" stroke="#7b89a7" stroke-width="2.2" stroke-linecap="round"></path>
+                  <text x="1080" y="307" text-anchor="middle" class="diagram-target-copy">初步社交联系</text>
+                  <rect class="diagram-node-hit" x="972" y="274" width="180" height="58" rx="28"></rect>
+                </g>
+
+                <g class="diagram-node" data-step="4" data-node="extension" tabindex="0" role="button" aria-label="现实社交延伸">
+                  <rect class="diagram-target-pill" x="972" y="364" width="180" height="58" rx="28"></rect>
+                  <rect class="diagram-focus-ring" x="964" y="356" width="196" height="74" rx="34"></rect>
+                  <rect x="1002" y="390" width="12" height="16" rx="2" class="diagram-icon-fill-purple"></rect>
+                  <rect x="1018" y="382" width="12" height="24" rx="2" class="diagram-icon-fill-purple"></rect>
+                  <rect x="1034" y="388" width="12" height="18" rx="2" class="diagram-icon-fill-purple"></rect>
+                  <text x="1080" y="398" text-anchor="middle" class="diagram-target-copy">现实社交延伸</text>
+                  <text x="1080" y="413" text-anchor="middle" class="diagram-target-subcopy">联系从虚拟体验走向面对面</text>
+                  <rect class="diagram-node-hit" x="972" y="364" width="180" height="58" rx="28"></rect>
+                </g>
+              </g>
+
+              <g class="diagram-node" data-step="4" data-node="outcome" tabindex="0" role="button" aria-label="促进现实社交发生">
+                <rect class="diagram-target-box" x="1236" y="214" width="72" height="184" rx="18"></rect>
+                <rect class="diagram-focus-ring" x="1228" y="206" width="88" height="200" rx="24"></rect>
+                <circle cx="1262" cy="264" r="10" class="diagram-icon-fill-purple"></circle>
+                <circle cx="1276" cy="264" r="10" class="diagram-icon-fill-purple" opacity="0.92"></circle>
+                <circle cx="1290" cy="264" r="10" class="diagram-icon-fill-purple" opacity="0.82"></circle>
+                <text x="1272" y="308" text-anchor="middle" class="diagram-target-copy">促进现实</text>
+                <text x="1272" y="323" text-anchor="middle" class="diagram-target-copy">社交发生</text>
+                <text x="1272" y="346" text-anchor="middle" class="diagram-target-subcopy">降低社交</text>
+                <text x="1272" y="360" text-anchor="middle" class="diagram-target-subcopy">启动门槛</text>
+                <text x="1272" y="376" text-anchor="middle" class="diagram-target-subcopy">增强积极体验</text>
+                <rect class="diagram-node-hit" x="1236" y="214" width="72" height="184" rx="18"></rect>
+              </g>
+
+              <g class="diagram-node" data-step="4" data-node="summary" tabindex="0" role="button" aria-label="跨媒介协作过程总结">
+                <rect class="diagram-summary-band" x="72" y="634" width="1084" height="74" rx="18"></rect>
+                <rect class="diagram-focus-ring" x="64" y="626" width="1100" height="90" rx="24"></rect>
+                <text x="614" y="667" text-anchor="middle" class="diagram-summary-title">跨媒介协作是一个动态过程：媒介组织 → 角色分配 → 交互推进 → 目标转化</text>
+                <text x="614" y="690" text-anchor="middle" class="diagram-summary-copy">通过结构化设计，将社交行为嵌入体验，最终实现从虚拟体验到现实社交的过渡</text>
+                <rect class="diagram-node-hit" x="72" y="634" width="1084" height="74" rx="18"></rect>
+              </g>
+            </svg>
           </div>
+          <p class="mechanism-svg-note">悬浮任一阶段或子节点可查看细项，点击可锁定当前焦点；右上角可放大整张图。</p>
         </div>
 
         <div class="mechanism-details" aria-live="polite">
-          <strong>机制图交互</strong>
-          <div class="mechanism-step is-active" data-step="1" role="button" tabindex="0" aria-pressed="true">
-            <h3>① 媒介组织</h3>
-            <p>先把 XR 头显、大屏、纸质卡片与现实空间编排成一个“信息流动的场”。</p>
+          <div class="mechanism-node-panel">
+            <span class="mechanism-node-label">当前名词解释</span>
+            <h3 data-node-title>虚拟媒介</h3>
+            <p data-node-copy>XR 头显提供沉浸式场景与行动空间，是整张机制图中“信息场”建立的第一层。</p>
           </div>
-          <div class="mechanism-step" data-step="2" role="button" tabindex="0" aria-pressed="false">
-            <h3>② 角色分配</h3>
-            <p>通过非对称权限与信息拆分，让沟通成为推进任务的必要条件。</p>
-          </div>
-          <div class="mechanism-step" data-step="3" role="button" tabindex="0" aria-pressed="false">
-            <h3>③ 交互推进</h3>
-            <p>以任务目标为核心组织互动，形成“协作讨论”而非“强行社交”。</p>
-          </div>
-          <div class="mechanism-step" data-step="4" role="button" tabindex="0" aria-pressed="false">
-            <h3>④ 目标转化</h3>
-            <p>在完成任务的过程中完成关系递进，把虚拟协作自然转译为现实交流。</p>
+          <div class="mechanism-preview-card">
+            <div class="mechanism-preview-frame">
+              <img data-node-preview alt="机制图节点参考预览" hidden>
+              <div class="mechanism-preview-empty" data-node-preview-empty>悬浮到“探索者 / 引导者 / 回应者”可显示对应人物；悬浮到“非对称性 + 互补依赖”可显示三角色协作关系图。</div>
+            </div>
+            <p class="mechanism-preview-note" data-node-preview-note>当前节点没有附加人物参考图。</p>
           </div>
         </div>
       </div>
@@ -746,7 +1687,62 @@ grid-template-columns: 1fr;
           <button class="diagram-lightbox-close" type="button" aria-label="关闭" data-lightbox-close>×</button>
         </div>
         <div class="diagram-lightbox-viewport" data-lightbox-viewport>
-          <img class="diagram-lightbox-image" alt="跨媒介协作机制图大图" data-lightbox-image>
+            <div class="diagram-lightbox-content" data-lightbox-content>
+              <div class="diagram-lightbox-canvas" aria-hidden="true" data-lightbox-canvas></div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section design-anchor-section" id="design-space-map">
+      <div class="section-head">
+        <h2>空间布置图示</h2>
+        <p>空间布置不是单纯摆放设备，而是把角色分区、媒介位置、信息流路径与社交距离梯度一起组织成“低压力进入，逐步协作深化”的现实场景。</p>
+      </div>
+
+      <div class="interactive-diagram" data-interactive-diagram="space-layout" data-disable-hover="true">
+        <div class="interactive-stage-shell">
+          <div class="interactive-stage-top">
+            <span class="interactive-stage-label">图 3 · 体验空间布置与功能划分图</span>
+            <span class="interactive-stage-tip">空间结构热点说明</span>
+          </div>
+          <div class="interactive-stage">
+            <img src="../20260505-102555.jpg" alt="体验空间布置与功能划分图" width="775" height="435">
+            <button class="interactive-hotspot is-active" type="button" data-diagram-item="space-explorer-zone" data-filters="role distance" style="left:47%;top:8%;width:29%;height:42%;" aria-label="探索者体验区"></button>
+            <button class="interactive-hotspot" type="button" data-diagram-item="space-guide-zone" data-filters="role flow" style="left:41%;top:42%;width:18%;height:18%;" aria-label="引导者协作区"></button>
+            <button class="interactive-hotspot" type="button" data-diagram-item="space-responder-zone" data-filters="role distance" style="left:74%;top:33%;width:16%;height:23%;" aria-label="回应者轻量参与区"></button>
+            <button class="interactive-hotspot" type="button" data-diagram-item="space-display-a" data-filters="media flow" style="left:60%;top:33%;width:12%;height:11%;" aria-label="显示器A"></button>
+            <button class="interactive-hotspot" type="button" data-diagram-item="space-display-b" data-filters="media flow" style="left:58%;top:18%;width:13%;height:10%;" aria-label="显示器B"></button>
+            <button class="interactive-hotspot is-circle" type="button" data-diagram-item="space-host" data-filters="media flow" style="left:55%;top:43%;width:9%;height:10%;" aria-label="主机终端"></button>
+            <button class="interactive-hotspot" type="button" data-diagram-item="space-waiting" data-filters="role distance" style="left:67%;top:58%;width:24%;height:24%;" aria-label="等候区"></button>
+            <button class="interactive-hotspot is-pill" type="button" data-diagram-item="space-distance" data-filters="distance" style="left:34%;top:71%;width:47%;height:18%;" aria-label="社交距离梯度"></button>
+            <button class="interactive-hotspot" type="button" data-diagram-item="space-overview" data-filters="flow media" style="left:4%;top:57%;width:19%;height:35%;" aria-label="空间俯视辅助图"></button>
+          </div>
+          <p class="interactive-caption">左侧保留空间布置原图与热点区域，用于辅助理解角色分区、媒介位置与空间关系。</p>
+        </div>
+        <div class="space-model-shell">
+          <div class="space-model-head">
+            <strong>空间模型预览</strong>
+            <span>可拖拽旋转</span>
+          </div>
+          <p class="space-model-copy">右侧改为三维空间展示位，不再重复放说明文字。你把空间布置模型导出为 `glb` 后，替换下方模型路径，就可以在网页中直接拖拽旋转、缩放查看。</p>
+          <div class="space-model-viewer-shell">
+            <model-viewer
+              class="space-model-viewer"
+              src="../models/space-layout.glb"
+              alt="Within 空间布置三维模型"
+              camera-controls
+              auto-rotate
+              auto-rotate-delay="1200"
+              rotation-per-second="18deg"
+              shadow-intensity="1"
+              exposure="1.05"
+              environment-image="neutral"
+              interaction-prompt="none"
+              touch-action="pan-y">
+            </model-viewer>
+          </div>
+          <p class="space-model-note">把模型文件放到 <code>../models/space-layout.glb</code>，或直接修改上面 <code>src</code> 路径即可。当前左侧图片热点仅保留二维结构说明。</p>
         </div>
       </div>
     </div>
@@ -813,6 +1809,7 @@ grid-template-columns: 1fr;
   </footer>
 </div>
 
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <script id="page-config">
 window.__pageConfig = {
   current: 'design',
@@ -830,39 +1827,169 @@ if (window.__designMechanismCleanup) {
 var host = document.querySelector('[data-mechanism-map]');
 if (host) {
   var steps = Array.prototype.slice.call(host.querySelectorAll('.mechanism-step[data-step]'));
-  var hotspots = Array.prototype.slice.call(host.querySelectorAll('.mechanism-hotspot[data-step]'));
+  var diagramNodes = Array.prototype.slice.call(host.querySelectorAll('[data-map-diagram] [data-step], [data-map-diagram] [data-node]'));
+  var diagramLinks = Array.prototype.slice.call(host.querySelectorAll('[data-map-diagram] .diagram-link'));
   var zoomBtn = host.querySelector('[data-map-zoom]');
-  var img = host.querySelector('[data-map-image]');
+  var diagramWrap = host.querySelector('[data-map-diagram]');
+  var diagramSvg = diagramWrap ? diagramWrap.querySelector('svg') : null;
+  var detailTitle = host.querySelector('[data-node-title]');
+  var detailCopy = host.querySelector('[data-node-copy]');
+  var detailPreview = host.querySelector('[data-node-preview]');
+  var detailPreviewEmpty = host.querySelector('[data-node-preview-empty]');
+  var detailPreviewNote = host.querySelector('[data-node-preview-note]');
 
   var lightbox = document.getElementById('design-diagram-lightbox');
-  var lbImage = lightbox ? lightbox.querySelector('[data-lightbox-image]') : null;
   var lbViewport = lightbox ? lightbox.querySelector('[data-lightbox-viewport]') : null;
+  var lbContent = lightbox ? lightbox.querySelector('[data-lightbox-content]') : null;
+  var lbCanvas = lightbox ? lightbox.querySelector('[data-lightbox-canvas]') : null;
   var lbCloseEls = lightbox ? lightbox.querySelectorAll('[data-lightbox-close]') : [];
 
   var activeStep = '1';
+  var activeNode = 'headset';
 
-  function setActive(step) {
-    activeStep = String(step || '1');
-    hotspots.forEach(function (el) {
-      el.classList.toggle('is-active', el.getAttribute('data-step') === activeStep);
+  var stepContent = {
+    '1': {
+      title: '① 媒介组织',
+      copy: '不同媒介承担差异化信息功能，前三种媒介构成信息层，现实空间则作为更落地的承接层。',
+      defaultNode: 'headset',
+      links: ['main-1-2', 'aux-1-space', 'aux-1-summary']
+    },
+    '2': {
+      title: '② 角色分配',
+      copy: '探索者、引导者与回应者拥有不同视角与任务权限，非对称性和互补依赖共同促成沟通。',
+      defaultNode: 'explorer',
+      links: ['main-1-2', 'main-2-3', 'aux-2-summary']
+    },
+    '3': {
+      title: '③ 交互推进',
+      copy: '任务目标位于中心，语言沟通、动作配合与信息共享围绕它循环展开，推动协同关系逐步建立。',
+      defaultNode: 'goal',
+      links: ['main-2-3', 'main-3-4', 'aux-3-summary']
+    },
+    '4': {
+      title: '④ 目标转化',
+      copy: '共同经历与协作会先形成初步社交联系，再延伸到现实互动，最终指向促进现实社交发生。',
+      defaultNode: 'cooperate',
+      links: ['main-3-4', 'main-4-outcome', 'aux-4-chain-1', 'aux-4-chain-2', 'aux-4-summary']
+    }
+  };
+
+  var nodeContent = {
+    'headset': { step: '1', title: '虚拟媒介', copy: 'XR 头显提供沉浸式场景与行动空间，是整张机制图中“信息场”建立的第一层。' },
+    'screen': { step: '1', title: '同步媒介', copy: '同步媒介负责信息共享与外部观察，让场外参与者也能进入同一个理解框架。' },
+    'card': { step: '1', title: '实体媒介', copy: '实体媒介承担信息拼接与行为反馈，把线索、规则和现实动作连接起来。' },
+    'space': { step: '1', title: '现实空间', copy: '现实空间是更落地的承接层，负责让行为真正发生，并为交流提供情境锚定。' },
+    'flow': { step: '1', title: '信息流动与重构', copy: '这一竖向标签强调媒介之间并非静态并列，而是信息持续被传递、重组和重新理解。' },
+    'explorer': { step: '2', title: '探索者', copy: '探索者负责具身体验和第一视角体验，是最直接进入虚拟空间的人。', previewSrc: '../20260505-102552.jpg', previewFit: 'cover', previewPosition: '50% center', previewNote: '当前显示角色参考图中的探索者。' },
+    'guide': { step: '2', title: '引导者', copy: '引导者负责信息整合与沟通推动，帮助把零散线索组织成可执行判断。', previewSrc: '../20260505-102552.jpg', previewFit: 'cover', previewPosition: '14% center', previewNote: '当前显示角色参考图中的引导者。' },
+    'responder': { step: '2', title: '回应者', copy: '回应者通过观察、理解与协助反馈加入协作闭环，补足现场互动层。', previewSrc: '../20260505-102552.jpg', previewFit: 'cover', previewPosition: '86% center', previewNote: '当前显示角色参考图中的回应者。' },
+    'asymmetry': { step: '2', title: '非对称性 + 互补依赖', copy: '正因为不同角色看到的信息和能做的事不同，沟通才自然变成任务推进的必要条件。', previewSrc: '../20260505-102547.jpg', previewFit: 'contain', previewPosition: 'center center', previewNote: '当前显示三角色协作关系图，用于说明三者如何围绕媒介形成协作。' },
+    'goal': { step: '3', title: '任务目标', copy: '任务目标是整列的中心核心，所有互动都围绕它组织和回流。' },
+    'goal-core': { step: '3', title: '协作核心', copy: '这里代表任务驱动下的协作核心，交流和行动会不断回到这个中心并再次被激活。' },
+    'discussion': { step: '3', title: '语言沟通', copy: '语言沟通负责信息转述、判断确认与协商，是任务推进中的第一层交互方式。' },
+    'decision': { step: '3', title: '动作配合', copy: '动作配合让协作不止停留在说话层面，而是进入共同操作和即时回应。' },
+    'shared-info': { step: '3', title: '信息共享', copy: '信息共享把反馈重新送回任务中心，形成不断修正、不断推进的互动回路。' },
+    'multi-participation': { step: '3', title: '多轮互动与行为调整', copy: '在持续协作中，参与者会逐步建立默契，协同关系也因此不断加深。' },
+    'cooperate': { step: '4', title: '共同经历与协作', copy: '共同完成任务会先沉淀成一种共享经历，为后续关系建立提供情感基础。' },
+    'icebreak': { step: '4', title: '初步社交联系', copy: '共同经历之后，参与者更容易产生初步联系，并愿意进行下一步交流。' },
+    'extension': { step: '4', title: '现实社交延伸', copy: '联系不再停留在体验内部，而是逐渐延伸到现实中的面对面互动。' },
+    'outcome': { step: '4', title: '促进现实社交发生', copy: '整个机制的最终目标是降低社交启动门槛，增强积极体验，并推动现实互动过渡。' },
+    'summary': { step: '4', title: '动态过程总结', copy: '这不是单点功能堆叠，而是一个从媒介组织到目标转化的连续动态过程。' }
+  };
+
+  function getNodeDetail(step, node) {
+    var safeStep = String(step || activeStep || '1');
+    var safeNode = node && nodeContent[node] ? node : stepContent[safeStep].defaultNode;
+    return nodeContent[safeNode] || stepContent[safeStep];
+  }
+
+  function syncDetail(step, node) {
+    var detail = getNodeDetail(step, node);
+    if (detailTitle) detailTitle.textContent = detail.title || '';
+    if (detailCopy) detailCopy.textContent = detail.copy || '';
+    if (detailPreview) {
+      if (detail.previewSrc) {
+        detailPreview.hidden = false;
+        detailPreview.src = detail.previewSrc;
+        detailPreview.style.objectFit = detail.previewFit || 'contain';
+        detailPreview.style.objectPosition = detail.previewPosition || 'center center';
+        if (detailPreviewEmpty) detailPreviewEmpty.hidden = true;
+        if (detailPreviewNote) detailPreviewNote.textContent = detail.previewNote || '当前显示该节点对应的参考图。';
+      } else {
+        detailPreview.hidden = true;
+        detailPreview.removeAttribute('src');
+        detailPreview.style.objectFit = 'contain';
+        detailPreview.style.objectPosition = 'center center';
+        if (detailPreviewEmpty) detailPreviewEmpty.hidden = false;
+        if (detailPreviewNote) detailPreviewNote.textContent = '当前节点没有附加人物参考图。';
+      }
+    }
+  }
+
+  function syncLinks(step) {
+    var currentStep = stepContent[String(step)] || stepContent['1'];
+    var activeLinks = currentStep.links || [];
+    diagramLinks.forEach(function (el) {
+      el.classList.toggle('is-active', activeLinks.indexOf(el.getAttribute('data-link')) !== -1);
     });
+  }
+
+  function syncLightboxDiagram() {
+    if (!lbCanvas || !diagramSvg) return;
+    lbCanvas.innerHTML = '';
+    var clone = diagramSvg.cloneNode(true);
+    clone.removeAttribute('role');
+    clone.setAttribute('aria-hidden', 'true');
+    lbCanvas.appendChild(clone);
+  }
+
+  function setActive(step, node) {
+    activeStep = String(step || '1');
+    if (!node || !nodeContent[node] || nodeContent[node].step !== activeStep) {
+      activeNode = stepContent[activeStep].defaultNode;
+    } else {
+      activeNode = node;
+    }
     steps.forEach(function (el) {
       var isActive = el.getAttribute('data-step') === activeStep;
       el.classList.toggle('is-active', isActive);
       el.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
+    diagramNodes.forEach(function (el) {
+      var nodeStep = el.getAttribute('data-step');
+      var nodeName = el.getAttribute('data-node');
+      el.classList.toggle('is-step-active', nodeStep === activeStep);
+      el.classList.toggle('is-node-active', !!nodeName && nodeName === activeNode);
+      if (!nodeName) {
+        el.classList.toggle('is-step-active', nodeStep === activeStep);
+      }
+    });
+    syncLinks(activeStep);
+    syncDetail(activeStep, activeNode);
+    if (lightbox && lightbox.classList.contains('is-open')) syncLightboxDiagram();
   }
 
   function onActivateFromNode(node) {
     if (!node) return;
     var step = node.getAttribute('data-step');
     if (!step) return;
-    setActive(step);
+    setActive(step, node.getAttribute('data-node'));
   }
 
-  hotspots.forEach(function (el) {
+  diagramNodes.forEach(function (el) {
     el.addEventListener('pointerenter', function () { onActivateFromNode(el); });
-    el.addEventListener('click', function () { onActivateFromNode(el); });
+    el.addEventListener('focus', function () { onActivateFromNode(el); });
+    el.addEventListener('click', function (e) {
+      e.stopPropagation();
+      onActivateFromNode(el);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        e.stopPropagation();
+        onActivateFromNode(el);
+      }
+    });
   });
 
   steps.forEach(function (el) {
@@ -876,12 +2003,12 @@ if (host) {
   });
 
   function openLightbox() {
-    if (!lightbox || !lbImage || !img) return;
-    lbImage.src = img.getAttribute('src') || '';
-    lbImage.style.transform = 'translate(-50%, -50%) scale(1)';
-    lbImage.dataset.scale = '1';
-    lbImage.dataset.tx = '0';
-    lbImage.dataset.ty = '0';
+    if (!lightbox || !lbContent) return;
+    lbContent.style.transform = 'translate(-50%, -50%) scale(1)';
+    lbContent.dataset.scale = '1';
+    lbContent.dataset.tx = '0';
+    lbContent.dataset.ty = '0';
+    syncLightboxDiagram();
     lightbox.classList.add('is-open');
     lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -895,11 +2022,11 @@ if (host) {
   }
 
   function applyLightboxTransform() {
-    if (!lbImage) return;
-    var scale = parseFloat(lbImage.dataset.scale || '1') || 1;
-    var tx = parseFloat(lbImage.dataset.tx || '0') || 0;
-    var ty = parseFloat(lbImage.dataset.ty || '0') || 0;
-    lbImage.style.transform = 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(' + scale + ')';
+    if (!lbContent) return;
+    var scale = parseFloat(lbContent.dataset.scale || '1') || 1;
+    var tx = parseFloat(lbContent.dataset.tx || '0') || 0;
+    var ty = parseFloat(lbContent.dataset.ty || '0') || 0;
+    lbContent.style.transform = 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(' + scale + ')';
   }
 
   function clamp(v, min, max) {
@@ -913,20 +2040,20 @@ if (host) {
   var dragStartTy = 0;
 
   function onViewportDown(e) {
-    if (!lbImage) return;
+    if (!lbContent) return;
     dragging = true;
     dragStartX = e.clientX;
     dragStartY = e.clientY;
-    dragStartTx = parseFloat(lbImage.dataset.tx || '0') || 0;
-    dragStartTy = parseFloat(lbImage.dataset.ty || '0') || 0;
+    dragStartTx = parseFloat(lbContent.dataset.tx || '0') || 0;
+    dragStartTy = parseFloat(lbContent.dataset.ty || '0') || 0;
   }
 
   function onViewportMove(e) {
-    if (!dragging || !lbImage) return;
+    if (!dragging || !lbContent) return;
     var dx = e.clientX - dragStartX;
     var dy = e.clientY - dragStartY;
-    lbImage.dataset.tx = String(dragStartTx + dx);
-    lbImage.dataset.ty = String(dragStartTy + dy);
+    lbContent.dataset.tx = String(dragStartTx + dx);
+    lbContent.dataset.ty = String(dragStartTy + dy);
     applyLightboxTransform();
   }
 
@@ -935,12 +2062,12 @@ if (host) {
   }
 
   function onViewportWheel(e) {
-    if (!lbImage) return;
+    if (!lbContent) return;
     e.preventDefault();
-    var current = parseFloat(lbImage.dataset.scale || '1') || 1;
+    var current = parseFloat(lbContent.dataset.scale || '1') || 1;
     var next = current + (e.deltaY > 0 ? -0.12 : 0.12);
     next = clamp(next, 0.8, 2.6);
-    lbImage.dataset.scale = String(next);
+    lbContent.dataset.scale = String(next);
     applyLightboxTransform();
   }
 
@@ -951,7 +2078,7 @@ if (host) {
   }
 
   if (zoomBtn) zoomBtn.addEventListener('click', openLightbox);
-  if (img) img.addEventListener('dblclick', openLightbox);
+  if (diagramWrap) diagramWrap.addEventListener('dblclick', openLightbox);
   if (lightbox && lbViewport) {
     lbViewport.addEventListener('pointerdown', onViewportDown);
     lbViewport.addEventListener('pointermove', onViewportMove);
@@ -970,9 +2097,233 @@ if (host) {
     window.removeEventListener('keydown', onKeyDown);
   };
 
-  setActive(activeStep);
+  setActive(activeStep, activeNode);
 }
+
+var interactiveDiagramContent = {
+  'space-layout': {
+    default: 'space-explorer-zone',
+    items: {
+      'space-explorer-zone': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '探索者体验区',
+        subtitle: 'Explorer Zone',
+        summary: '探索者在相对独立的沉浸空间中完成 XR 体验，保证其专注进入虚拟叙事与具身操作，同时与外部协作者保持适度联系而非完全隔离。',
+        purpose: '保证沉浸体验和具身操作的连续性。',
+        media: 'XR 头显、主体验区',
+        role: '探索者',
+        meaning: '体现“低压力进入，逐步协作深化”的空间前提。',
+        tags: ['角色分区', '沉浸空间', '适度联系']
+      },
+      'space-guide-zone': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '引导者协作区',
+        subtitle: 'Guide Zone',
+        summary: '引导者位于能够观察同步信息的位置，便于读取任务线索、操控道具并与探索者交流，是现实协作发生的核心节点。',
+        purpose: '承接沟通、解读和协助反馈。',
+        media: '显示器、纸质道具、主机终端',
+        role: '引导者',
+        meaning: '把现实协作集中在最容易发生沟通的位置上。',
+        tags: ['角色分区', '协作节点', '信息解读']
+      },
+      'space-responder-zone': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '回应者轻量参与区',
+        subtitle: 'Responder Zone',
+        summary: '回应者不直接进入主体验区，而是通过观察和移动端介入实现低压力参与，为围观群体提供柔性进入方式。',
+        purpose: '提供外围观察与低门槛参与入口。',
+        media: '移动端、同步观察界面',
+        role: '回应者',
+        meaning: '避免陌生人被迫进入高压互动，保留渐进式社交入口。',
+        tags: ['角色分区', '轻量参与', '低压力进入']
+      },
+      'space-display-a': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '显示器 A',
+        subtitle: '',
+        summary: '承载局部信息展示与协作反馈，为引导者提供任务判断依据。',
+        purpose: '呈现局部协作信息与即时任务反馈。',
+        media: '显示器 A',
+        role: '引导者为主',
+        meaning: '增强现实协作中的信息可见性和判断效率。',
+        tags: ['媒介系统', '局部信息', '协作反馈']
+      },
+      'space-display-b': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '显示器 B',
+        subtitle: '',
+        summary: '展示同步视角与关键内容，强化不同角色之间的信息联通。',
+        purpose: '承担全局画面同步与关键线索显示。',
+        media: '显示器 B',
+        role: '引导者 / 回应者',
+        meaning: '建立多人共享的可视化参照面。',
+        tags: ['媒介系统', '同步视角', '信息联通']
+      },
+      'space-host': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '主机终端',
+        subtitle: 'Host Terminal',
+        summary: '作为 XR 系统运行与同步输出的核心节点，主机终端连接虚拟体验与外部展示媒介。',
+        purpose: '维持系统运行并分发同步内容。',
+        media: '主机终端',
+        role: '系统支撑节点',
+        meaning: '把虚拟体验与现实协作媒介真正连接起来。',
+        tags: ['媒介系统', '系统节点', '同步输出']
+      },
+      'space-waiting': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '等候区',
+        subtitle: 'Waiting Area',
+        summary: '为尚未进入核心体验的人提供缓冲空间，降低陌生人直接进入主互动的心理压力，对应渐进式社交引导逻辑。',
+        purpose: '提供观察、等待与心理缓冲位置。',
+        media: '现实空间',
+        role: '等待者 / 回应者',
+        meaning: '让社交参与具有从远到近的渐进层级。',
+        tags: ['角色分区', '缓冲空间', '渐进式社交']
+      },
+      'space-distance': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '社交距离梯度',
+        subtitle: 'Social Distance',
+        summary: '空间并非随意排列，而是按社交压力进行层级设置，从远距离观察到近距离协作，逐步降低启动焦虑。',
+        purpose: '把空间距离设计成可被感知的社交过渡机制。',
+        media: '现实空间动线',
+        role: '全体参与者',
+        meaning: '体现“低压力进入—逐步协作深化”的设计原则。',
+        tags: ['社交距离', '空间梯度', '启动焦虑']
+      },
+      'space-overview': {
+        badge: '图 3 · 体验空间布置与功能划分图',
+        title: '空间俯视辅助图',
+        subtitle: 'Overview Map',
+        summary: '用于帮助理解整体空间结构与角色分布，也可以作为网页中的二级导航入口。',
+        purpose: '快速概括空间结构与角色关系。',
+        media: '辅助示意图',
+        role: '全体参与者',
+        meaning: '补充正交视图难以直观看出的整体结构信息。',
+        tags: ['信息流动', '辅助导航', '空间结构']
+      }
+    }
+  }
+};
+
+Array.prototype.forEach.call(document.querySelectorAll('[data-interactive-diagram]'), function (root) {
+  var key = root.getAttribute('data-interactive-diagram');
+  var config = interactiveDiagramContent[key];
+  if (!config) return;
+
+  var items = config.items || {};
+  var hotspots = Array.prototype.slice.call(root.querySelectorAll('[data-diagram-item]'));
+  var filterWrap = document.querySelector('[data-diagram-filters="' + key + '"]');
+  var filters = filterWrap ? Array.prototype.slice.call(filterWrap.querySelectorAll('[data-diagram-filter]')) : [];
+  var badgeEl = root.querySelector('[data-panel-badge]');
+  var titleEl = root.querySelector('[data-panel-title]');
+  var subtitleEl = root.querySelector('[data-panel-subtitle]');
+  var summaryEl = root.querySelector('[data-panel-summary]');
+  var purposeEl = root.querySelector('[data-panel-purpose]');
+  var mediaEl = root.querySelector('[data-panel-media]');
+  var roleEl = root.querySelector('[data-panel-role]');
+  var meaningEl = root.querySelector('[data-panel-meaning]');
+  var tagsEl = root.querySelector('[data-panel-tags]');
+
+  var activeItem = config.default;
+  var activeFilter = 'all';
+
+  function render(itemKey) {
+    var safeKey = items[itemKey] ? itemKey : config.default;
+    var data = items[safeKey];
+    activeItem = safeKey;
+
+    hotspots.forEach(function (hotspot) {
+      hotspot.classList.toggle('is-active', hotspot.getAttribute('data-diagram-item') === safeKey);
+    });
+
+    if (badgeEl) badgeEl.textContent = data.badge || '';
+    if (titleEl) titleEl.textContent = data.title || '';
+    if (subtitleEl) {
+      subtitleEl.textContent = data.subtitle || '';
+      subtitleEl.style.display = data.subtitle ? '' : 'none';
+    }
+    if (summaryEl) summaryEl.textContent = data.summary || '';
+    if (purposeEl) purposeEl.textContent = data.purpose || '';
+    if (mediaEl) mediaEl.textContent = data.media || '';
+    if (roleEl) roleEl.textContent = data.role || '';
+    if (meaningEl) meaningEl.textContent = data.meaning || '';
+
+    if (tagsEl) {
+      tagsEl.innerHTML = '';
+      (data.tags || []).forEach(function (tag) {
+        var span = document.createElement('span');
+        span.textContent = tag;
+        tagsEl.appendChild(span);
+      });
+    }
+  }
+
+  function hotspotMatchesFilter(hotspot, filterKey) {
+    if (!filterKey || filterKey === 'all') return true;
+    var attr = hotspot.getAttribute('data-filters') || '';
+    return attr.split(/\s+/).indexOf(filterKey) !== -1;
+  }
+
+  function syncFilter(filterKey) {
+    activeFilter = filterKey || 'all';
+
+    filters.forEach(function (filterBtn) {
+      filterBtn.classList.toggle('is-active', filterBtn.getAttribute('data-diagram-filter') === activeFilter);
+    });
+
+    hotspots.forEach(function (hotspot) {
+      var matched = hotspotMatchesFilter(hotspot, activeFilter);
+      hotspot.classList.toggle('is-muted', !matched);
+    });
+
+    if (activeFilter !== 'all') {
+      var activeVisible = hotspots.some(function (hotspot) {
+        return hotspot.getAttribute('data-diagram-item') === activeItem && !hotspot.classList.contains('is-muted');
+      });
+      if (!activeVisible) {
+        var fallback = hotspots.find(function (hotspot) {
+          return !hotspot.classList.contains('is-muted');
+        });
+        if (fallback) render(fallback.getAttribute('data-diagram-item'));
+      }
+    }
+  }
+
+  hotspots.forEach(function (hotspot) {
+    hotspot.addEventListener('pointerenter', function () {
+      if (hotspot.classList.contains('is-muted')) return;
+      render(hotspot.getAttribute('data-diagram-item'));
+    });
+    hotspot.addEventListener('focus', function () {
+      if (hotspot.classList.contains('is-muted')) return;
+      render(hotspot.getAttribute('data-diagram-item'));
+    });
+    hotspot.addEventListener('click', function () {
+      if (hotspot.classList.contains('is-muted')) return;
+      render(hotspot.getAttribute('data-diagram-item'));
+    });
+    hotspot.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && !hotspot.classList.contains('is-muted')) {
+        e.preventDefault();
+        render(hotspot.getAttribute('data-diagram-item'));
+      }
+    });
+  });
+
+  filters.forEach(function (filterBtn) {
+    filterBtn.addEventListener('click', function () {
+      syncFilter(filterBtn.getAttribute('data-diagram-filter'));
+    });
+  });
+
+  render(activeItem);
+  syncFilter(activeFilter);
+});
 </script>
 
 </body>
 </html>
+
+
