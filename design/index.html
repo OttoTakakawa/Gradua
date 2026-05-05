@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>核心设计 — Within · 协作同行</title>
 <link rel="stylesheet" href="../shared.css">
-<script type="module" src="../vendor/model-viewer.min.js"></script>
+<script type="module" src="/vendor/model-viewer.min.js"></script>
 <style id="page-styles">
 body.page-design {
 background:
@@ -1145,6 +1145,22 @@ height: 460px;
 background: transparent;
 }
 
+.space-model-status {
+position: absolute;
+left: 20px;
+right: 20px;
+bottom: 20px;
+padding: 12px 14px;
+border-radius: 16px;
+background: rgba(255,255,255,0.92);
+border: 1px solid rgba(148,176,200,0.20);
+box-shadow: 0 14px 34px rgba(74, 96, 120, 0.12);
+font-size: 13px;
+line-height: 1.7;
+color: #5f7489;
+z-index: 1;
+}
+
 .space-model-reset {
 position: absolute;
 bottom: 16px;
@@ -1742,7 +1758,7 @@ grid-template-columns: 1fr;
             <model-viewer
               class="space-model-viewer"
               id="space-model"
-              src="../models/space-layout.glb"
+              src="/models/space-layout.glb"
               alt="Within 空间布置三维模型"
               camera-controls
               camera-orbit="45deg 55deg auto"
@@ -1753,11 +1769,12 @@ grid-template-columns: 1fr;
               interaction-prompt="none"
               touch-action="pan-y">
             </model-viewer>
+            <div class="space-model-status" id="space-model-status" hidden></div>
             <button class="space-model-reset" id="space-model-reset" title="复位视角">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
             </button>
           </div>
-          <p class="space-model-note">把模型文件放到 <code>../models/space-layout.glb</code>，或直接修改上面 <code>src</code> 路径即可。当前左侧图片热点仅保留二维结构说明。</p>
+          <p class="space-model-note">把模型文件放到 <code>/models/space-layout.glb</code>，或直接修改上面 <code>src</code> 路径即可。当前左侧图片热点仅保留二维结构说明。</p>
         </div>
       </div>
     </div>
@@ -1836,6 +1853,34 @@ window.__pageConfig = {
 (function() {
   var resetBtn = document.getElementById('space-model-reset');
   var viewer = document.getElementById('space-model');
+  var modelStatus = document.getElementById('space-model-status');
+  var modelTimeout = null;
+
+  function setModelStatus(message) {
+    if (!modelStatus) return;
+    modelStatus.hidden = !message;
+    modelStatus.textContent = message || '';
+  }
+
+  if (viewer) {
+    setModelStatus('空间模型加载中...');
+    modelTimeout = window.setTimeout(function() {
+      if (!window.customElements || !window.customElements.get('model-viewer')) {
+        setModelStatus('模型组件未加载成功。请确认通过本地服务器打开，并检查 /vendor/model-viewer.min.js 是否可访问。');
+      }
+    }, 2400);
+
+    viewer.addEventListener('load', function() {
+      if (modelTimeout) window.clearTimeout(modelTimeout);
+      setModelStatus('');
+    });
+
+    viewer.addEventListener('error', function() {
+      if (modelTimeout) window.clearTimeout(modelTimeout);
+      setModelStatus('空间模型加载失败。请直接访问 /models/space-layout.glb 检查文件是否能打开。');
+    });
+  }
+
   if (resetBtn && viewer) {
     resetBtn.addEventListener('click', function() {
       viewer.cameraOrbit = '45deg 55deg auto';
