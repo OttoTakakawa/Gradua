@@ -10,7 +10,7 @@
     prevArmed: false,
     nextArmed: false,
     threshold: 4,
-    delay: 420,
+    delay: 280,
     pullOpenDistance: 240,
     armedLockUntil: 0,
     armedGraceMs: 960,
@@ -37,8 +37,8 @@
 
   function isPjaxTarget(href) {
     if (!href) return false;
-    if (/chapter-\d+/.test(href)) return false;
     if (/(?:about|research|design|chapters|process|thanks)\/index\.html/.test(href)) return true;
+    if (/chapter-\d+\/index\.html/.test(href)) return true;
     if (/(?:^|\/|\.\/)index\.html$/.test(href)) return true;
     return false;
   }
@@ -361,7 +361,7 @@
     var fetchPromise = fetch(url, { credentials: 'same-origin' })
       .then(function (res) { return res.text(); });
 
-    var animDelay = mode === 'click' ? 280 : state.delay;
+    var animDelay = mode === 'click' ? 150 : state.delay;
 
     setTimeout(function () {
       fetchPromise.then(function (html) {
@@ -470,11 +470,22 @@
 
       animateNavIndicatorFromPrevious();
       setupRevealAnimations();
+      preloadAdjacentImages();
 
     } catch (e) {
       state.navigating = false;
       window.location.href = absoluteUrl;
     }
+  }
+
+  function preloadAdjacentImages() {
+    var targets = [state.prevTarget, state.nextTarget];
+    targets.forEach(function (url) {
+      if (!url || !/chapter-\d+/.test(url)) return;
+      var base = url.replace(/index\.html$/, '');
+      var img = new Image();
+      img.src = base + 'images/overview.webp';
+    });
   }
 
   function handleWheel(event) {

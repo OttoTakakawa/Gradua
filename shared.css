@@ -48,7 +48,7 @@ body::after {
   z-index: 35;
   opacity: 0;
   background: linear-gradient(180deg, rgba(245,247,250,0.14), rgba(238,241,245,0.94) 68%, rgba(237,240,244,1));
-  transition: opacity .42s ease;
+  transition: opacity .18s ease;
 }
 
 body.is-leaving-prev::after,
@@ -124,7 +124,7 @@ body.is-leaving-click::after {
 }
 
 #page-content > * {
-  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
+  transition: opacity .22s ease, transform .24s ease, filter .22s ease;
 }
 
 .reveal-item {
@@ -165,7 +165,7 @@ body.is-leaving-prev #page-content > * {
 body.is-leaving-click #page-content > * {
   opacity: 0;
   transform: scale(0.985);
-  transition: opacity .22s ease, transform .26s cubic-bezier(.4,0,.2,1);
+  transition: opacity .14s ease, transform .16s cubic-bezier(.4,0,.2,1);
 }
 
 body.is-entering-next #page-content > *,
