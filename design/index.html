@@ -1866,7 +1866,25 @@ window.__pageConfig = {
     setModelStatus('空间模型加载中...');
     modelTimeout = window.setTimeout(function() {
       if (!window.customElements || !window.customElements.get('model-viewer')) {
-        setModelStatus('模型组件未加载成功。请确认通过本地服务器打开，并检查 /vendor/model-viewer.min.js 是否可访问。');
+        var ua = navigator.userAgent || 'unknown';
+        fetch('/vendor/model-viewer.min.js', { method: 'GET', cache: 'no-store' })
+          .then(function(response) {
+            var contentType = response.headers.get('content-type') || 'unknown';
+            setModelStatus(
+              '模型组件未加载成功。'
+              + ' 脚本状态: ' + response.status
+              + '；Content-Type: ' + contentType
+              + '；浏览器: ' + ua
+            );
+          })
+          .catch(function(error) {
+            setModelStatus(
+              '模型组件未加载成功。'
+              + ' /vendor/model-viewer.min.js 请求失败：'
+              + (error && error.message ? error.message : 'unknown error')
+              + '；浏览器: ' + ua
+            );
+          });
       }
     }, 2400);
 
