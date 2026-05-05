@@ -4,935 +4,821 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>第四章 · 太空之梦 — Within · 协作同行</title>
-<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
-
-:root {
-  --accent: #6b8399;
-  --accent-soft: rgba(107,131,153,0.12);
-  --text-main: #4a5560;
-  --text-dark: #2c3a4a;
-  --text-soft: #8899a8;
-  --border: rgba(112,136,160,0.16);
-  --shadow: 0 20px 60px rgba(99,124,148,0.10);
-}
-
-body {
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: var(--text-main);
+<link rel="stylesheet" href="../../shared.css">
+<style id="page-styles">
+body.page-chapter-4 {
+  --accent: #7f92ae;
+  --accent-strong: #617999;
+  --accent-soft: rgba(127, 146, 174, 0.16);
+  --panel-bg: rgba(245, 248, 255, 0.8);
+  --panel-stroke: rgba(123, 145, 176, 0.18);
   background:
-    radial-gradient(circle at 82% 18%, rgba(107,131,153,0.12), transparent 34%),
-    radial-gradient(circle at 20% 80%, rgba(138,180,196,0.10), transparent 26%),
-    linear-gradient(180deg, #f4f7fa 0%, #edf2f6 52%, #ebf0f4 100%);
-  overflow-x: hidden;
-  overflow-y: clip;
+    radial-gradient(circle at 16% 18%, rgba(121, 161, 216, 0.22), transparent 30%),
+    radial-gradient(circle at 82% 20%, rgba(183, 211, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 62% 76%, rgba(114, 138, 183, 0.16), transparent 28%),
+    linear-gradient(180deg, #eef4fb 0%, #dfeaf8 52%, #d8e4f1 100%);
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
-  background-size: 72px 72px, 96px 96px;
+body.page-chapter-4::after {
+  background: linear-gradient(180deg, rgba(238, 244, 251, 0.18), rgba(219, 229, 242, 0.92) 70%, rgba(216, 228, 241, 1));
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 30;
-  opacity: 0;
-  background: linear-gradient(180deg, rgba(244,247,250,0.14), rgba(235,240,244,0.94) 68%, rgba(235,240,244,1));
-  transition: opacity .42s ease;
+body.page-chapter-4 .nav {
+  background: rgba(241, 246, 252, 0.76);
 }
 
-body.is-leaving-prev::after,
-body.is-leaving-next::after {
-  opacity: 1;
-}
-
-.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  backdrop-filter: blur(16px);
-  background: rgba(244,247,250,0.72);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-indicator {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-  border-radius: 999px;
-  background: rgba(59,75,92,0.88);
-  box-shadow: 0 10px 24px rgba(59,75,92,0.18);
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, width, height, opacity;
-  transition: transform .42s cubic-bezier(.22,1,.36,1), width .42s cubic-bezier(.22,1,.36,1), height .42s cubic-bezier(.22,1,.36,1), opacity .22s ease;
-}
-
-.nav.is-indicator-ready .nav-indicator {
-  opacity: 1;
-}
-.nav a {
+body.page-chapter-4 #page-content {
   position: relative;
   z-index: 1;
-  padding: 10px 18px;
-  border-radius: 999px;
-  color: var(--text-soft);
-  font-size: 14px;
-  text-decoration: none;
-  background: transparent;
-  transition: color .25s ease, background .25s ease;
 }
 
-.nav a:hover {
-  color: var(--text-main);
-  background: rgba(138,180,196,0.12);
-}
-.nav a.active {
-  color: #f5f7fa;
-  background: transparent;
-  box-shadow: none;
+body.page-chapter-4 .wrap {
+  width: min(1220px, calc(100% - 40px));
 }
 
-.nav,
-.wrap,
-footer {
-  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
-}
-
-body.is-leaving-next .wrap,
-body.is-leaving-next footer {
-  opacity: 0;
-  transform: translateY(-24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-prev .wrap,
-body.is-leaving-prev footer {
-  opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-click::after {
-  opacity: 1;
-}
-body.is-leaving-click .wrap,
-body.is-leaving-click footer {
-  opacity: 0;
-  transform: scale(0.985);
-  transition: opacity .22s ease, transform .26s cubic-bezier(.4,0,.2,1);
-}
-
-.prev-arm-hint {
-  position: fixed;
-  left: 50%;
-  top: 156px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.prev-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-left: 1.5px solid rgba(91,154,160,0.9);
-  border-top: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-28%) rotate(45deg);
-}
-
-.prev-arm-hint::after {
-  content: "滚轮上滑，回到前一页";
-}
-
-body.is-prev-armed .prev-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-.next-arm-hint {
-  position: fixed;
-  left: 50%;
-  bottom: 84px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(-6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.next-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid rgba(91,154,160,0.9);
-  border-bottom: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-72%) rotate(45deg);
-}
-
-.next-arm-hint::after {
-  content: "滚轮下滑，前往下一页";
-}
-
-body.is-next-armed .next-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-
-.wrap {
-  position: relative;
-  z-index: 1;
-  width: min(1120px, calc(100% - 36px));
-  margin: 0 auto;
-  padding: 104px 0 72px;
-}
-
-.hero {
+body.page-chapter-4 .chapter-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 28px;
+}
+
+body.page-chapter-4 .eyebrow {
+  color: var(--accent-strong);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+body.page-chapter-4 .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(340px, 1.06fr);
   gap: 24px;
   align-items: stretch;
 }
 
-.cover {
-  min-height: 520px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 32px;
-  border: 1px solid rgba(148,176,200,0.20);
+body.page-chapter-4 .hero-cover,
+body.page-chapter-4 .hero-card,
+body.page-chapter-4 .board,
+body.page-chapter-4 .summary-card,
+body.page-chapter-4 .pager a {
+  border: 1px solid var(--panel-stroke);
   box-shadow: var(--shadow);
 }
 
-.cover img {
+body.page-chapter-4 .hero-cover {
+  min-height: 420px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(84, 109, 146, 0.14), rgba(84, 109, 146, 0.06)),
+    linear-gradient(135deg, rgba(255,255,255,0.18), transparent 48%);
+}
+
+body.page-chapter-4 .hero-cover button {
+  all: unset;
+  cursor: zoom-in;
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+}
+
+body.page-chapter-4 .hero-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
+  background: linear-gradient(180deg, rgba(244,248,255,0.88), rgba(217,229,244,0.68));
 }
 
-.cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(39,55,71,0.08), rgba(39,55,71,0.24)),
-    linear-gradient(135deg, transparent 0 48%, rgba(255,255,255,0.12) 49%, transparent 50%);
-  background-size: auto, 84px 84px;
-}
-
-.hero-card,
-.meta-card,
-.gallery-card,
-.video-card,
-.note-card,
-.pager a {
-  border: 1px solid rgba(148,176,200,0.20);
-  box-shadow: var(--shadow);
-}
-
-.hero-card {
+body.page-chapter-4 .hero-card {
   padding: 32px;
   border-radius: 32px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
+  background: linear-gradient(180deg, rgba(250, 252, 255, 0.9), rgba(239, 245, 255, 0.64));
+  backdrop-filter: blur(14px);
 }
 
-.eyebrow {
-  color: var(--accent);
-  font-size: 12px;
-  letter-spacing: .18em;
-}
-
-h1 {
+body.page-chapter-4 h1 {
   margin-top: 14px;
   color: var(--text-dark);
-  font-size: clamp(34px, 4vw, 48px);
-  line-height: 1.15;
+  font-size: clamp(34px, 4vw, 50px);
+  line-height: 1.12;
 }
 
-.lead {
+body.page-chapter-4 .lead {
   margin-top: 16px;
   color: var(--text-soft);
   font-size: 16px;
-  line-height: 1.95;
+  line-height: 1.92;
 }
 
-.tag-row {
+body.page-chapter-4 .tag-row {
   margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
-.tag-row span {
-  padding: 6px 12px;
+body.page-chapter-4 .tag-row span,
+body.page-chapter-4 .detail-meta span {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 13px;
   border-radius: 999px;
+  border: 1px solid rgba(127, 146, 174, 0.18);
   background: var(--accent-soft);
-  border: 1px solid rgba(107,131,153,0.16);
-  color: #4a6a8a;
+  color: var(--accent-strong);
   font-size: 12px;
 }
 
-.section { margin-top: 28px; }
+body.page-chapter-4 .hero-note {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(127, 146, 174, 0.14);
+  color: #677892;
+  font-size: 14px;
+  line-height: 1.85;
+}
 
-.section-title {
+body.page-chapter-4 .board {
+  padding: 26px;
+  border-radius: 34px;
+  background: linear-gradient(180deg, rgba(250, 252, 255, 0.9), rgba(236, 243, 255, 0.72));
+  backdrop-filter: blur(12px);
+}
+
+body.page-chapter-4 .board-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+body.page-chapter-4 .board-title {
   color: var(--text-dark);
-  font-size: 26px;
-  margin-bottom: 14px;
+  font-size: 28px;
+  margin: 8px 0 0;
 }
 
-.meta-grid,
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.detail-grid {
-  grid-template-columns: 1fr 1fr;
-  margin-top: 18px;
-}
-
-.meta-card,
-.gallery-card,
-.video-card,
-.note-card {
-  padding: 24px;
-  border-radius: 24px;
-  background: rgba(255,255,255,0.76);
-}
-
-.meta-card h3,
-.gallery-card h3,
-.video-card h3,
-.note-card h3 {
-  color: var(--text-dark);
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.meta-card p,
-.gallery-card p,
-.video-card p,
-.note-card p,
-.note-card li {
+body.page-chapter-4 .board-intro {
+  max-width: 700px;
   color: var(--text-soft);
   font-size: 15px;
   line-height: 1.9;
 }
 
-.placeholder-grid {
+body.page-chapter-4 .board-hint {
+  color: #667da0;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+body.page-chapter-4 .board-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+body.page-chapter-4 .board-media {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  min-height: 580px;
+  background: linear-gradient(180deg, rgba(235,243,255,0.96), rgba(211,224,241,0.84));
+}
+
+body.page-chapter-4 .board-media button.board-open {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  cursor: zoom-in;
+}
+
+body.page-chapter-4 .board-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+body.page-chapter-4 .board-hotspots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+body.page-chapter-4 .board-hotspot {
+  position: absolute;
+  pointer-events: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(245, 249, 255, 0.56);
+  background: rgba(219, 232, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(95, 122, 166, 0.08);
+  cursor: pointer;
+  transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+}
+
+body.page-chapter-4 .board-hotspot::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 12px;
+  border: 1px dashed rgba(244, 248, 255, 0.32);
+  opacity: 0;
+  transition: opacity .22s ease;
+}
+
+body.page-chapter-4 .board-hotspot:hover,
+body.page-chapter-4 .board-hotspot:focus-visible,
+body.page-chapter-4 .board-hotspot.is-active {
+  transform: translateY(-1px);
+  background: rgba(197, 220, 255, 0.16);
+  border-color: rgba(244, 249, 255, 0.86);
+  box-shadow: 0 16px 36px rgba(87, 115, 158, 0.14), inset 0 0 0 1px rgba(95, 122, 166, 0.12);
+  outline: none;
+}
+
+body.page-chapter-4 .board-hotspot:hover::before,
+body.page-chapter-4 .board-hotspot:focus-visible::before,
+body.page-chapter-4 .board-hotspot.is-active::before {
+  opacity: 1;
+}
+
+body.page-chapter-4 .board-hotspot span {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(248, 251, 255, 0.92);
+  color: #647a9b;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  box-shadow: 0 10px 18px rgba(87, 115, 158, 0.12);
+}
+
+body.page-chapter-4 .board-hotspot span::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(127, 146, 174, 0.82);
+}
+
+body.page-chapter-4 .board-side {
+  display: grid;
+  gap: 18px;
+}
+
+body.page-chapter-4 .detail-card {
+  padding: 24px;
+  border-radius: 28px;
+  border: 1px solid rgba(123, 145, 176, 0.14);
+  background: rgba(246, 250, 255, 0.86);
+}
+
+body.page-chapter-4 .detail-preview {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(123, 145, 176, 0.14);
+  background:
+    linear-gradient(180deg, rgba(244,248,255,0.16), rgba(218,229,244,0.24)),
+    url("./images/overview.png");
+  background-repeat: no-repeat;
+  background-size: 260%;
+  background-position: 35% 20%;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+}
+
+body.page-chapter-4 .detail-preview button {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  cursor: zoom-in;
+}
+
+body.page-chapter-4 .detail-preview::after {
+  content: "点击查看完整主图";
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(248,251,255,0.92);
+  color: #647a9b;
+  font-size: 12px;
+  box-shadow: 0 10px 18px rgba(87, 115, 158, 0.12);
+  pointer-events: none;
+}
+
+body.page-chapter-4 .detail-index {
+  color: var(--accent-strong);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+body.page-chapter-4 .detail-title {
+  margin: 10px 0 0;
+  color: var(--text-dark);
+  font-size: 24px;
+}
+
+body.page-chapter-4 .detail-text {
+  margin-top: 14px;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.92;
+}
+
+body.page-chapter-4 .detail-meta {
   margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+body.page-chapter-4 .detail-caption {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(127, 146, 174, 0.08);
+  color: #657894;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+body.page-chapter-4 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 18px;
 }
 
-.placeholder {
-  min-height: 160px;
-  border-radius: 18px;
-  border: 1px dashed rgba(107,131,153,0.32);
-  background: linear-gradient(135deg, rgba(107,131,153,0.08), rgba(255,255,255,0.58));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #4a6a8a;
-  font-size: 13px;
-  line-height: 1.7;
-  padding: 12px;
+body.page-chapter-4 .summary-card {
+  padding: 24px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(250,252,255,0.9), rgba(235,243,255,0.68));
 }
 
-code {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.88);
-  border: 1px solid rgba(148,176,200,0.18);
-  color: #4a6a8a;
-  font-size: 12px;
+body.page-chapter-4 .summary-card h3 {
+  margin: 0 0 12px;
+  color: var(--text-dark);
+  font-size: 19px;
 }
 
-.note-card ul {
-  margin-top: 10px;
-  padding-left: 18px;
+body.page-chapter-4 .summary-card p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
 }
 
-.pager {
-  margin-top: 34px;
+body.page-chapter-4 .pager {
+  margin-top: 6px;
   display: flex;
   justify-content: space-between;
   gap: 14px;
 }
 
-.pager a {
+body.page-chapter-4 .pager a {
   flex: 1;
   padding: 16px 20px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.84);
+  background: rgba(248, 251, 255, 0.9);
   text-align: center;
   color: var(--text-main);
   text-decoration: none;
-  transition: all .25s ease;
+  transition: transform .24s ease, background .24s ease;
 }
 
-.pager a:hover {
+body.page-chapter-4 .pager a:hover {
   transform: translateY(-2px);
-  background: rgba(255,255,255,0.96);
+  background: rgba(255, 255, 255, 0.98);
 }
 
-footer {
-  text-align: center;
-  padding: 24px 24px 40px;
-  color: var(--text-soft);
-  font-size: 13px;
+body.page-chapter-4 footer {
+  padding: 4px 24px 40px;
 }
 
-@media (max-width: 960px) {
-  .hero,
-  .meta-grid,
-  .detail-grid,
-  .placeholder-grid {
+body.page-chapter-4 .lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(24, 33, 46, 0.84);
+  z-index: 30;
+}
+
+body.page-chapter-4 .lightbox.is-open {
+  display: flex;
+}
+
+body.page-chapter-4 .lightbox-dialog {
+  position: relative;
+  width: min(1200px, 100%);
+  max-height: min(92vh, 980px);
+  padding: 18px;
+  border-radius: 28px;
+  background: rgba(246, 250, 255, 0.98);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+}
+
+body.page-chapter-4 .lightbox-close {
+  all: unset;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  background: rgba(255,255,255,0.94);
+  color: var(--text-dark);
+  font-size: 26px;
+  box-shadow: 0 12px 20px rgba(66, 88, 121, 0.16);
+}
+
+body.page-chapter-4 .lightbox img {
+  width: 100%;
+  max-height: calc(92vh - 36px);
+  object-fit: contain;
+  display: block;
+  border-radius: 18px;
+}
+
+@media (max-width: 1080px) {
+  body.page-chapter-4 .hero,
+  body.page-chapter-4 .board-grid,
+  body.page-chapter-4 .summary-grid {
     grid-template-columns: 1fr;
+  }
+
+  body.page-chapter-4 .board-media {
+    min-height: 500px;
   }
 }
 
 @media (max-width: 700px) {
-  .nav {
-    justify-content: flex-start;
-    overflow-x: auto;
-    gap: 6px;
-  }
-
-  .nav a {
-    padding: 8px 14px;
-    font-size: 13px;
-    white-space: nowrap;
-  }
-
-  .wrap {
+  body.page-chapter-4 .wrap {
     width: min(100%, calc(100% - 28px));
-    padding: 84px 0 40px;
   }
 
-  .cover {
-    min-height: 320px;
+  body.page-chapter-4 .hero-cover {
+    min-height: 280px;
   }
 
-  .pager {
+  body.page-chapter-4 .hero-card,
+  body.page-chapter-4 .board,
+  body.page-chapter-4 .summary-card,
+  body.page-chapter-4 .detail-card {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  body.page-chapter-4 .board-header {
+    align-items: start;
     flex-direction: column;
   }
 
-  .prev-arm-hint {
-    top: 124px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
+  body.page-chapter-4 .board-media {
+    min-height: 340px;
   }
-  .next-arm-hint {
-    bottom: 60px;
+
+  body.page-chapter-4 .board-hotspot span {
+    left: 10px;
+    top: 10px;
+    padding: 6px 10px;
     font-size: 11px;
-    padding: 7px 12px 7px 30px;
+  }
+
+  body.page-chapter-4 .detail-preview {
+    min-height: 220px;
+  }
+
+  body.page-chapter-4 .pager {
+    flex-direction: column;
+  }
+
+  body.page-chapter-4 .lightbox {
+    padding: 14px;
+  }
+
+  body.page-chapter-4 .lightbox-dialog {
+    padding: 12px;
+    border-radius: 22px;
   }
 }
 </style>
 </head>
-<body>
+<body class="page-chapter-4">
 <nav class="nav">
   <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../../index.html">首页</a>
   <a href="../../about/index.html">项目介绍</a>
   <a href="../../research/index.html">问题研究</a>
   <a href="../../design/index.html">核心设计</a>
-  <a href="../index.html" class="active">空间布置</a>
+  <a href="../index.html" class="active">章节导览</a>
   <a href="../../process/index.html">制作过程</a>
   <a href="../../thanks/index.html">感谢</a>
 </nav>
 <div class="prev-arm-hint" aria-hidden="true"></div>
 <div class="next-arm-hint" aria-hidden="true"></div>
-<div class="wrap">
-  <section class="hero">
-    <div class="cover">
-      <img src="../../images/剪贴板图片.jpg" alt="第四章 太空之梦">
-    </div>
-
-    <div class="hero-card">
-      <div class="eyebrow">CHAPTER 04</div>
-      <h1>太空之梦</h1>
-      <p class="lead">
-        第四章是整部作品的终章，也是协作强度与情绪释放最集中的部分。
-        这里不再只是练习如何一起完成任务，而是通过飞船、黑洞与共同驾驶的危机感，
-        让用户在高压并肩中完成真正的“同行”。
-      </p>
-      <div class="tag-row">
-        <span>飞船驾驶</span>
-        <span>终章高潮</span>
-        <span>冷蓝光感</span>
-        <span>现实延伸</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title">本章作用</h2>
-    <div class="meta-grid">
-      <div class="meta-card">
-        <h3>核心情绪</h3>
-        <p>开阔、紧张、希望感并存。用户在高强度协作中获得共同经历后的情绪释放。</p>
-      </div>
-      <div class="meta-card">
-        <h3>核心交互</h3>
-        <p>共同修复、协同驾驶、临场判断和收束后的现实对话，是从任务走向关系的最后一步。</p>
-      </div>
-      <div class="meta-card">
-        <h3>叙事功能</h3>
-        <p>作为终章，它负责把整部作品的协作体验推向高潮，并把虚拟共同行动转译为现实中的交流意愿。</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title">素材展示区</h2>
-    <div class="detail-grid">
-      <div class="gallery-card">
-        <h3>图片素材</h3>
-        <p>这里适合放飞船驾驶舱截图、动力修复流程图、黑洞终章画面和希望感最强的收束镜头。</p>
-        <div class="placeholder-grid">
-          <div class="placeholder">建议放置<br>驾驶舱场景截图</div>
-          <div class="placeholder">建议放置<br>飞船协作画面</div>
-          <div class="placeholder">建议放置<br>黑洞终章镜头</div>
+<div id="page-content">
+  <div class="wrap">
+    <div class="chapter-shell">
+      <section class="hero">
+        <div class="hero-cover">
+          <button type="button" class="js-open-lightbox" aria-label="查看第四章总览大图">
+            <img src="./images/overview.png" alt="第四章《太空之梦》总览图">
+          </button>
         </div>
-        <code>chapter-4/images/</code>
-      </div>
+        <div class="hero-card">
+          <div class="eyebrow">CHAPTER 04</div>
+          <h1>太空之梦</h1>
+          <p class="lead">
+            第四章作为终章，把前面几章建立起来的协作关系推到最高压也最开阔的状态里。
+            飞船空间、共同驾驶、路径判断与终章收束同时发生，重点不再只是“能不能一起做事”，而是能否在高风险环境中保持信任与共识。
+          </p>
+          <div class="tag-row" aria-label="章节标签">
+            <span>飞船空间</span>
+            <span>终章高潮</span>
+            <span>共同驾驶</span>
+            <span>现实延伸</span>
+          </div>
+          <p class="hero-note">
+            这一章把协作从情绪陪伴推进到共同承担。用户需要一起修复、一起判断、一起穿越危机，
+            最终把虚拟空间里的同行感转译为现实里更愿意交流与回应的关系结果。
+          </p>
+        </div>
+      </section>
 
-      <div class="video-card">
-        <h3>视频素材</h3>
-        <p>这里适合放终章高潮演示、飞船驱动操作录像、黑洞穿越片段和结尾交流记录视频。</p>
-        <div class="placeholder">建议放置第四章演示视频<br>或终章高潮片段</div>
-        <code>chapter-4/videos/</code>
+      <section class="board" aria-labelledby="overview-title">
+        <div class="board-header">
+          <div>
+            <div class="eyebrow">OVERVIEW BOARD</div>
+            <h2 class="board-title" id="overview-title">章节设计总览</h2>
+          </div>
+          <p class="board-hint">点击热点切换右侧说明，点击图片可放大查看</p>
+        </div>
+        <p class="board-intro">
+          总览图把第四章的推进节奏、痛点回应、设计目标与空间终章表现放在同一张画面里。
+          热点说明聚焦“共担风险、共同驾驶、终章收束、现实回响”四个关键词，帮助阅读者快速理解终章如何把协作推向完整闭环。
+        </p>
+
+        <div class="board-grid">
+          <div class="board-media">
+            <button type="button" class="board-open js-open-lightbox" aria-label="查看第四章总览大图">
+              <img src="./images/overview.png" alt="第四章总览图热点分区">
+            </button>
+            <div class="board-hotspots" role="tablist" aria-label="第四章热点列表">
+              <button type="button" class="board-hotspot is-active" data-key="timeline" style="left:8%; top:12%; width:55%; height:15%;" role="tab" aria-selected="true">
+                <span>设计时间线</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="pain" style="left:5%; top:27%; width:57%; height:11%;" role="tab" aria-selected="false">
+                <span>对应痛点</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="goal" style="left:5%; top:39%; width:57%; height:11%;" role="tab" aria-selected="false">
+                <span>设计目标</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="role" style="left:4%; top:53%; width:60%; height:40%;" role="tab" aria-selected="false">
+                <span>角色行为时间线</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="interaction" style="left:67%; top:12%; width:30%; height:37%;" role="tab" aria-selected="false">
+                <span>交互动线图</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="render" style="left:67%; top:56%; width:30%; height:37%;" role="tab" aria-selected="false">
+                <span>Unity场景渲染图</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="board-side">
+            <div class="detail-preview" id="detail-preview" aria-hidden="true">
+              <button type="button" class="js-open-lightbox" aria-label="查看第四章总览大图"></button>
+            </div>
+            <article class="detail-card">
+              <div class="detail-index" id="detail-index">01 / 06</div>
+              <h3 class="detail-title" id="detail-title">设计时间线</h3>
+              <p class="detail-text" id="detail-text">
+                第四章的推进不再围绕“慢慢靠近”，而是围绕“必须一起完成”。从进入飞船空间、分工修复，到共同驾驶与穿越危机，
+                节奏被持续压紧，让终章的协作在高风险环境中获得真正的重量。
+              </p>
+              <div class="detail-meta" id="detail-meta">
+                <span>终章推进</span>
+                <span>风险共担</span>
+              </div>
+              <div class="detail-caption" id="detail-caption">
+                放大的局部停留在总览图左上区域，对应章节从进入飞船到进入协同修复状态的第一段推进。
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="章节摘要">
+        <article class="summary-card">
+          <h3>事件场景</h3>
+          <p>从飞船空间进入、系统修复、共同驾驶到终章收束，第四章把合作置于更高风险、更高强度的叙事情境中，让每一步配合都更具决定性。</p>
+        </article>
+        <article class="summary-card">
+          <h3>对应痛点</h3>
+          <p>关系推进到最后阶段时，真正困难的不只是表达本身，而是能否在压力下继续相信彼此、及时共享判断，并共同承担选择结果。</p>
+        </article>
+        <article class="summary-card">
+          <h3>设计目标</h3>
+          <p>通过终章的高压协作把“同行”从概念变成经验，让用户在共同完成危机处置后，把虚拟中的共担感带回现实交流之中。</p>
+        </article>
+      </section>
+
+      <div class="pager">
+        <a href="../index.html">返回章节总览</a>
+        <a href="../../process/index.html">前往制作过程 →</a>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="note-card">
-      <h3>后续可补内容</h3>
-      <p>第四章最适合强调“高潮”和“收束”的关系。后续你可以在这一页继续补这些内容：</p>
-      <ul>
-        <li>飞船系统交互流程和共同驾驶逻辑图</li>
-        <li>黑洞终章镜头设计、配乐情绪和灯光演变说明</li>
-        <li>体验结束后现实交流的记录或用户反馈摘录</li>
-      </ul>
-    </div>
-  </section>
+  <footer>Within · 协作同行 ｜ 愿每一段旅程都有人同行</footer>
+</div>
 
-  <div class="pager">
-    <a href="../chapter-3/index.html">← 上一章：皮埃尔的梦想</a>
-    <a href="../index.html">返回章节总览 →</a>
+<div class="lightbox" id="chapter-lightbox" aria-hidden="true">
+  <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="第四章总览大图">
+    <button type="button" class="lightbox-close" id="lightbox-close" aria-label="关闭大图">×</button>
+    <img src="./images/overview.png" alt="第四章《太空之梦》总览大图">
   </div>
 </div>
 
-<footer>
-  Within · 协作同行 ｜ 第四章页面
-</footer>
-<script>
-(function () {
-  var prevTarget = '../chapter-3/index.html';
-  var nextTarget = '../../process/index.html';
-  var wrap = document.querySelector('.wrap');
-  var navigating = false;
-  var prevArmed = false;
-  var nextArmed = false;
-  var threshold = 4;
-  var delay = 420;
-  var pullOpenDistance = 240;
-  var armedLockUntil = 0;
-  var armedGraceMs = 960;
-  var armedConfirmReadyAt = 0;
-  var armedConfirmCooldownMs = 360;
-  var nextLockUntil = 0;
-  var nextGraceMs = 960;
-  var nextConfirmReadyAt = 0;
-  var nextConfirmCooldownMs = 360;
-  function applyPull(distance) {
-    if (wrap) {
-      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
-    }
-  }
-
-  function clearPrevArm() {
-    prevArmed = false;
-    armedLockUntil = 0;
-    armedConfirmReadyAt = 0;
-    document.body.classList.remove('is-prev-armed');
-  }
-
-  function clearNextArm() {
-    nextArmed = false;
-    nextLockUntil = 0;
-    nextConfirmReadyAt = 0;
-    document.body.classList.remove('is-next-armed');
-  }
-
-  function openPrevPull() {
-    if (!prevTarget || navigating) return;
-    var now = Date.now();
-    clearNextArm();
-    prevArmed = true;
-    armedLockUntil = now + armedGraceMs;
-    armedConfirmReadyAt = now + armedConfirmCooldownMs;
-    document.body.classList.add('is-prev-armed');
-    applyPull(pullOpenDistance);
-  }
-
-  function openNextPull() {
-    if (!nextTarget || navigating) return;
-    var now = Date.now();
-    clearPrevArm();
-    nextArmed = true;
-    nextLockUntil = now + nextGraceMs;
-    nextConfirmReadyAt = now + nextConfirmCooldownMs;
-    document.body.classList.add('is-next-armed');
-    applyPull(-pullOpenDistance);
-  }
-
-  function closePull() {
-    clearPrevArm();
-    clearNextArm();
-    applyPull(0);
-  }
-
-  function getMaxScroll() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
-
-  function go(target, direction, mode) {
-    if (!target || navigating) return;
-    navigating = true;
-    if (mode !== 'click') {
-      rememberCurrentNavIndicator();
-    }
-    closePull();
-    if (mode === 'click') {
-      document.body.classList.add('is-leaving-click');
-      window.setTimeout(function () {
-        window.location.href = target;
-      }, 260);
-    } else {
-      document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
-      window.setTimeout(function () {
-        window.location.href = target;
-      }, delay);
-    }
-  }
-
-  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
-  var currentPage = 'chapters';
-
-  var nav = document.querySelector('.nav');
-  var navIndicator = nav ? nav.querySelector('.nav-indicator') : null;
-  var navActiveLink = nav ? nav.querySelector('.nav a.active') : null;
-  var navIndicatorStorageKey = 'within-nav-indicator';
-
-  function getNavIndicatorMetrics(link) {
-    if (!nav || !link) return null;
-    return {
-      x: link.offsetLeft,
-      y: link.offsetTop,
-      width: link.offsetWidth,
-      height: link.offsetHeight
-    };
-  }
-
-  function applyNavIndicator(metrics, immediate) {
-    if (!nav || !navIndicator || !metrics) return;
-    if (immediate) {
-      var previousTransition = navIndicator.style.transition;
-      navIndicator.style.transition = 'none';
-      navIndicator.style.width = metrics.width + 'px';
-      navIndicator.style.height = metrics.height + 'px';
-      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
-      navIndicator.offsetWidth;
-      navIndicator.style.transition = previousTransition;
-    } else {
-      navIndicator.style.width = metrics.width + 'px';
-      navIndicator.style.height = metrics.height + 'px';
-      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
-    }
-    nav.classList.add('is-indicator-ready');
-  }
-
-  function saveNavIndicatorMetrics(metrics, pageKey) {
-    if (!metrics) return;
-    try {
-      sessionStorage.setItem(navIndicatorStorageKey, JSON.stringify({
-        page: pageKey || null,
-        x: metrics.x,
-        y: metrics.y,
-        width: metrics.width,
-        height: metrics.height
-      }));
-    } catch (error) {
-      // Ignore storage errors.
-    }
-  }
-
-  function syncActiveNavIndicator(immediate) {
-    if (!nav) return;
-    var activeLink = nav.querySelector('.nav a.active');
-    if (!activeLink) return;
-    navActiveLink = activeLink;
-    var metrics = getNavIndicatorMetrics(activeLink);
-    applyNavIndicator(metrics, immediate);
-    saveNavIndicatorMetrics(metrics, currentPage);
-  }
-
-  function animateNavIndicatorFromPrevious() {
-    if (!navIndicator || !navActiveLink) return;
-    var currentMetrics = getNavIndicatorMetrics(navActiveLink);
-    if (!currentMetrics) return;
-    var previousMetrics = null;
-    try {
-      previousMetrics = JSON.parse(sessionStorage.getItem(navIndicatorStorageKey) || 'null');
-    } catch (error) {
-      previousMetrics = null;
-    }
-    if (
-      previousMetrics &&
-      typeof previousMetrics.x === 'number' &&
-      typeof previousMetrics.y === 'number' &&
-      typeof previousMetrics.width === 'number' &&
-      typeof previousMetrics.height === 'number'
-    ) {
-      applyNavIndicator(previousMetrics, true);
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          applyNavIndicator(currentMetrics, false);
-          saveNavIndicatorMetrics(currentMetrics, currentPage);
-        });
-      });
-    } else {
-      applyNavIndicator(currentMetrics, true);
-      saveNavIndicatorMetrics(currentMetrics, currentPage);
-    }
-  }
-
-  function rememberCurrentNavIndicator() {
-    if (!nav) return;
-    var activeLink = nav.querySelector('.nav a.active');
-    if (!activeLink) return;
-    saveNavIndicatorMetrics(getNavIndicatorMetrics(activeLink), currentPage);
-  }
-
-  function moveNavIndicatorToLink(link) {
-    if (!link) return;
-    var metrics = getNavIndicatorMetrics(link);
-    if (!metrics) return;
-    applyNavIndicator(metrics, false);
-    saveNavIndicatorMetrics(metrics, normalizeNavTarget(link.getAttribute('href')) || currentPage);
-  }
-
-  function normalizeNavTarget(href) {
-    if (!href) return null;
-    if (href.indexOf('about/index.html') !== -1) return 'about';
-    if (href.indexOf('research/index.html') !== -1) return 'research';
-    if (href.indexOf('design/index.html') !== -1) return 'design';
-    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
-    if (href.indexOf('process/index.html') !== -1) return 'process';
-    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
-    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
-    return null;
-  }
-
-  function getNavDirection(href) {
-    var targetKey = normalizeNavTarget(href);
-    var currentIndex = pageOrder.indexOf(currentPage);
-    var targetIndex = pageOrder.indexOf(targetKey);
-    if (currentIndex === -1 || targetIndex === -1) return 'next';
-    return targetIndex < currentIndex ? 'prev' : 'next';
-  }
-
-  function bindNavLinks() {
-    var navLinks = document.querySelectorAll('.nav a[href]');
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        if (navigating) {
-          event.preventDefault();
-          return;
-        }
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-        var href = link.getAttribute('href');
-        if (!href || link.classList.contains('active')) return;
-        event.preventDefault();
-        moveNavIndicatorToLink(link);
-        go(href, getNavDirection(href), 'click');
-      });
-    });
-  }
-
-  bindNavLinks();
-  animateNavIndicatorFromPrevious();
-  window.addEventListener('resize', function () {
-    syncActiveNavIndicator(true);
-  }, { passive: true });
-  if (nav) {
-    nav.addEventListener('scroll', function () {
-      syncActiveNavIndicator(true);
-    }, { passive: true });
-  }
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () {
-      syncActiveNavIndicator(true);
-    });
-  }
-  window.addEventListener('wheel', function (event) {
-    if (navigating) {
-      event.preventDefault();
-      return;
-    }
-
-    var atTop = window.scrollY <= threshold;
-    var maxScroll = getMaxScroll();
-    var atBottom = window.scrollY >= maxScroll - threshold;
-
-    if (prevArmed) {
-      event.preventDefault();
-      var now = Date.now();
-      if (event.deltaY < -8 && prevTarget) {
-        if (now < armedConfirmReadyAt) {
-          return;
-        }
-        go(prevTarget, 'prev');
-        return;
-      }
-      if (event.deltaY > 10 && now >= armedLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      event.preventDefault();
-      var nowNext = Date.now();
-      if (event.deltaY > 8 && nextTarget) {
-        if (nowNext < nextConfirmReadyAt) {
-          return;
-        }
-        go(nextTarget, 'next');
-        return;
-      }
-      if (event.deltaY < -10 && nowNext >= nextLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (event.deltaY < -12 && atTop && prevTarget) {
-      event.preventDefault();
-      openPrevPull();
-      return;
-    }
-
-    if (event.deltaY > 12 && atBottom && nextTarget) {
-      event.preventDefault();
-      openNextPull();
-      return;
-    }
-
-    if (!atTop && !atBottom) {
-      closePull();
-    }
-  }, { passive: false });
-
-  window.addEventListener('scroll', function () {
-    var maxScroll = getMaxScroll();
-
-    if (prevArmed) {
-      if (window.scrollY > threshold + 2) {
-        window.scrollTo(0, 0);
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      if (window.scrollY < maxScroll - threshold - 2) {
-        window.scrollTo(0, maxScroll);
-      }
-      return;
-    }
-
-    if (window.scrollY > threshold + 2 && window.scrollY < maxScroll - threshold - 2) {
-      closePull();
-    }
-  }, { passive: true });})();
+<script id="page-config">
+window.__pageConfig = {
+  current: 'chapters',
+  prev: '../chapter-3/index.html',
+  next: '../../process/index.html'
+};
 </script>
+<script id="page-script">
+(function () {
+  if (typeof window.__chapterBoardCleanup === 'function') {
+    try {
+      window.__chapterBoardCleanup();
+    } catch (e) {}
+  }
+
+  var root = document.body;
+  if (!root || !root.classList.contains('page-chapter-4')) {
+    return;
+  }
+
+  var hotspotData = {
+    timeline: {
+      index: '01 / 06',
+      title: '设计时间线',
+      text: '第四章的推进不再围绕“慢慢靠近”，而是围绕“必须一起完成”。从进入飞船空间、分工修复，到共同驾驶与穿越危机，节奏被持续压紧，让终章协作在高风险环境中获得真正的重量。',
+      tags: ['终章推进', '风险共担'],
+      caption: '放大的局部停留在总览图左上区域，对应章节从进入飞船到进入协同修复状态的第一段推进。',
+      position: '35% 20%'
+    },
+    pain: {
+      index: '02 / 06',
+      title: '对应痛点',
+      text: '终章最核心的痛点不只是“不会表达”，而是在压力之下是否还能持续相信对方、及时同步线索，并在不确定中共同作出判断。关系到了这里，沉默与犹豫会直接影响协作结果。',
+      tags: ['高压判断', '信任考验'],
+      caption: '这里聚焦痛点区域的局部放大，强调终章把信任、判断与承担同时推到前台。',
+      position: '27% 34%'
+    },
+    goal: {
+      index: '03 / 06',
+      title: '设计目标',
+      text: '设计目标是把“同行”从氛围感落实为行动证据。通过共同修复、共同驾驶和共同面对危机，让用户真实感受到协作不是陪同，而是一起承担、一起完成、一起抵达。',
+      tags: ['共同完成', '协作闭环'],
+      caption: '目标区域强调终章的方法论：让高风险共同任务成为关系完成的证据。',
+      position: '27% 45%'
+    },
+    role: {
+      index: '04 / 06',
+      title: '角色行为时间线',
+      text: '角色行为在终章被安排为更强的互相依赖结构。每个人掌握的操作、线索与行动时机都更关键，只有持续回应彼此、即时补位，飞船空间里的任务才能被稳定推进。',
+      tags: ['互相依赖', '即时补位'],
+      caption: '角色行为时间线的局部更突出终章里的互相接应，让“共同承担”被看得更清楚。',
+      position: '31% 73%'
+    },
+    interaction: {
+      index: '05 / 06',
+      title: '交互动线图',
+      text: '交互动线围绕飞船系统、通道移动与驾驶路径展开，空间不再只是背景，而是协作判断的一部分。用户必须在有限时间里协调路线、操作顺序与注意力分配。',
+      tags: ['飞船动线', '路径协同'],
+      caption: '右上区域展示动线放大，重点是共同驾驶与路径判断如何构成终章的空间压力。',
+      position: '84% 27%'
+    },
+    render: {
+      index: '06 / 06',
+      title: 'Unity场景渲染图',
+      text: '冷色飞船空间、清晰的通道结构和更开阔的视野，共同构成第四章的终章氛围。视觉上既要承接前几章的关系累积，也要让用户感到“这一段真的要一起完成”。',
+      tags: ['终章空间', '冷光氛围'],
+      caption: '场景渲染局部聚焦飞船内部结构与冷蓝色氛围，强调终章的开阔感与压迫感并存。',
+      position: '84% 78%'
+    }
+  };
+
+  var hotspots = Array.prototype.slice.call(document.querySelectorAll('.board-hotspot'));
+  var detailIndex = document.getElementById('detail-index');
+  var detailTitle = document.getElementById('detail-title');
+  var detailText = document.getElementById('detail-text');
+  var detailMeta = document.getElementById('detail-meta');
+  var detailCaption = document.getElementById('detail-caption');
+  var detailPreview = document.getElementById('detail-preview');
+  var lightbox = document.getElementById('chapter-lightbox');
+  var lightboxClose = document.getElementById('lightbox-close');
+  var openButtons = Array.prototype.slice.call(document.querySelectorAll('.js-open-lightbox'));
+
+  function renderTags(tags) {
+    detailMeta.innerHTML = '';
+    tags.forEach(function (tag) {
+      var tagEl = document.createElement('span');
+      tagEl.textContent = tag;
+      detailMeta.appendChild(tagEl);
+    });
+  }
+
+  function activateHotspot(key) {
+    var current = hotspotData[key];
+    if (!current) {
+      return;
+    }
+
+    hotspots.forEach(function (hotspot) {
+      var isActive = hotspot.getAttribute('data-key') === key;
+      hotspot.classList.toggle('is-active', isActive);
+      hotspot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    detailIndex.textContent = current.index;
+    detailTitle.textContent = current.title;
+    detailText.textContent = current.text;
+    detailCaption.textContent = current.caption;
+    detailPreview.style.backgroundPosition = current.position;
+    renderTags(current.tags);
+  }
+
+  hotspots.forEach(function (hotspot) {
+    function handleActivate() {
+      activateHotspot(hotspot.getAttribute('data-key'));
+    }
+
+    hotspot.addEventListener('mouseenter', handleActivate);
+    hotspot.addEventListener('focus', handleActivate);
+    hotspot.addEventListener('click', handleActivate);
+  });
+
+  function openLightbox() {
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function handleDocumentKeydown(event) {
+    if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+      closeLightbox();
+    }
+  }
+
+  function handleLightboxBackdrop(event) {
+    if (event.target === lightbox) {
+      closeLightbox();
+    }
+  }
+
+  openButtons.forEach(function (button) {
+    button.addEventListener('click', openLightbox);
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', handleLightboxBackdrop);
+  document.addEventListener('keydown', handleDocumentKeydown);
+
+  activateHotspot('timeline');
+
+  window.__chapterBoardCleanup = function () {
+    closeLightbox();
+    lightbox.removeEventListener('click', handleLightboxBackdrop);
+    document.removeEventListener('keydown', handleDocumentKeydown);
+    window.__chapterBoardCleanup = null;
+  };
+})();
+</script>
+<script src="../../shell.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

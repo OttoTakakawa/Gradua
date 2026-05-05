@@ -4,934 +4,817 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>第二章 · 萨沙的家 — Within · 协作同行</title>
-<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
-
-:root {
-  --accent: #c4a882;
-  --accent-soft: rgba(196,168,130,0.14);
-  --text-main: #4a5560;
-  --text-dark: #2c3a4a;
-  --text-soft: #8899a8;
-  --border: rgba(112,136,160,0.16);
-  --shadow: 0 20px 60px rgba(99,124,148,0.10);
-}
-
-body {
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: var(--text-main);
+<link rel="stylesheet" href="../../shared.css">
+<style id="page-styles">
+body.page-chapter-2 {
+  --accent: #b4885f;
+  --accent-strong: #8c6542;
+  --accent-soft: rgba(180, 136, 95, 0.16);
+  --panel-bg: rgba(255, 250, 242, 0.78);
+  --panel-stroke: rgba(157, 122, 83, 0.18);
   background:
-    radial-gradient(circle at 80% 20%, rgba(196,168,130,0.12), transparent 32%),
-    linear-gradient(180deg, #f7f4ef 0%, #f2efe9 52%, #f0ece7 100%);
-  overflow-x: hidden;
-  overflow-y: clip;
+    radial-gradient(circle at 18% 16%, rgba(255, 239, 214, 0.92), transparent 28%),
+    radial-gradient(circle at 78% 22%, rgba(210, 170, 122, 0.20), transparent 34%),
+    radial-gradient(circle at 62% 78%, rgba(244, 205, 132, 0.18), transparent 30%),
+    linear-gradient(180deg, #fbf4e8 0%, #f1e2cb 52%, #ead7bc 100%);
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
-  background-size: 72px 72px, 96px 96px;
+body.page-chapter-2::after {
+  background: linear-gradient(180deg, rgba(251, 244, 232, 0.18), rgba(239, 224, 198, 0.92) 70%, rgba(233, 215, 188, 1));
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 30;
-  opacity: 0;
-  background: linear-gradient(180deg, rgba(247,244,239,0.14), rgba(244,238,231,0.94) 68%, rgba(241,235,228,1));
-  transition: opacity .42s ease;
+body.page-chapter-2 .nav {
+  background: rgba(251, 244, 232, 0.74);
 }
 
-body.is-leaving-prev::after,
-body.is-leaving-next::after {
-  opacity: 1;
-}
-
-.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  backdrop-filter: blur(16px);
-  background: rgba(247,244,239,0.72);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-indicator {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-  border-radius: 999px;
-  background: rgba(59,75,92,0.88);
-  box-shadow: 0 10px 24px rgba(59,75,92,0.18);
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, width, height, opacity;
-  transition: transform .42s cubic-bezier(.22,1,.36,1), width .42s cubic-bezier(.22,1,.36,1), height .42s cubic-bezier(.22,1,.36,1), opacity .22s ease;
-}
-
-.nav.is-indicator-ready .nav-indicator {
-  opacity: 1;
-}
-.nav a {
+body.page-chapter-2 #page-content {
   position: relative;
   z-index: 1;
-  padding: 10px 18px;
-  border-radius: 999px;
-  color: var(--text-soft);
-  font-size: 14px;
-  text-decoration: none;
-  background: transparent;
-  transition: color .25s ease, background .25s ease;
 }
 
-.nav a:hover {
-  color: var(--text-main);
-  background: rgba(138,180,196,0.12);
-}
-.nav a.active {
-  color: #f5f7fa;
-  background: transparent;
-  box-shadow: none;
+body.page-chapter-2 .wrap {
+  width: min(1220px, calc(100% - 40px));
 }
 
-.nav,
-.wrap,
-footer {
-  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
-}
-
-body.is-leaving-next .wrap,
-body.is-leaving-next footer {
-  opacity: 0;
-  transform: translateY(-24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-prev .wrap,
-body.is-leaving-prev footer {
-  opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-click::after {
-  opacity: 1;
-}
-body.is-leaving-click .wrap,
-body.is-leaving-click footer {
-  opacity: 0;
-  transform: scale(0.985);
-  transition: opacity .22s ease, transform .26s cubic-bezier(.4,0,.2,1);
-}
-
-.prev-arm-hint {
-  position: fixed;
-  left: 50%;
-  top: 156px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.prev-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-left: 1.5px solid rgba(91,154,160,0.9);
-  border-top: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-28%) rotate(45deg);
-}
-
-.prev-arm-hint::after {
-  content: "滚轮上滑，回到前一页";
-}
-
-body.is-prev-armed .prev-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-.next-arm-hint {
-  position: fixed;
-  left: 50%;
-  bottom: 84px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(-6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.next-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid rgba(91,154,160,0.9);
-  border-bottom: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-72%) rotate(45deg);
-}
-
-.next-arm-hint::after {
-  content: "滚轮下滑，前往下一页";
-}
-
-body.is-next-armed .next-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-
-.wrap {
-  position: relative;
-  z-index: 1;
-  width: min(1120px, calc(100% - 36px));
-  margin: 0 auto;
-  padding: 104px 0 72px;
-}
-
-.hero {
+body.page-chapter-2 .chapter-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 28px;
+}
+
+body.page-chapter-2 .eyebrow {
+  color: var(--accent-strong);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+body.page-chapter-2 .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(340px, 1.06fr);
   gap: 24px;
   align-items: stretch;
 }
 
-.cover {
-  min-height: 520px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 32px;
-  border: 1px solid rgba(148,176,200,0.20);
+body.page-chapter-2 .hero-cover,
+body.page-chapter-2 .hero-card,
+body.page-chapter-2 .board,
+body.page-chapter-2 .summary-card,
+body.page-chapter-2 .pager a {
+  border: 1px solid var(--panel-stroke);
   box-shadow: var(--shadow);
 }
 
-.cover img {
+body.page-chapter-2 .hero-cover {
+  min-height: 420px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(117, 83, 49, 0.14), rgba(117, 83, 49, 0.06)),
+    linear-gradient(135deg, rgba(255,255,255,0.18), transparent 48%);
+}
+
+body.page-chapter-2 .hero-cover button {
+  all: unset;
+  cursor: zoom-in;
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+}
+
+body.page-chapter-2 .hero-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
+  background: linear-gradient(180deg, rgba(255,248,236,0.84), rgba(239,223,194,0.62));
 }
 
-.cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(72,54,34,0.08), rgba(72,54,34,0.22)),
-    linear-gradient(135deg, transparent 0 48%, rgba(255,255,255,0.12) 49%, transparent 50%);
-  background-size: auto, 84px 84px;
-}
-
-.hero-card,
-.meta-card,
-.gallery-card,
-.video-card,
-.note-card,
-.pager a {
-  border: 1px solid rgba(148,176,200,0.20);
-  box-shadow: var(--shadow);
-}
-
-.hero-card {
+body.page-chapter-2 .hero-card {
   padding: 32px;
   border-radius: 32px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
+  background: linear-gradient(180deg, rgba(255,252,247,0.9), rgba(255,246,233,0.62));
+  backdrop-filter: blur(14px);
 }
 
-.eyebrow {
-  color: var(--accent);
-  font-size: 12px;
-  letter-spacing: .18em;
-}
-
-h1 {
+body.page-chapter-2 h1 {
   margin-top: 14px;
   color: var(--text-dark);
-  font-size: clamp(34px, 4vw, 48px);
-  line-height: 1.15;
+  font-size: clamp(34px, 4vw, 50px);
+  line-height: 1.12;
 }
 
-.lead {
+body.page-chapter-2 .lead {
   margin-top: 16px;
   color: var(--text-soft);
   font-size: 16px;
-  line-height: 1.95;
+  line-height: 1.92;
 }
 
-.tag-row {
+body.page-chapter-2 .tag-row {
   margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
-.tag-row span {
-  padding: 6px 12px;
+body.page-chapter-2 .tag-row span,
+body.page-chapter-2 .detail-meta span {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 13px;
   border-radius: 999px;
+  border: 1px solid rgba(180, 136, 95, 0.18);
   background: var(--accent-soft);
-  border: 1px solid rgba(196,168,130,0.16);
-  color: #9b7c54;
+  color: var(--accent-strong);
   font-size: 12px;
 }
 
-.section { margin-top: 28px; }
+body.page-chapter-2 .hero-note {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(180, 136, 95, 0.14);
+  color: #7f6852;
+  font-size: 14px;
+  line-height: 1.85;
+}
 
-.section-title {
+body.page-chapter-2 .board {
+  padding: 26px;
+  border-radius: 34px;
+  background: linear-gradient(180deg, rgba(255,252,247,0.88), rgba(255,245,230,0.68));
+  backdrop-filter: blur(12px);
+}
+
+body.page-chapter-2 .board-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+body.page-chapter-2 .board-title {
   color: var(--text-dark);
-  font-size: 26px;
-  margin-bottom: 14px;
+  font-size: 28px;
+  margin: 8px 0 0;
 }
 
-.meta-grid,
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.detail-grid {
-  grid-template-columns: 1fr 1fr;
-  margin-top: 18px;
-}
-
-.meta-card,
-.gallery-card,
-.video-card,
-.note-card {
-  padding: 24px;
-  border-radius: 24px;
-  background: rgba(255,255,255,0.76);
-}
-
-.meta-card h3,
-.gallery-card h3,
-.video-card h3,
-.note-card h3 {
-  color: var(--text-dark);
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.meta-card p,
-.gallery-card p,
-.video-card p,
-.note-card p,
-.note-card li {
+body.page-chapter-2 .board-intro {
+  max-width: 700px;
   color: var(--text-soft);
   font-size: 15px;
   line-height: 1.9;
 }
 
-.placeholder-grid {
+body.page-chapter-2 .board-hint {
+  color: #8a6b4b;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+body.page-chapter-2 .board-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+body.page-chapter-2 .board-media {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  min-height: 580px;
+  background: linear-gradient(180deg, rgba(249,239,220,0.96), rgba(235,214,181,0.84));
+}
+
+body.page-chapter-2 .board-media button.board-open {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  cursor: zoom-in;
+}
+
+body.page-chapter-2 .board-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+body.page-chapter-2 .board-hotspots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+body.page-chapter-2 .board-hotspot {
+  position: absolute;
+  pointer-events: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 249, 240, 0.52);
+  background: rgba(255, 244, 223, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(181, 134, 86, 0.08);
+  cursor: pointer;
+  transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+}
+
+body.page-chapter-2 .board-hotspot::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 245, 229, 0.28);
+  opacity: 0;
+  transition: opacity .22s ease;
+}
+
+body.page-chapter-2 .board-hotspot:hover,
+body.page-chapter-2 .board-hotspot:focus-visible,
+body.page-chapter-2 .board-hotspot.is-active {
+  transform: translateY(-1px);
+  background: rgba(255, 221, 170, 0.14);
+  border-color: rgba(255, 247, 234, 0.84);
+  box-shadow: 0 16px 36px rgba(121, 84, 49, 0.14), inset 0 0 0 1px rgba(181, 134, 86, 0.12);
+  outline: none;
+}
+
+body.page-chapter-2 .board-hotspot:hover::before,
+body.page-chapter-2 .board-hotspot:focus-visible::before,
+body.page-chapter-2 .board-hotspot.is-active::before {
+  opacity: 1;
+}
+
+body.page-chapter-2 .board-hotspot span {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 252, 246, 0.9);
+  color: #8a6441;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  box-shadow: 0 10px 18px rgba(121, 84, 49, 0.12);
+}
+
+body.page-chapter-2 .board-hotspot span::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(180, 136, 95, 0.76);
+}
+
+body.page-chapter-2 .board-side {
+  display: grid;
+  gap: 18px;
+}
+
+body.page-chapter-2 .detail-card {
+  padding: 24px;
+  border-radius: 28px;
+  border: 1px solid rgba(157, 122, 83, 0.14);
+  background: rgba(255, 250, 242, 0.84);
+}
+
+body.page-chapter-2 .detail-preview {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(157, 122, 83, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255,249,240,0.1), rgba(255,238,206,0.22)),
+    url("./images/overview.png");
+  background-repeat: no-repeat;
+  background-size: 260%;
+  background-position: 35% 20%;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.26);
+}
+
+body.page-chapter-2 .detail-preview button {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  cursor: zoom-in;
+}
+
+body.page-chapter-2 .detail-preview::after {
+  content: "点击查看完整主图";
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,252,247,0.9);
+  color: #8a6441;
+  font-size: 12px;
+  box-shadow: 0 10px 18px rgba(121, 84, 49, 0.12);
+  pointer-events: none;
+}
+
+body.page-chapter-2 .detail-index {
+  color: var(--accent-strong);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+body.page-chapter-2 .detail-title {
+  margin: 10px 0 0;
+  color: var(--text-dark);
+  font-size: 24px;
+}
+
+body.page-chapter-2 .detail-text {
+  margin-top: 14px;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.92;
+}
+
+body.page-chapter-2 .detail-meta {
   margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+body.page-chapter-2 .detail-caption {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(180, 136, 95, 0.08);
+  color: #7b624d;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+body.page-chapter-2 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 18px;
 }
 
-.placeholder {
-  min-height: 160px;
-  border-radius: 18px;
-  border: 1px dashed rgba(196,168,130,0.32);
-  background: linear-gradient(135deg, rgba(196,168,130,0.08), rgba(255,255,255,0.58));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #9b7c54;
-  font-size: 13px;
-  line-height: 1.7;
-  padding: 12px;
+body.page-chapter-2 .summary-card {
+  padding: 24px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255,252,247,0.88), rgba(255,244,227,0.64));
 }
 
-code {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.88);
-  border: 1px solid rgba(148,176,200,0.18);
-  color: #9b7c54;
-  font-size: 12px;
+body.page-chapter-2 .summary-card h3 {
+  margin: 0 0 12px;
+  color: var(--text-dark);
+  font-size: 19px;
 }
 
-.note-card ul {
-  margin-top: 10px;
-  padding-left: 18px;
+body.page-chapter-2 .summary-card p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
 }
 
-.pager {
-  margin-top: 34px;
+body.page-chapter-2 .pager {
+  margin-top: 6px;
   display: flex;
   justify-content: space-between;
   gap: 14px;
 }
 
-.pager a {
+body.page-chapter-2 .pager a {
   flex: 1;
   padding: 16px 20px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.84);
+  background: rgba(255, 251, 245, 0.86);
   text-align: center;
   color: var(--text-main);
   text-decoration: none;
-  transition: all .25s ease;
+  transition: transform .24s ease, background .24s ease;
 }
 
-.pager a:hover {
+body.page-chapter-2 .pager a:hover {
   transform: translateY(-2px);
-  background: rgba(255,255,255,0.96);
+  background: rgba(255, 255, 255, 0.96);
 }
 
-footer {
-  text-align: center;
-  padding: 24px 24px 40px;
-  color: var(--text-soft);
-  font-size: 13px;
+body.page-chapter-2 footer {
+  padding: 4px 24px 40px;
 }
 
-@media (max-width: 960px) {
-  .hero,
-  .meta-grid,
-  .detail-grid,
-  .placeholder-grid {
+body.page-chapter-2 .lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(37, 24, 12, 0.82);
+  z-index: 30;
+}
+
+body.page-chapter-2 .lightbox.is-open {
+  display: flex;
+}
+
+body.page-chapter-2 .lightbox-dialog {
+  position: relative;
+  width: min(1200px, 100%);
+  max-height: min(92vh, 980px);
+  padding: 18px;
+  border-radius: 28px;
+  background: rgba(255, 250, 242, 0.96);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+}
+
+body.page-chapter-2 .lightbox-close {
+  all: unset;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  background: rgba(255,255,255,0.92);
+  color: var(--text-dark);
+  font-size: 26px;
+  box-shadow: 0 12px 20px rgba(86, 57, 29, 0.16);
+}
+
+body.page-chapter-2 .lightbox img {
+  width: 100%;
+  max-height: calc(92vh - 36px);
+  object-fit: contain;
+  display: block;
+  border-radius: 18px;
+}
+
+@media (max-width: 1080px) {
+  body.page-chapter-2 .hero,
+  body.page-chapter-2 .board-grid,
+  body.page-chapter-2 .summary-grid {
     grid-template-columns: 1fr;
+  }
+
+  body.page-chapter-2 .board-media {
+    min-height: 500px;
   }
 }
 
 @media (max-width: 700px) {
-  .nav {
-    justify-content: flex-start;
-    overflow-x: auto;
-    gap: 6px;
-  }
-
-  .nav a {
-    padding: 8px 14px;
-    font-size: 13px;
-    white-space: nowrap;
-  }
-
-  .wrap {
+  body.page-chapter-2 .wrap {
     width: min(100%, calc(100% - 28px));
-    padding: 84px 0 40px;
   }
 
-  .cover {
-    min-height: 320px;
+  body.page-chapter-2 .hero-cover {
+    min-height: 280px;
   }
 
-  .pager {
+  body.page-chapter-2 .hero-card,
+  body.page-chapter-2 .board,
+  body.page-chapter-2 .summary-card,
+  body.page-chapter-2 .detail-card {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  body.page-chapter-2 .board-header {
+    align-items: start;
     flex-direction: column;
   }
 
-  .prev-arm-hint {
-    top: 124px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
+  body.page-chapter-2 .board-media {
+    min-height: 340px;
   }
-  .next-arm-hint {
-    bottom: 60px;
+
+  body.page-chapter-2 .board-hotspot span {
+    left: 10px;
+    top: 10px;
+    padding: 6px 10px;
     font-size: 11px;
-    padding: 7px 12px 7px 30px;
+  }
+
+  body.page-chapter-2 .detail-preview {
+    min-height: 220px;
+  }
+
+  body.page-chapter-2 .pager {
+    flex-direction: column;
+  }
+
+  body.page-chapter-2 .lightbox {
+    padding: 14px;
+  }
+
+  body.page-chapter-2 .lightbox-dialog {
+    padding: 12px;
+    border-radius: 22px;
   }
 }
 </style>
 </head>
-<body>
+<body class="page-chapter-2">
 <nav class="nav">
   <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../../index.html">首页</a>
   <a href="../../about/index.html">项目介绍</a>
   <a href="../../research/index.html">问题研究</a>
   <a href="../../design/index.html">核心设计</a>
-  <a href="../index.html" class="active">空间布置</a>
+  <a href="../index.html" class="active">章节导览</a>
   <a href="../../process/index.html">制作过程</a>
   <a href="../../thanks/index.html">感谢</a>
 </nav>
 <div class="prev-arm-hint" aria-hidden="true"></div>
 <div class="next-arm-hint" aria-hidden="true"></div>
-<div class="wrap">
-  <section class="hero">
-    <div class="cover">
-      <img src="../../images/剪贴板图片.jpg" alt="第二章 萨沙的家">
-    </div>
-
-    <div class="hero-card">
-      <div class="eyebrow">CHAPTER 02</div>
-      <h1>萨沙的家</h1>
-      <p class="lead">
-        第二章是整部作品第一次真正让“协作”以柔和方式出现的章节。
-        相比第一章的冰冷外部世界，这里转向温暖、安全、可停留的室内空间，
-        让用户在较低压力下尝试沟通、配合和共同完成小任务。
-      </p>
-      <div class="tag-row">
-        <span>安全空间</span>
-        <span>室内氛围</span>
-        <span>协作绘画</span>
-        <span>自然破冰</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title">本章作用</h2>
-    <div class="meta-grid">
-      <div class="meta-card">
-        <h3>核心情绪</h3>
-        <p>温暖、放松、被接住。它让用户从第一章的社交压迫感中缓下来，开始愿意靠近他人。</p>
-      </div>
-      <div class="meta-card">
-        <h3>核心交互</h3>
-        <p>电话沟通、协作绘画、室内解谜和线索配合。互动难度更轻，但交流频率开始上升。</p>
-      </div>
-      <div class="meta-card">
-        <h3>叙事功能</h3>
-        <p>作为破冰章节，它负责建立第一次成功的协作经验，为后面更复杂的共同任务做准备。</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title">素材展示区</h2>
-    <div class="detail-grid">
-      <div class="gallery-card">
-        <h3>图片素材</h3>
-        <p>这里适合放客厅环境图、协作绘画界面截图、暖光场景细节和第二章过程分镜。</p>
-        <div class="placeholder-grid">
-          <div class="placeholder">建议放置<br>室内环境截图</div>
-          <div class="placeholder">建议放置<br>协作绘画画面</div>
-          <div class="placeholder">建议放置<br>暖色氛围概念图</div>
+<div id="page-content">
+  <div class="wrap">
+    <div class="chapter-shell">
+      <section class="hero">
+        <div class="hero-cover">
+          <button type="button" class="js-open-lightbox" aria-label="查看第二章总览大图">
+            <img src="./images/overview.png" alt="第二章《萨沙的家》总览图">
+          </button>
         </div>
-        <code>chapter-2/images/</code>
-      </div>
+        <div class="hero-card">
+          <div class="eyebrow">CHAPTER 02</div>
+          <h1>萨沙的家</h1>
+          <p class="lead">
+            第二章把叙事重点从外部压迫转向室内安全感。角色终于进入一个可以停留、可以缓慢试探的家庭空间，
+            电话沟通与轻协作任务在暖色氛围中逐步展开，让交流不再以正面表达为起点，而是以更低门槛的共同动作自然破冰。
+          </p>
+          <div class="tag-row" aria-label="章节标签">
+            <span>安全空间</span>
+            <span>室内氛围</span>
+            <span>协作绘画</span>
+            <span>自然破冰</span>
+          </div>
+          <p class="hero-note">
+            这一章的关键不是立刻要求亲密沟通，而是先建立一种“可以一起做点什么”的关系感，
+            让第一次配合发生在被接纳、被照亮、也更容易开口的室内环境里。
+          </p>
+        </div>
+      </section>
 
-      <div class="video-card">
-        <h3>视频素材</h3>
-        <p>这里适合放电话触发片段、绘画互动演示、解谜流程录像和答辩展示短片。</p>
-        <div class="placeholder">建议放置第二章演示视频<br>或协作绘画录屏</div>
-        <code>chapter-2/videos/</code>
+      <section class="board" aria-labelledby="overview-title">
+        <div class="board-header">
+          <div>
+            <div class="eyebrow">OVERVIEW BOARD</div>
+            <h2 class="board-title" id="overview-title">章节设计总览</h2>
+          </div>
+          <p class="board-hint">点击热点切换右侧说明，点击图片可放大查看</p>
+        </div>
+        <p class="board-intro">
+          总览图把第二章的时间推进、痛点回应、设计策略与空间表现放在同一张画面里。
+          热点说明聚焦“温暖、安全、低门槛、破冰”四个关键词，帮助阅读者快速抓住本章如何让关系启动变得更自然。
+        </p>
+
+        <div class="board-grid">
+          <div class="board-media">
+            <button type="button" class="board-open js-open-lightbox" aria-label="查看第二章总览大图">
+              <img src="./images/overview.png" alt="第二章总览图热点分区">
+            </button>
+            <div class="board-hotspots" role="tablist" aria-label="第二章热点列表">
+              <button type="button" class="board-hotspot is-active" data-key="timeline" style="left:8%; top:12%; width:55%; height:15%;" role="tab" aria-selected="true">
+                <span>设计时间线</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="pain" style="left:5%; top:27%; width:57%; height:11%;" role="tab" aria-selected="false">
+                <span>对应痛点</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="goal" style="left:5%; top:39%; width:57%; height:11%;" role="tab" aria-selected="false">
+                <span>设计目标</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="role" style="left:4%; top:53%; width:60%; height:40%;" role="tab" aria-selected="false">
+                <span>角色行为时间线</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="interaction" style="left:67%; top:12%; width:30%; height:37%;" role="tab" aria-selected="false">
+                <span>交互动线图</span>
+              </button>
+              <button type="button" class="board-hotspot" data-key="render" style="left:67%; top:56%; width:30%; height:37%;" role="tab" aria-selected="false">
+                <span>Unity场景渲染图</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="board-side">
+            <div class="detail-preview" id="detail-preview" aria-hidden="true">
+              <button type="button" class="js-open-lightbox" aria-label="查看第二章总览大图"></button>
+            </div>
+            <article class="detail-card">
+              <div class="detail-index" id="detail-index">01 / 06</div>
+              <h3 class="detail-title" id="detail-title">设计时间线</h3>
+              <p class="detail-text" id="detail-text">
+                这一段时间线强调“先安顿，再靠近”。从进入室内、电话沟通，到引入轻量协作任务，
+                节奏被处理得更慢更柔和，让用户不是被推着社交，而是在安全感中逐渐愿意参与。
+              </p>
+              <div class="detail-meta" id="detail-meta">
+                <span>温暖氛围</span>
+                <span>低压力启动</span>
+              </div>
+              <div class="detail-caption" id="detail-caption">
+                放大的局部会停留在总览图左上区域，对应章节从“到达室内”到“愿意尝试一起行动”的第一段推进。
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="章节摘要">
+        <article class="summary-card">
+          <h3>事件场景</h3>
+          <p>从进入室内、电话沟通到轻量协作任务，章节逐步把用户带入可停留的关系启动空间，让共同完成一件小事成为靠近彼此的自然入口。</p>
+        </article>
+        <article class="summary-card">
+          <h3>对应痛点</h3>
+          <p>即便进入更安全的环境，用户仍可能不敢主动表达，也缺少自然开场的契机，因此需要一种不用先“会说”，也能开始互动的过渡方式。</p>
+        </article>
+        <article class="summary-card">
+          <h3>设计目标</h3>
+          <p>用温暖的家庭空间与低压力任务，让第一次配合发生得更自然、更容易被接受，并在不强迫表达的前提下慢慢建立协作关系。</p>
+        </article>
+      </section>
+
+      <div class="pager">
+        <a href="../index.html">返回章节总览</a>
+        <a href="../chapter-3/index.html">下一章：皮埃尔的梦想 →</a>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="note-card">
-      <h3>后续可补内容</h3>
-      <p>第二章最适合突出“安全感”和“关系启动”的设计策略。你后续可以在这一页继续补这些内容：</p>
-      <ul>
-        <li>客厅空间布局图和灯光氛围草图</li>
-        <li>协作绘画机制、电话沟通逻辑和任务流程示意</li>
-        <li>第二章如何降低社交启动门槛的说明文本</li>
-      </ul>
-    </div>
-  </section>
+  <footer>Within · 协作同行 ｜ 愿每一段旅程都有人同行</footer>
+</div>
 
-  <div class="pager">
-    <a href="../chapter-1/index.html">← 上一章：孤独的城市</a>
-    <a href="../chapter-3/index.html">下一章：皮埃尔的梦想 →</a>
+<div class="lightbox" id="chapter-lightbox" aria-hidden="true">
+  <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="第二章总览大图">
+    <button type="button" class="lightbox-close" id="lightbox-close" aria-label="关闭大图">×</button>
+    <img src="./images/overview.png" alt="第二章《萨沙的家》总览大图">
   </div>
 </div>
 
-<footer>
-  Within · 协作同行 ｜ 第二章页面
-</footer>
-<script>
-(function () {
-  var prevTarget = '../chapter-1/index.html';
-  var nextTarget = '../chapter-3/index.html';
-  var wrap = document.querySelector('.wrap');
-  var navigating = false;
-  var prevArmed = false;
-  var nextArmed = false;
-  var threshold = 4;
-  var delay = 420;
-  var pullOpenDistance = 240;
-  var armedLockUntil = 0;
-  var armedGraceMs = 960;
-  var armedConfirmReadyAt = 0;
-  var armedConfirmCooldownMs = 360;
-  var nextLockUntil = 0;
-  var nextGraceMs = 960;
-  var nextConfirmReadyAt = 0;
-  var nextConfirmCooldownMs = 360;
-  function applyPull(distance) {
-    if (wrap) {
-      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
-    }
-  }
-
-  function clearPrevArm() {
-    prevArmed = false;
-    armedLockUntil = 0;
-    armedConfirmReadyAt = 0;
-    document.body.classList.remove('is-prev-armed');
-  }
-
-  function clearNextArm() {
-    nextArmed = false;
-    nextLockUntil = 0;
-    nextConfirmReadyAt = 0;
-    document.body.classList.remove('is-next-armed');
-  }
-
-  function openPrevPull() {
-    if (!prevTarget || navigating) return;
-    var now = Date.now();
-    clearNextArm();
-    prevArmed = true;
-    armedLockUntil = now + armedGraceMs;
-    armedConfirmReadyAt = now + armedConfirmCooldownMs;
-    document.body.classList.add('is-prev-armed');
-    applyPull(pullOpenDistance);
-  }
-
-  function openNextPull() {
-    if (!nextTarget || navigating) return;
-    var now = Date.now();
-    clearPrevArm();
-    nextArmed = true;
-    nextLockUntil = now + nextGraceMs;
-    nextConfirmReadyAt = now + nextConfirmCooldownMs;
-    document.body.classList.add('is-next-armed');
-    applyPull(-pullOpenDistance);
-  }
-
-  function closePull() {
-    clearPrevArm();
-    clearNextArm();
-    applyPull(0);
-  }
-
-  function getMaxScroll() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
-
-  function go(target, direction, mode) {
-    if (!target || navigating) return;
-    navigating = true;
-    if (mode !== 'click') {
-      rememberCurrentNavIndicator();
-    }
-    closePull();
-    if (mode === 'click') {
-      document.body.classList.add('is-leaving-click');
-      window.setTimeout(function () {
-        window.location.href = target;
-      }, 260);
-    } else {
-      document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
-      window.setTimeout(function () {
-        window.location.href = target;
-      }, delay);
-    }
-  }
-
-  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
-  var currentPage = 'chapters';
-
-  var nav = document.querySelector('.nav');
-  var navIndicator = nav ? nav.querySelector('.nav-indicator') : null;
-  var navActiveLink = nav ? nav.querySelector('.nav a.active') : null;
-  var navIndicatorStorageKey = 'within-nav-indicator';
-
-  function getNavIndicatorMetrics(link) {
-    if (!nav || !link) return null;
-    return {
-      x: link.offsetLeft,
-      y: link.offsetTop,
-      width: link.offsetWidth,
-      height: link.offsetHeight
-    };
-  }
-
-  function applyNavIndicator(metrics, immediate) {
-    if (!nav || !navIndicator || !metrics) return;
-    if (immediate) {
-      var previousTransition = navIndicator.style.transition;
-      navIndicator.style.transition = 'none';
-      navIndicator.style.width = metrics.width + 'px';
-      navIndicator.style.height = metrics.height + 'px';
-      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
-      navIndicator.offsetWidth;
-      navIndicator.style.transition = previousTransition;
-    } else {
-      navIndicator.style.width = metrics.width + 'px';
-      navIndicator.style.height = metrics.height + 'px';
-      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
-    }
-    nav.classList.add('is-indicator-ready');
-  }
-
-  function saveNavIndicatorMetrics(metrics, pageKey) {
-    if (!metrics) return;
-    try {
-      sessionStorage.setItem(navIndicatorStorageKey, JSON.stringify({
-        page: pageKey || null,
-        x: metrics.x,
-        y: metrics.y,
-        width: metrics.width,
-        height: metrics.height
-      }));
-    } catch (error) {
-      // Ignore storage errors.
-    }
-  }
-
-  function syncActiveNavIndicator(immediate) {
-    if (!nav) return;
-    var activeLink = nav.querySelector('.nav a.active');
-    if (!activeLink) return;
-    navActiveLink = activeLink;
-    var metrics = getNavIndicatorMetrics(activeLink);
-    applyNavIndicator(metrics, immediate);
-    saveNavIndicatorMetrics(metrics, currentPage);
-  }
-
-  function animateNavIndicatorFromPrevious() {
-    if (!navIndicator || !navActiveLink) return;
-    var currentMetrics = getNavIndicatorMetrics(navActiveLink);
-    if (!currentMetrics) return;
-    var previousMetrics = null;
-    try {
-      previousMetrics = JSON.parse(sessionStorage.getItem(navIndicatorStorageKey) || 'null');
-    } catch (error) {
-      previousMetrics = null;
-    }
-    if (
-      previousMetrics &&
-      typeof previousMetrics.x === 'number' &&
-      typeof previousMetrics.y === 'number' &&
-      typeof previousMetrics.width === 'number' &&
-      typeof previousMetrics.height === 'number'
-    ) {
-      applyNavIndicator(previousMetrics, true);
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          applyNavIndicator(currentMetrics, false);
-          saveNavIndicatorMetrics(currentMetrics, currentPage);
-        });
-      });
-    } else {
-      applyNavIndicator(currentMetrics, true);
-      saveNavIndicatorMetrics(currentMetrics, currentPage);
-    }
-  }
-
-  function rememberCurrentNavIndicator() {
-    if (!nav) return;
-    var activeLink = nav.querySelector('.nav a.active');
-    if (!activeLink) return;
-    saveNavIndicatorMetrics(getNavIndicatorMetrics(activeLink), currentPage);
-  }
-
-  function moveNavIndicatorToLink(link) {
-    if (!link) return;
-    var metrics = getNavIndicatorMetrics(link);
-    if (!metrics) return;
-    applyNavIndicator(metrics, false);
-    saveNavIndicatorMetrics(metrics, normalizeNavTarget(link.getAttribute('href')) || currentPage);
-  }
-
-  function normalizeNavTarget(href) {
-    if (!href) return null;
-    if (href.indexOf('about/index.html') !== -1) return 'about';
-    if (href.indexOf('research/index.html') !== -1) return 'research';
-    if (href.indexOf('design/index.html') !== -1) return 'design';
-    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
-    if (href.indexOf('process/index.html') !== -1) return 'process';
-    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
-    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
-    return null;
-  }
-
-  function getNavDirection(href) {
-    var targetKey = normalizeNavTarget(href);
-    var currentIndex = pageOrder.indexOf(currentPage);
-    var targetIndex = pageOrder.indexOf(targetKey);
-    if (currentIndex === -1 || targetIndex === -1) return 'next';
-    return targetIndex < currentIndex ? 'prev' : 'next';
-  }
-
-  function bindNavLinks() {
-    var navLinks = document.querySelectorAll('.nav a[href]');
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        if (navigating) {
-          event.preventDefault();
-          return;
-        }
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-        var href = link.getAttribute('href');
-        if (!href || link.classList.contains('active')) return;
-        event.preventDefault();
-        moveNavIndicatorToLink(link);
-        go(href, getNavDirection(href), 'click');
-      });
-    });
-  }
-
-  bindNavLinks();
-  animateNavIndicatorFromPrevious();
-  window.addEventListener('resize', function () {
-    syncActiveNavIndicator(true);
-  }, { passive: true });
-  if (nav) {
-    nav.addEventListener('scroll', function () {
-      syncActiveNavIndicator(true);
-    }, { passive: true });
-  }
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () {
-      syncActiveNavIndicator(true);
-    });
-  }
-  window.addEventListener('wheel', function (event) {
-    if (navigating) {
-      event.preventDefault();
-      return;
-    }
-
-    var atTop = window.scrollY <= threshold;
-    var maxScroll = getMaxScroll();
-    var atBottom = window.scrollY >= maxScroll - threshold;
-
-    if (prevArmed) {
-      event.preventDefault();
-      var now = Date.now();
-      if (event.deltaY < -8 && prevTarget) {
-        if (now < armedConfirmReadyAt) {
-          return;
-        }
-        go(prevTarget, 'prev');
-        return;
-      }
-      if (event.deltaY > 10 && now >= armedLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      event.preventDefault();
-      var nowNext = Date.now();
-      if (event.deltaY > 8 && nextTarget) {
-        if (nowNext < nextConfirmReadyAt) {
-          return;
-        }
-        go(nextTarget, 'next');
-        return;
-      }
-      if (event.deltaY < -10 && nowNext >= nextLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (event.deltaY < -12 && atTop && prevTarget) {
-      event.preventDefault();
-      openPrevPull();
-      return;
-    }
-
-    if (event.deltaY > 12 && atBottom && nextTarget) {
-      event.preventDefault();
-      openNextPull();
-      return;
-    }
-
-    if (!atTop && !atBottom) {
-      closePull();
-    }
-  }, { passive: false });
-
-  window.addEventListener('scroll', function () {
-    var maxScroll = getMaxScroll();
-
-    if (prevArmed) {
-      if (window.scrollY > threshold + 2) {
-        window.scrollTo(0, 0);
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      if (window.scrollY < maxScroll - threshold - 2) {
-        window.scrollTo(0, maxScroll);
-      }
-      return;
-    }
-
-    if (window.scrollY > threshold + 2 && window.scrollY < maxScroll - threshold - 2) {
-      closePull();
-    }
-  }, { passive: true });})();
+<script id="page-config">
+window.__pageConfig = {
+  current: 'chapters',
+  prev: '../chapter-1/index.html',
+  next: '../chapter-3/index.html'
+};
 </script>
+<script id="page-script">
+(function () {
+  if (typeof window.__chapterBoardCleanup === 'function') {
+    try {
+      window.__chapterBoardCleanup();
+    } catch (e) {}
+  }
+
+  var root = document.body;
+  if (!root || !root.classList.contains('page-chapter-2')) {
+    return;
+  }
+
+  var hotspotData = {
+    timeline: {
+      index: '01 / 06',
+      title: '设计时间线',
+      text: '这一段时间线强调“先安顿，再靠近”。从进入室内、电话沟通，到引入轻量协作任务，节奏被处理得更慢更柔和，让用户不是被推着社交，而是在安全感中逐渐愿意参与。',
+      tags: ['温暖氛围', '低压力启动'],
+      caption: '放大的局部停留在总览图左上区域，对应章节从“到达室内”到“愿意尝试一起行动”的第一段推进。',
+      position: '35% 20%'
+    },
+    pain: {
+      index: '02 / 06',
+      title: '对应痛点',
+      text: '即便已经进入更安全的室内，用户也未必会立刻放松下来。害怕打扰、不会开口、担心被误解，都会让“已经靠近”仍然无法转化成真正的互动。',
+      tags: ['表达门槛', '关系迟滞'],
+      caption: '这里聚焦痛点区域的局部放大，强调“安全环境已出现，但社交启动仍旧困难”的断层感。',
+      position: '27% 34%'
+    },
+    goal: {
+      index: '03 / 06',
+      title: '设计目标',
+      text: '设计目标不是逼迫用户主动表态，而是借由温暖家庭空间与轻任务，把“先一起做点什么”变成交流起点，让协作先发生，再慢慢转化成表达。',
+      tags: ['自然破冰', '首次配合'],
+      caption: '目标区域的局部强调章节方法论：先建立被接纳的氛围，再让合作动作承担破冰功能。',
+      position: '27% 45%'
+    },
+    role: {
+      index: '04 / 06',
+      title: '角色行为时间线',
+      text: '角色行为被安排为缓慢接近、互相试探、逐步配合的节奏。第二章不追求高密度对白，而是通过行动与回应让“愿意留下来一起做事”成为关系启动的证据。',
+      tags: ['陪伴感', '缓慢靠近'],
+      caption: '角色行为时间线的放大局部更突出停留、回应与共同动作，让本章的温和节奏更容易被读出来。',
+      position: '31% 73%'
+    },
+    interaction: {
+      index: '05 / 06',
+      title: '交互动线图',
+      text: '交互动线围绕室内移动、电话触发和协作绘画展开，路径短、反馈轻、操作直接，避免复杂规则打断情绪，让破冰建立在顺手可做的共同任务上。',
+      tags: ['轻协作', '顺手互动'],
+      caption: '右上区域展示动线放大，重点是动作负担小、反馈明确，让第一次合作更容易发生。',
+      position: '84% 27%'
+    },
+    render: {
+      index: '06 / 06',
+      title: 'Unity场景渲染图',
+      text: '暖黄室内光线、木色家具与安定的空间包裹感，共同构成第二章的情绪底色。视觉上先让人觉得“这里可以待着”，协作与表达才会真正有机会开始。',
+      tags: ['家庭空间', '被接住的感觉'],
+      caption: '场景渲染局部聚焦暖光与室内材质，强调本章“安全、安静、可停留”的视觉氛围。',
+      position: '84% 78%'
+    }
+  };
+
+  var hotspots = Array.prototype.slice.call(document.querySelectorAll('.board-hotspot'));
+  var detailIndex = document.getElementById('detail-index');
+  var detailTitle = document.getElementById('detail-title');
+  var detailText = document.getElementById('detail-text');
+  var detailMeta = document.getElementById('detail-meta');
+  var detailCaption = document.getElementById('detail-caption');
+  var detailPreview = document.getElementById('detail-preview');
+  var lightbox = document.getElementById('chapter-lightbox');
+  var lightboxClose = document.getElementById('lightbox-close');
+  var openButtons = Array.prototype.slice.call(document.querySelectorAll('.js-open-lightbox'));
+
+  function renderTags(tags) {
+    detailMeta.innerHTML = '';
+    tags.forEach(function (tag) {
+      var tagEl = document.createElement('span');
+      tagEl.textContent = tag;
+      detailMeta.appendChild(tagEl);
+    });
+  }
+
+  function activateHotspot(key) {
+    var current = hotspotData[key];
+    if (!current) {
+      return;
+    }
+
+    hotspots.forEach(function (hotspot) {
+      var isActive = hotspot.getAttribute('data-key') === key;
+      hotspot.classList.toggle('is-active', isActive);
+      hotspot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    detailIndex.textContent = current.index;
+    detailTitle.textContent = current.title;
+    detailText.textContent = current.text;
+    detailCaption.textContent = current.caption;
+    detailPreview.style.backgroundPosition = current.position;
+    renderTags(current.tags);
+  }
+
+  function openLightbox() {
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function handleDocumentKeydown(event) {
+    if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+      closeLightbox();
+    }
+  }
+
+  function handleLightboxBackdrop(event) {
+    if (event.target === lightbox) {
+      closeLightbox();
+    }
+  }
+
+  hotspots.forEach(function (hotspot) {
+    hotspot.addEventListener('click', function () {
+      activateHotspot(hotspot.getAttribute('data-key'));
+    });
+  });
+
+  openButtons.forEach(function (button) {
+    button.addEventListener('click', openLightbox);
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', handleLightboxBackdrop);
+  document.addEventListener('keydown', handleDocumentKeydown);
+
+  activateHotspot('timeline');
+
+  window.__chapterBoardCleanup = function () {
+    closeLightbox();
+    lightbox.removeEventListener('click', handleLightboxBackdrop);
+    document.removeEventListener('keydown', handleDocumentKeydown);
+    window.__chapterBoardCleanup = null;
+  };
+})();
+</script>
+<script src="../../shell.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -4,934 +4,916 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>第三章 · 皮埃尔的梦想 — Within · 协作同行</title>
-<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { overflow-y: scroll; scrollbar-gutter: stable; overscroll-behavior-y: none; }
-
-:root {
-  --accent: #9385bf;
-  --accent-soft: rgba(147,133,191,0.13);
-  --text-main: #4a5560;
-  --text-dark: #2c3a4a;
-  --text-soft: #8899a8;
-  --border: rgba(112,136,160,0.16);
-  --shadow: 0 20px 60px rgba(99,124,148,0.10);
-}
-
-body {
-  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color: var(--text-main);
+<link rel="stylesheet" href="../../shared.css">
+<style id="page-styles">
+body.page-chapter-3 {
+  --chapter3-accent: #5f8f95;
+  --chapter3-accent-soft: rgba(95, 143, 149, 0.14);
+  --chapter3-accent-strong: #4f7e86;
+  --chapter3-green: #a8c69d;
+  --chapter3-lake: #9dc6d6;
+  --chapter3-border: rgba(128, 164, 170, 0.22);
   background:
-    radial-gradient(circle at 18% 22%, rgba(147,133,191,0.12), transparent 34%),
-    radial-gradient(circle at 82% 18%, rgba(91,154,160,0.08), transparent 30%),
-    linear-gradient(180deg, #f5f3f8 0%, #f0eef5 52%, #efedf4 100%);
-  overflow-x: hidden;
-  overflow-y: clip;
+    radial-gradient(circle at 16% 18%, rgba(168, 198, 157, 0.24), transparent 30%),
+    radial-gradient(circle at 82% 20%, rgba(157, 198, 214, 0.22), transparent 34%),
+    radial-gradient(circle at 30% 76%, rgba(190, 214, 201, 0.18), transparent 28%),
+    linear-gradient(145deg, #f7f8f6 0%, #edf3ee 32%, #e7f1ef 62%, #edf4f7 100%);
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image:
-    linear-gradient(135deg, transparent 0 48%, rgba(90,120,145,0.8) 49%, transparent 50%),
-    linear-gradient(45deg, transparent 0 48%, rgba(90,120,145,0.6) 49%, transparent 50%);
-  background-size: 72px 72px, 96px 96px;
+body.page-chapter-3::after {
+  background: linear-gradient(180deg, rgba(247, 248, 246, 0.12), rgba(234, 241, 240, 0.94) 66%, rgba(232, 239, 242, 1));
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 30;
-  opacity: 0;
-  background: linear-gradient(180deg, rgba(245,242,248,0.14), rgba(238,233,243,0.94) 68%, rgba(235,230,240,1));
-  transition: opacity .42s ease;
+body.page-chapter-3 .nav {
+  background: rgba(245, 248, 247, 0.74);
 }
 
-body.is-leaving-prev::after,
-body.is-leaving-next::after {
-  opacity: 1;
-}
-
-.nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 30;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  backdrop-filter: blur(16px);
-  background: rgba(245,243,248,0.72);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-indicator {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-  border-radius: 999px;
-  background: rgba(59,75,92,0.88);
-  box-shadow: 0 10px 24px rgba(59,75,92,0.18);
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, width, height, opacity;
-  transition: transform .42s cubic-bezier(.22,1,.36,1), width .42s cubic-bezier(.22,1,.36,1), height .42s cubic-bezier(.22,1,.36,1), opacity .22s ease;
-}
-
-.nav.is-indicator-ready .nav-indicator {
-  opacity: 1;
-}
-.nav a {
-  position: relative;
-  z-index: 1;
-  padding: 10px 18px;
-  border-radius: 999px;
-  color: var(--text-soft);
-  font-size: 14px;
-  text-decoration: none;
-  background: transparent;
-  transition: color .25s ease, background .25s ease;
-}
-
-.nav a:hover {
-  color: var(--text-main);
-  background: rgba(138,180,196,0.12);
-}
-.nav a.active {
-  color: #f5f7fa;
-  background: transparent;
-  box-shadow: none;
-}
-
-.nav,
-.wrap,
-footer {
-  transition: opacity .4s ease, transform .46s ease, filter .46s ease;
-}
-
-body.is-leaving-next .wrap,
-body.is-leaving-next footer {
-  opacity: 0;
-  transform: translateY(-24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-prev .wrap,
-body.is-leaving-prev footer {
-  opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-click::after {
-  opacity: 1;
-}
-body.is-leaving-click .wrap,
-body.is-leaving-click footer {
-  opacity: 0;
-  transform: scale(0.985);
-  transition: opacity .22s ease, transform .26s cubic-bezier(.4,0,.2,1);
-}
-
-.prev-arm-hint {
-  position: fixed;
-  left: 50%;
-  top: 156px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.prev-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-left: 1.5px solid rgba(91,154,160,0.9);
-  border-top: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-28%) rotate(45deg);
-}
-
-.prev-arm-hint::after {
-  content: "滚轮上滑，回到前一页";
-}
-
-body.is-prev-armed .prev-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-.next-arm-hint {
-  position: fixed;
-  left: 50%;
-  bottom: 84px;
-  width: auto;
-  min-height: 24px;
-  padding: 8px 14px 8px 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,176,200,0.24);
-  background: rgba(245,247,250,0.86);
-  backdrop-filter: blur(8px);
-  transform: translateX(-50%) translateY(-6px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 36;
-  transition: opacity .24s ease, transform .24s ease, background .24s ease;
-  color: #5a7a8c;
-  font-size: 12px;
-  letter-spacing: .06em;
-  white-space: nowrap;
-}
-
-.next-arm-hint::before {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid rgba(91,154,160,0.9);
-  border-bottom: 1.5px solid rgba(91,154,160,0.9);
-  transform: translateY(-72%) rotate(45deg);
-}
-
-.next-arm-hint::after {
-  content: "滚轮下滑，前往下一页";
-}
-
-body.is-next-armed .next-arm-hint {
-  opacity: 0.92;
-  transform: translateX(-50%) translateY(0);
-}
-
-.wrap {
-  position: relative;
-  z-index: 1;
+body.page-chapter-3 .wrap {
   width: min(1120px, calc(100% - 36px));
-  margin: 0 auto;
-  padding: 104px 0 72px;
 }
 
-.hero {
+body.page-chapter-3 .hero,
+body.page-chapter-3 .board,
+body.page-chapter-3 .summary-grid {
+  margin-top: 28px;
+}
+
+body.page-chapter-3 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
   gap: 24px;
   align-items: stretch;
 }
 
-.cover {
-  min-height: 520px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 32px;
-  border: 1px solid rgba(148,176,200,0.20);
+body.page-chapter-3 .hero-card,
+body.page-chapter-3 .hero-visual,
+body.page-chapter-3 .board-shell,
+body.page-chapter-3 .detail-panel,
+body.page-chapter-3 .summary-card,
+body.page-chapter-3 .pager a,
+body.page-chapter-3 .lightbox-stage {
+  border: 1px solid var(--chapter3-border);
   box-shadow: var(--shadow);
 }
 
-.cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+body.page-chapter-3 .hero-card,
+body.page-chapter-3 .hero-visual,
+body.page-chapter-3 .board-shell,
+body.page-chapter-3 .detail-panel,
+body.page-chapter-3 .summary-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.56));
+  backdrop-filter: blur(10px);
 }
 
-.cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(59,47,82,0.10), rgba(59,47,82,0.24)),
-    linear-gradient(135deg, transparent 0 48%, rgba(255,255,255,0.12) 49%, transparent 50%);
-  background-size: auto, 84px 84px;
-}
-
-.hero-card,
-.meta-card,
-.gallery-card,
-.video-card,
-.note-card,
-.pager a {
-  border: 1px solid rgba(148,176,200,0.20);
-  box-shadow: var(--shadow);
-}
-
-.hero-card {
+body.page-chapter-3 .hero-card {
   padding: 32px;
   border-radius: 32px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
 }
 
-.eyebrow {
-  color: var(--accent);
+body.page-chapter-3 .eyebrow {
   font-size: 12px;
-  letter-spacing: .18em;
+  letter-spacing: 0.12em;
+  color: var(--chapter3-accent-strong);
 }
 
-h1 {
+body.page-chapter-3 h1 {
   margin-top: 14px;
   color: var(--text-dark);
   font-size: clamp(34px, 4vw, 48px);
   line-height: 1.15;
 }
 
-.lead {
+body.page-chapter-3 .lead {
   margin-top: 16px;
   color: var(--text-soft);
   font-size: 16px;
   line-height: 1.95;
 }
 
-.tag-row {
+body.page-chapter-3 .tag-row {
   margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.tag-row span {
+body.page-chapter-3 .tag-row span,
+body.page-chapter-3 .detail-tags span {
   padding: 6px 12px;
   border-radius: 999px;
-  background: var(--accent-soft);
-  border: 1px solid rgba(147,133,191,0.16);
-  color: #786888;
+  border: 1px solid rgba(95, 143, 149, 0.16);
+  background: var(--chapter3-accent-soft);
+  color: var(--chapter3-accent-strong);
   font-size: 12px;
 }
 
-.section { margin-top: 28px; }
+body.page-chapter-3 .hero-visual {
+  position: relative;
+  min-height: 320px;
+  border-radius: 32px;
+  overflow: hidden;
+  padding: 18px;
+}
 
-.section-title {
-  color: var(--text-dark);
-  font-size: 26px;
+body.page-chapter-3 .hero-visual::before,
+body.page-chapter-3 .board-shell::before,
+body.page-chapter-3 .detail-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 42%),
+    radial-gradient(circle at 18% 18%, rgba(168, 198, 157, 0.18), transparent 28%),
+    radial-gradient(circle at 82% 22%, rgba(157, 198, 214, 0.18), transparent 34%);
+}
+
+body.page-chapter-3 .hero-visual-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  min-height: 284px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(239, 245, 244, 0.76);
+}
+
+body.page-chapter-3 .hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+body.page-chapter-3 .hero-visual-note {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(244, 249, 248, 0.78);
+  border: 1px solid rgba(95, 143, 149, 0.16);
+  color: #54757b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+body.page-chapter-3 .section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 18px;
   margin-bottom: 14px;
 }
 
-.meta-grid,
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.detail-grid {
-  grid-template-columns: 1fr 1fr;
-  margin-top: 18px;
-}
-
-.meta-card,
-.gallery-card,
-.video-card,
-.note-card {
-  padding: 24px;
-  border-radius: 24px;
-  background: rgba(255,255,255,0.76);
-}
-
-.meta-card h3,
-.gallery-card h3,
-.video-card h3,
-.note-card h3 {
+body.page-chapter-3 .section-head h2 {
+  font-size: 28px;
   color: var(--text-dark);
-  font-size: 18px;
-  margin-bottom: 10px;
 }
 
-.meta-card p,
-.gallery-card p,
-.video-card p,
-.note-card p,
-.note-card li {
+body.page-chapter-3 .section-head p {
+  max-width: 660px;
   color: var(--text-soft);
   font-size: 15px;
   line-height: 1.9;
 }
 
-.placeholder-grid {
-  margin-top: 16px;
+body.page-chapter-3 .board {
+  display: grid;
+  gap: 22px;
+}
+
+body.page-chapter-3 .board-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(300px, 0.78fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+body.page-chapter-3 .board-shell,
+body.page-chapter-3 .detail-panel {
+  position: relative;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+body.page-chapter-3 .board-shell {
+  padding: 18px;
+}
+
+body.page-chapter-3 .board-frame {
+  position: relative;
+  z-index: 1;
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(240, 246, 244, 0.96), rgba(235, 241, 243, 0.92));
+  min-height: 620px;
+}
+
+body.page-chapter-3 .board-media {
+  position: relative;
+  width: 100%;
+  min-height: 620px;
+}
+
+body.page-chapter-3 .board-media img {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+  object-fit: contain;
+  display: block;
+  cursor: zoom-in;
+}
+
+body.page-chapter-3 .board-hotspot {
+  position: absolute;
+  border-radius: 18px;
+  border: 1px solid rgba(95, 143, 149, 0.26);
+  background: rgba(95, 143, 149, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+  cursor: pointer;
+  transition: background .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+
+body.page-chapter-3 .board-hotspot::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(248, 252, 252, 0.82);
+  color: var(--chapter3-accent-strong);
+  font-size: 12px;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+body.page-chapter-3 .board-hotspot:hover,
+body.page-chapter-3 .board-hotspot:focus-visible,
+body.page-chapter-3 .board-hotspot.is-active {
+  background: rgba(95, 143, 149, 0.15);
+  border-color: rgba(95, 143, 149, 0.64);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.24),
+    0 10px 24px rgba(95, 143, 149, 0.12);
+}
+
+body.page-chapter-3 .board-hotspot:hover::after,
+body.page-chapter-3 .board-hotspot:focus-visible::after,
+body.page-chapter-3 .board-hotspot.is-active::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body.page-chapter-3 .detail-panel {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+body.page-chapter-3 .detail-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+body.page-chapter-3 .detail-kicker {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--chapter3-accent-strong);
+}
+
+body.page-chapter-3 .detail-panel h3 {
+  font-size: 26px;
+  color: var(--text-dark);
+  line-height: 1.25;
+}
+
+body.page-chapter-3 .detail-copy {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+body.page-chapter-3 .detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+body.page-chapter-3 .detail-meta {
+  display: grid;
+  gap: 10px;
+}
+
+body.page-chapter-3 .detail-meta-row {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+body.page-chapter-3 .detail-meta-row strong {
+  min-width: 78px;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+body.page-chapter-3 .detail-preview {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(232, 242, 240, 0.92), rgba(233, 239, 242, 0.94));
+  border: 1px solid rgba(95, 143, 149, 0.16);
+  min-height: 250px;
+}
+
+body.page-chapter-3 .detail-preview::after {
+  content: "点击查看大图";
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(244, 249, 248, 0.84);
+  color: var(--chapter3-accent-strong);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+body.page-chapter-3 .detail-preview-button {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+body.page-chapter-3 .detail-preview-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  object-position: var(--focus-x, 50%) var(--focus-y, 50%);
+  transform: scale(2.05);
+  transform-origin: var(--focus-x, 50%) var(--focus-y, 50%);
+  display: block;
+  transition: transform .32s ease, object-position .32s ease;
+}
+
+body.page-chapter-3 .detail-preview-button:hover .detail-preview-image,
+body.page-chapter-3 .detail-preview-button:focus-visible .detail-preview-image {
+  transform: scale(2.14);
+}
+
+body.page-chapter-3 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 18px;
 }
 
-.placeholder {
-  min-height: 160px;
-  border-radius: 18px;
-  border: 1px dashed rgba(147,133,191,0.32);
-  background: linear-gradient(135deg, rgba(147,133,191,0.08), rgba(255,255,255,0.58));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #786888;
-  font-size: 13px;
-  line-height: 1.7;
-  padding: 12px;
+body.page-chapter-3 .summary-card {
+  padding: 24px;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
 }
 
-code {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.88);
-  border: 1px solid rgba(148,176,200,0.18);
-  color: #786888;
-  font-size: 12px;
+body.page-chapter-3 .summary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, rgba(157, 198, 214, 0.18), transparent 72%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
 
-.note-card ul {
-  margin-top: 10px;
-  padding-left: 18px;
+body.page-chapter-3 .summary-card > * {
+  position: relative;
+  z-index: 1;
 }
 
-.pager {
+body.page-chapter-3 .summary-card h3 {
+  margin-bottom: 10px;
+  color: var(--text-dark);
+  font-size: 20px;
+}
+
+body.page-chapter-3 .summary-card p {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+body.page-chapter-3 .pager {
   margin-top: 34px;
   display: flex;
   justify-content: space-between;
   gap: 14px;
 }
 
-.pager a {
+body.page-chapter-3 .pager a {
   flex: 1;
   padding: 16px 20px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.84);
+  background: rgba(255, 255, 255, 0.84);
   text-align: center;
   color: var(--text-main);
   text-decoration: none;
-  transition: all .25s ease;
+  transition: transform .25s ease, background .25s ease;
 }
 
-.pager a:hover {
+body.page-chapter-3 .pager a:hover {
   transform: translateY(-2px);
-  background: rgba(255,255,255,0.96);
+  background: rgba(255, 255, 255, 0.96);
 }
 
-footer {
-  text-align: center;
+body.page-chapter-3 footer {
   padding: 24px 24px 40px;
+}
+
+body.page-chapter-3 .lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1200;
+}
+
+body.page-chapter-3 .lightbox.is-open {
+  display: flex;
+}
+
+body.page-chapter-3 .lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(24, 34, 40, 0.58);
+  backdrop-filter: blur(8px);
+}
+
+body.page-chapter-3 .lightbox-stage {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(243, 247, 246, 0.98);
+}
+
+body.page-chapter-3 .lightbox-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(95, 143, 149, 0.12);
+}
+
+body.page-chapter-3 .lightbox-caption {
   color: var(--text-soft);
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+body.page-chapter-3 .lightbox-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(95, 143, 149, 0.12);
+  color: var(--chapter3-accent-strong);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body.page-chapter-3 .lightbox-image-wrap {
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(238, 244, 243, 0.88), rgba(236, 242, 245, 0.94));
+}
+
+body.page-chapter-3 .lightbox-image-wrap img {
+  width: 100%;
+  max-height: calc(100vh - 132px);
+  object-fit: contain;
+  display: block;
 }
 
 @media (max-width: 960px) {
-  .hero,
-  .meta-grid,
-  .detail-grid,
-  .placeholder-grid {
+  body.page-chapter-3 .hero,
+  body.page-chapter-3 .board-grid,
+  body.page-chapter-3 .summary-grid {
     grid-template-columns: 1fr;
+  }
+
+  body.page-chapter-3 .board-frame,
+  body.page-chapter-3 .board-media,
+  body.page-chapter-3 .board-media img {
+    min-height: 500px;
   }
 }
 
 @media (max-width: 700px) {
-  .nav {
-    justify-content: flex-start;
-    overflow-x: auto;
-    gap: 6px;
-  }
-
-  .nav a {
-    padding: 8px 14px;
-    font-size: 13px;
-    white-space: nowrap;
-  }
-
-  .wrap {
+  body.page-chapter-3 .wrap {
     width: min(100%, calc(100% - 28px));
     padding: 84px 0 40px;
   }
 
-  .cover {
-    min-height: 320px;
+  body.page-chapter-3 .hero-card,
+  body.page-chapter-3 .hero-visual,
+  body.page-chapter-3 .board-shell,
+  body.page-chapter-3 .detail-panel,
+  body.page-chapter-3 .summary-card {
+    border-radius: 24px;
   }
 
-  .pager {
+  body.page-chapter-3 .hero-visual {
+    min-height: 260px;
+  }
+
+  body.page-chapter-3 .hero-visual-inner {
+    min-height: 220px;
+  }
+
+  body.page-chapter-3 .board-frame,
+  body.page-chapter-3 .board-media,
+  body.page-chapter-3 .board-media img {
+    min-height: 360px;
+  }
+
+  body.page-chapter-3 .detail-preview,
+  body.page-chapter-3 .detail-preview-button {
+    min-height: 220px;
+  }
+
+  body.page-chapter-3 .detail-preview-image {
+    height: 220px;
+  }
+
+  body.page-chapter-3 .pager {
     flex-direction: column;
   }
 
-  .prev-arm-hint {
-    top: 124px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
+  body.page-chapter-3 .lightbox {
+    padding: 16px;
   }
-  .next-arm-hint {
-    bottom: 60px;
-    font-size: 11px;
-    padding: 7px 12px 7px 30px;
+
+  body.page-chapter-3 .lightbox-stage {
+    width: min(100vw - 12px, 1100px);
+    border-radius: 22px;
   }
 }
 </style>
 </head>
-<body>
+<body class="page-chapter-3">
+
 <nav class="nav">
   <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../../index.html">首页</a>
   <a href="../../about/index.html">项目介绍</a>
   <a href="../../research/index.html">问题研究</a>
   <a href="../../design/index.html">核心设计</a>
-  <a href="../index.html" class="active">空间布置</a>
+  <a href="../index.html" class="active">章节导览</a>
   <a href="../../process/index.html">制作过程</a>
   <a href="../../thanks/index.html">感谢</a>
 </nav>
 <div class="prev-arm-hint" aria-hidden="true"></div>
 <div class="next-arm-hint" aria-hidden="true"></div>
-<div class="wrap">
-  <section class="hero">
-    <div class="cover">
-      <img src="../../images/剪贴板图片.jpg" alt="第三章 皮埃尔的梦想">
-    </div>
 
-    <div class="hero-card">
-      <div class="eyebrow">CHAPTER 03</div>
-      <h1>皮埃尔的梦想</h1>
-      <p class="lead">
-        第三章是整部作品最复杂、最有层次的一段。它不再只是安全地开始沟通，而是通过梦境世界的转场、
-        场景切换和信息分工，把协作推进到真正需要判断、共创和共同决策的深度层级。
-      </p>
-      <div class="tag-row">
-        <span>梦境空间</span>
-        <span>森林 / 城堡 / 太空</span>
-        <span>深度协同</span>
-        <span>关系深化</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title">本章作用</h2>
-    <div class="meta-grid">
-      <div class="meta-card">
-        <h3>核心情绪</h3>
-        <p>神秘、漂浮、不稳定，同时带有理想投射。这一章让用户进入更内在、更复杂的情绪层面。</p>
-      </div>
-      <div class="meta-card">
-        <h3>核心交互</h3>
-        <p>分工解谜、协同判断、情境切换与共创决策。这里开始要求用户持续而真实地互相回应。</p>
-      </div>
-      <div class="meta-card">
-        <h3>叙事功能</h3>
-        <p>作为关系深化章节，它把“能配合”推进为“能理解”，也是全作协作密度最强的一段。</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title">素材展示区</h2>
-    <div class="detail-grid">
-      <div class="gallery-card">
-        <h3>图片素材</h3>
-        <p>这里适合放森林、城堡、太空三个梦境空间的截图，解谜分镜图和视觉层级草图。</p>
-        <div class="placeholder-grid">
-          <div class="placeholder">建议放置<br>森林场景截图</div>
-          <div class="placeholder">建议放置<br>城堡空间画面</div>
-          <div class="placeholder">建议放置<br>太空梦境构图</div>
+<div id="page-content">
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">CHAPTER 03</div>
+        <h1>皮埃尔的梦想</h1>
+        <p class="lead">
+          第三章把体验推进到真正复杂的梦境层次之中。森林、城堡与更抽象的空间段落不断切换，
+          信息被拆分给不同角色与场景，用户必须在不稳定的环境里持续判断、沟通，并通过更深度的协同完成共创。
+        </p>
+        <div class="tag-row">
+          <span>梦境空间</span>
+          <span>森林城堡</span>
+          <span>深度协同</span>
+          <span>关系深化</span>
         </div>
-        <code>chapter-3/images/</code>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-visual-inner">
+          <img src="./images/overview.png" alt="第三章总览主图">
+        </div>
+        <div class="hero-visual-note">多层空间切换与信息分工并行，协作从配合进入理解。</div>
+      </div>
+    </section>
+
+    <section class="board" aria-labelledby="chapter-3-board-title">
+      <div class="section-head">
+        <div>
+          <h2 id="chapter-3-board-title">梦境协同总览</h2>
+        </div>
+        <p>统一主图承载第三章的时间线、角色行为与交互动线，通过热点切换查看每一块内容在复杂协作中的职责。</p>
       </div>
 
-      <div class="video-card">
-        <h3>视频素材</h3>
-        <p>这里适合放梦境段落切换演示、协同解谜录像、分支选择互动片段和完整章节短片。</p>
-        <div class="placeholder">建议放置第三章演示视频<br>或梦境解谜录屏</div>
-        <code>chapter-3/videos/</code>
+      <div class="board-grid" data-chapter-board>
+        <div class="board-shell">
+          <div class="board-frame">
+            <div class="board-media">
+              <img
+                src="./images/overview.png"
+                alt="第三章 梦境协同总览图"
+                data-board-image
+                data-lightbox-caption="第三章总览主图：森林、城堡与抽象梦境共同构成高密度协同结构。"
+              >
+              <button class="board-hotspot is-active" type="button" style="left:8%;top:12%;width:55%;height:15%;" data-key="timeline" data-label="设计时间线" aria-label="查看设计时间线"></button>
+              <button class="board-hotspot" type="button" style="left:5%;top:27%;width:57%;height:11%;" data-key="pain" data-label="对应痛点" aria-label="查看对应痛点"></button>
+              <button class="board-hotspot" type="button" style="left:5%;top:39%;width:57%;height:11%;" data-key="goal" data-label="设计目标" aria-label="查看设计目标"></button>
+              <button class="board-hotspot" type="button" style="left:4%;top:53%;width:60%;height:40%;" data-key="role" data-label="角色行为时间线" aria-label="查看角色行为时间线"></button>
+              <button class="board-hotspot" type="button" style="left:67%;top:12%;width:30%;height:37%;" data-key="interaction" data-label="交互动线图" aria-label="查看交互动线图"></button>
+              <button class="board-hotspot" type="button" style="left:67%;top:56%;width:30%;height:37%;" data-key="render" data-label="Unity场景渲染图" aria-label="查看Unity场景渲染图"></button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="detail-panel" aria-live="polite">
+          <div class="detail-kicker">FOCUS AREA</div>
+          <h3 data-detail-title>设计时间线</h3>
+          <p class="detail-copy" data-detail-copy>
+            第三章的设计时间线不是单一路径，而是随着梦境层次不断折返推进。森林到城堡的过渡承担情绪抬升，
+            抽象段落则把原本线性的合作任务打散成需要共同判断的多线程协作。
+          </p>
+          <div class="detail-tags" data-detail-tags></div>
+          <div class="detail-meta">
+            <div class="detail-meta-row"><strong>协同重点</strong><span data-detail-meta-a>在场景切换中保持共识，及时交换线索与位置判断。</span></div>
+            <div class="detail-meta-row"><strong>体验指向</strong><span data-detail-meta-b>让用户感受到梦境并非背景变化，而是不断提高判断成本的协作结构。</span></div>
+          </div>
+          <div class="detail-preview" style="--focus-x:35%;--focus-y:20%;">
+            <button
+              class="detail-preview-button"
+              type="button"
+              aria-label="查看当前热点局部大图"
+              data-detail-image-button
+            >
+              <img class="detail-preview-image" src="./images/overview.png" alt="设计时间线局部预览" data-detail-image>
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="第三章摘要">
+      <article class="summary-card">
+        <h3>事件场景</h3>
+        <p>从森林、城堡到更抽象的梦境段落，第三章通过空间切换不断提高协作密度，让用户在连续变换的环境里重新分配注意力与行动。</p>
+      </article>
+      <article class="summary-card">
+        <h3>对应痛点</h3>
+        <p>信息被拆分到不同角色与场景中，用户必须持续判断、沟通与共同决策，单靠个人理解已经无法稳定推进体验。</p>
+      </article>
+      <article class="summary-card">
+        <h3>设计目标</h3>
+        <p>把“能配合”推进为“能理解”，让协作从轻量互动进入真实的关系深化阶段，促成更深层的共创判断与互相体会。</p>
+      </article>
+    </section>
+
+    <div class="pager">
+      <a href="../index.html">返回章节总览</a>
+      <a href="../chapter-4/index.html">下一章：太空之梦 →</a>
+    </div>
+  </div>
+
+  <footer>Within · 协作同行 ｜ 愿每一段旅程都有人同行</footer>
+
+  <div class="lightbox" id="chapter-3-lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <div class="lightbox-stage" role="dialog" aria-modal="true" aria-label="第三章主图放大预览">
+      <div class="lightbox-toolbar">
+        <div class="lightbox-caption" data-lightbox-caption>第三章总览主图</div>
+        <button class="lightbox-close" type="button" aria-label="关闭大图" data-lightbox-close>×</button>
+      </div>
+      <div class="lightbox-image-wrap">
+        <img src="./images/overview.png" alt="第三章放大预览" data-lightbox-image>
       </div>
     </div>
-  </section>
-
-  <section class="section">
-    <div class="note-card">
-      <h3>后续可补内容</h3>
-      <p>第三章最适合承载最多素材，因为它既有视觉层次也有交互层次。后续你可以在这一页继续补这些内容：</p>
-      <ul>
-        <li>三个梦境子场景的视觉差异说明</li>
-        <li>协同解谜流程图、角色分工图和共创机制草图</li>
-        <li>皮埃尔心理状态如何映射到空间设计的说明文本</li>
-      </ul>
-    </div>
-  </section>
-
-  <div class="pager">
-    <a href="../chapter-2/index.html">← 上一章：萨沙的家</a>
-    <a href="../chapter-4/index.html">下一章：太空之梦 →</a>
   </div>
 </div>
 
-<footer>
-  Within · 协作同行 ｜ 第三章页面
-</footer>
-<script>
-(function () {
-  var prevTarget = '../chapter-2/index.html';
-  var nextTarget = '../chapter-4/index.html';
-  var wrap = document.querySelector('.wrap');
-  var navigating = false;
-  var prevArmed = false;
-  var nextArmed = false;
-  var threshold = 4;
-  var delay = 420;
-  var pullOpenDistance = 240;
-  var armedLockUntil = 0;
-  var armedGraceMs = 960;
-  var armedConfirmReadyAt = 0;
-  var armedConfirmCooldownMs = 360;
-  var nextLockUntil = 0;
-  var nextGraceMs = 960;
-  var nextConfirmReadyAt = 0;
-  var nextConfirmCooldownMs = 360;
-  function applyPull(distance) {
-    if (wrap) {
-      wrap.style.transform = distance ? 'translateY(' + distance + 'px)' : '';
-    }
-  }
-
-  function clearPrevArm() {
-    prevArmed = false;
-    armedLockUntil = 0;
-    armedConfirmReadyAt = 0;
-    document.body.classList.remove('is-prev-armed');
-  }
-
-  function clearNextArm() {
-    nextArmed = false;
-    nextLockUntil = 0;
-    nextConfirmReadyAt = 0;
-    document.body.classList.remove('is-next-armed');
-  }
-
-  function openPrevPull() {
-    if (!prevTarget || navigating) return;
-    var now = Date.now();
-    clearNextArm();
-    prevArmed = true;
-    armedLockUntil = now + armedGraceMs;
-    armedConfirmReadyAt = now + armedConfirmCooldownMs;
-    document.body.classList.add('is-prev-armed');
-    applyPull(pullOpenDistance);
-  }
-
-  function openNextPull() {
-    if (!nextTarget || navigating) return;
-    var now = Date.now();
-    clearPrevArm();
-    nextArmed = true;
-    nextLockUntil = now + nextGraceMs;
-    nextConfirmReadyAt = now + nextConfirmCooldownMs;
-    document.body.classList.add('is-next-armed');
-    applyPull(-pullOpenDistance);
-  }
-
-  function closePull() {
-    clearPrevArm();
-    clearNextArm();
-    applyPull(0);
-  }
-
-  function getMaxScroll() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
-
-  function go(target, direction, mode) {
-    if (!target || navigating) return;
-    navigating = true;
-    if (mode !== 'click') {
-      rememberCurrentNavIndicator();
-    }
-    closePull();
-    if (mode === 'click') {
-      document.body.classList.add('is-leaving-click');
-      window.setTimeout(function () {
-        window.location.href = target;
-      }, 260);
-    } else {
-      document.body.classList.add(direction === 'prev' ? 'is-leaving-prev' : 'is-leaving-next');
-      window.setTimeout(function () {
-        window.location.href = target;
-      }, delay);
-    }
-  }
-
-  var pageOrder = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
-  var currentPage = 'chapters';
-
-  var nav = document.querySelector('.nav');
-  var navIndicator = nav ? nav.querySelector('.nav-indicator') : null;
-  var navActiveLink = nav ? nav.querySelector('.nav a.active') : null;
-  var navIndicatorStorageKey = 'within-nav-indicator';
-
-  function getNavIndicatorMetrics(link) {
-    if (!nav || !link) return null;
-    return {
-      x: link.offsetLeft,
-      y: link.offsetTop,
-      width: link.offsetWidth,
-      height: link.offsetHeight
-    };
-  }
-
-  function applyNavIndicator(metrics, immediate) {
-    if (!nav || !navIndicator || !metrics) return;
-    if (immediate) {
-      var previousTransition = navIndicator.style.transition;
-      navIndicator.style.transition = 'none';
-      navIndicator.style.width = metrics.width + 'px';
-      navIndicator.style.height = metrics.height + 'px';
-      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
-      navIndicator.offsetWidth;
-      navIndicator.style.transition = previousTransition;
-    } else {
-      navIndicator.style.width = metrics.width + 'px';
-      navIndicator.style.height = metrics.height + 'px';
-      navIndicator.style.transform = 'translate(' + metrics.x + 'px, ' + metrics.y + 'px)';
-    }
-    nav.classList.add('is-indicator-ready');
-  }
-
-  function saveNavIndicatorMetrics(metrics, pageKey) {
-    if (!metrics) return;
-    try {
-      sessionStorage.setItem(navIndicatorStorageKey, JSON.stringify({
-        page: pageKey || null,
-        x: metrics.x,
-        y: metrics.y,
-        width: metrics.width,
-        height: metrics.height
-      }));
-    } catch (error) {
-      // Ignore storage errors.
-    }
-  }
-
-  function syncActiveNavIndicator(immediate) {
-    if (!nav) return;
-    var activeLink = nav.querySelector('.nav a.active');
-    if (!activeLink) return;
-    navActiveLink = activeLink;
-    var metrics = getNavIndicatorMetrics(activeLink);
-    applyNavIndicator(metrics, immediate);
-    saveNavIndicatorMetrics(metrics, currentPage);
-  }
-
-  function animateNavIndicatorFromPrevious() {
-    if (!navIndicator || !navActiveLink) return;
-    var currentMetrics = getNavIndicatorMetrics(navActiveLink);
-    if (!currentMetrics) return;
-    var previousMetrics = null;
-    try {
-      previousMetrics = JSON.parse(sessionStorage.getItem(navIndicatorStorageKey) || 'null');
-    } catch (error) {
-      previousMetrics = null;
-    }
-    if (
-      previousMetrics &&
-      typeof previousMetrics.x === 'number' &&
-      typeof previousMetrics.y === 'number' &&
-      typeof previousMetrics.width === 'number' &&
-      typeof previousMetrics.height === 'number'
-    ) {
-      applyNavIndicator(previousMetrics, true);
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          applyNavIndicator(currentMetrics, false);
-          saveNavIndicatorMetrics(currentMetrics, currentPage);
-        });
-      });
-    } else {
-      applyNavIndicator(currentMetrics, true);
-      saveNavIndicatorMetrics(currentMetrics, currentPage);
-    }
-  }
-
-  function rememberCurrentNavIndicator() {
-    if (!nav) return;
-    var activeLink = nav.querySelector('.nav a.active');
-    if (!activeLink) return;
-    saveNavIndicatorMetrics(getNavIndicatorMetrics(activeLink), currentPage);
-  }
-
-  function moveNavIndicatorToLink(link) {
-    if (!link) return;
-    var metrics = getNavIndicatorMetrics(link);
-    if (!metrics) return;
-    applyNavIndicator(metrics, false);
-    saveNavIndicatorMetrics(metrics, normalizeNavTarget(link.getAttribute('href')) || currentPage);
-  }
-
-  function normalizeNavTarget(href) {
-    if (!href) return null;
-    if (href.indexOf('about/index.html') !== -1) return 'about';
-    if (href.indexOf('research/index.html') !== -1) return 'research';
-    if (href.indexOf('design/index.html') !== -1) return 'design';
-    if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
-    if (href.indexOf('process/index.html') !== -1) return 'process';
-    if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
-    if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
-    return null;
-  }
-
-  function getNavDirection(href) {
-    var targetKey = normalizeNavTarget(href);
-    var currentIndex = pageOrder.indexOf(currentPage);
-    var targetIndex = pageOrder.indexOf(targetKey);
-    if (currentIndex === -1 || targetIndex === -1) return 'next';
-    return targetIndex < currentIndex ? 'prev' : 'next';
-  }
-
-  function bindNavLinks() {
-    var navLinks = document.querySelectorAll('.nav a[href]');
-    navLinks.forEach(function (link) {
-      link.addEventListener('click', function (event) {
-        if (navigating) {
-          event.preventDefault();
-          return;
-        }
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          return;
-        }
-        var href = link.getAttribute('href');
-        if (!href || link.classList.contains('active')) return;
-        event.preventDefault();
-        moveNavIndicatorToLink(link);
-        go(href, getNavDirection(href), 'click');
-      });
-    });
-  }
-
-  bindNavLinks();
-  animateNavIndicatorFromPrevious();
-  window.addEventListener('resize', function () {
-    syncActiveNavIndicator(true);
-  }, { passive: true });
-  if (nav) {
-    nav.addEventListener('scroll', function () {
-      syncActiveNavIndicator(true);
-    }, { passive: true });
-  }
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () {
-      syncActiveNavIndicator(true);
-    });
-  }
-  window.addEventListener('wheel', function (event) {
-    if (navigating) {
-      event.preventDefault();
-      return;
-    }
-
-    var atTop = window.scrollY <= threshold;
-    var maxScroll = getMaxScroll();
-    var atBottom = window.scrollY >= maxScroll - threshold;
-
-    if (prevArmed) {
-      event.preventDefault();
-      var now = Date.now();
-      if (event.deltaY < -8 && prevTarget) {
-        if (now < armedConfirmReadyAt) {
-          return;
-        }
-        go(prevTarget, 'prev');
-        return;
-      }
-      if (event.deltaY > 10 && now >= armedLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      event.preventDefault();
-      var nowNext = Date.now();
-      if (event.deltaY > 8 && nextTarget) {
-        if (nowNext < nextConfirmReadyAt) {
-          return;
-        }
-        go(nextTarget, 'next');
-        return;
-      }
-      if (event.deltaY < -10 && nowNext >= nextLockUntil) {
-        closePull();
-      }
-      return;
-    }
-
-    if (event.deltaY < -12 && atTop && prevTarget) {
-      event.preventDefault();
-      openPrevPull();
-      return;
-    }
-
-    if (event.deltaY > 12 && atBottom && nextTarget) {
-      event.preventDefault();
-      openNextPull();
-      return;
-    }
-
-    if (!atTop && !atBottom) {
-      closePull();
-    }
-  }, { passive: false });
-
-  window.addEventListener('scroll', function () {
-    var maxScroll = getMaxScroll();
-
-    if (prevArmed) {
-      if (window.scrollY > threshold + 2) {
-        window.scrollTo(0, 0);
-      }
-      return;
-    }
-
-    if (nextArmed) {
-      if (window.scrollY < maxScroll - threshold - 2) {
-        window.scrollTo(0, maxScroll);
-      }
-      return;
-    }
-
-    if (window.scrollY > threshold + 2 && window.scrollY < maxScroll - threshold - 2) {
-      closePull();
-    }
-  }, { passive: true });})();
+<script id="page-config">
+window.__pageConfig = {
+  current: 'chapters',
+  prev: '../chapter-2/index.html',
+  next: '../chapter-4/index.html'
+};
 </script>
+<script id="page-script">
+if (typeof window.__chapterBoardCleanup === 'function') {
+  try {
+    window.__chapterBoardCleanup();
+  } catch (e) {}
+}
+
+var chapter3Root = document.getElementById('page-content');
+
+if (chapter3Root) {
+  var chapter3Items = {
+    timeline: {
+      title: '设计时间线',
+      copy: '第三章的设计时间线不再追求直线推进，而是让梦境层次随着森林、城堡与抽象段落不断转换。场景变化同步抬高沟通成本，使用户必须在每一次转场中重新确认彼此的位置、线索与下一步判断。',
+      tags: ['梦境层次', '场景切换', '协同升级'],
+      metaA: '通过连续转场维持共同判断，避免各自只跟随单一叙事线。',
+      metaB: '让用户意识到第三章的难点来自结构复杂度，而不只是任务数量增加。',
+      focusX: '35%',
+      focusY: '20%',
+      caption: '设计时间线：梦境层次的切换决定了协作节奏如何逐步加深。'
+    },
+    pain: {
+      title: '对应痛点',
+      copy: '这一部分强调第三章最核心的协作压力：信息被拆分在不同角色、不同景别和不同空间逻辑中。用户不能只等待提示，而要不断核对自己掌握的信息是否足以支持下一次共同决策。',
+      tags: ['信息拆分', '持续沟通', '共同决策'],
+      metaA: '用户需要在复杂信息中判断哪些内容必须立即共享，哪些需要暂时保留观察。',
+      metaB: '梦境的不稳定感转化为协作中的不确定性，迫使双方真正开始互相依赖。',
+      focusX: '27%',
+      focusY: '34%',
+      caption: '对应痛点：第三章把分散信息与高判断成本推到前台。'
+    },
+    goal: {
+      title: '设计目标',
+      copy: '设计目标不只是让两个人继续合作，而是让他们从“会配合”进入“会理解”。第三章借由多层空间和复杂任务，把共创判断、互相补位和关系深化放到同一套体验结构里。',
+      tags: ['关系深化', '互相理解', '共创判断'],
+      metaA: '让协作不再停留于同步动作，而是转化为对彼此思路的理解与预判。',
+      metaB: '通过梦境结构把抽象的关系推进具体化，让情感变化有清晰的行为证据。',
+      focusX: '27%',
+      focusY: '45%',
+      caption: '设计目标：第三章要把协作从功能配合推进到关系理解。'
+    },
+    role: {
+      title: '角色行为时间线',
+      copy: '角色行为时间线展示了第三章如何把行动拆分成不同职责。两位用户会在不同阶段轮流承担观察、反馈、解释与确认的工作，协同关系因此变得更像共同编织一场梦，而不是完成单一谜题。',
+      tags: ['角色分工', '行为接力', '深度协同'],
+      metaA: '每位用户都拥有局部优势，但任何一方都无法独立完成整体判断。',
+      metaB: '行为层面的轮换让双方在协作中持续看见彼此的作用，从而推动关系深化。',
+      focusX: '31%',
+      focusY: '73%',
+      caption: '角色行为时间线：多角色轮换补位构成第三章的深层协同。'
+    },
+    interaction: {
+      title: '交互动线图',
+      copy: '交互动线图体现了第三章最复杂的一点：空间与信息都在流动。用户要在多条路径之间反复确认输入和反馈，让沟通成为穿越梦境结构的主通道，而不是附加操作。',
+      tags: ['交互路径', '判断流动', '信息往返'],
+      metaA: '交互不只是点击或移动，而是不断交换理解、修正路径和确认目标。',
+      metaB: '动线越复杂，越需要稳定的共同语境，这正是第三章关系深化的关键。 ',
+      focusX: '84%',
+      focusY: '27%',
+      caption: '交互动线图：梦境里的路径变化不断考验双方是否仍在同一理解中。'
+    },
+    render: {
+      title: 'Unity场景渲染图',
+      copy: 'Unity 场景渲染图对应第三章的氛围承载层。低多边形的森林与湖蓝色空间营造出轻微失真的梦境感，使视觉本身就参与到协作压力的构成中，让用户在观看与判断之间保持敏感。',
+      tags: ['场景渲染', 'Lowpoly氛围', '梦境空间'],
+      metaA: '画面既要保留完整空间线索，又要制造轻微陌生感，支撑复杂协同的情绪背景。',
+      metaB: '视觉氛围不只是装饰，而是帮助用户感知第三章多层空间逻辑的重要信息面。',
+      focusX: '84%',
+      focusY: '78%',
+      caption: 'Unity场景渲染图：梦境氛围与协同压力在同一张图里被同时建立。'
+    }
+  };
+
+  var hotspots = Array.prototype.slice.call(chapter3Root.querySelectorAll('.board-hotspot'));
+  var titleEl = chapter3Root.querySelector('[data-detail-title]');
+  var copyEl = chapter3Root.querySelector('[data-detail-copy]');
+  var tagsEl = chapter3Root.querySelector('[data-detail-tags]');
+  var metaAEl = chapter3Root.querySelector('[data-detail-meta-a]');
+  var metaBEl = chapter3Root.querySelector('[data-detail-meta-b]');
+  var detailPreview = chapter3Root.querySelector('.detail-preview');
+  var detailImage = chapter3Root.querySelector('[data-detail-image]');
+  var detailImageButton = chapter3Root.querySelector('[data-detail-image-button]');
+  var boardImage = chapter3Root.querySelector('[data-board-image]');
+
+  var lightbox = chapter3Root.querySelector('#chapter-3-lightbox');
+  var lightboxImage = lightbox ? lightbox.querySelector('[data-lightbox-image]') : null;
+  var lightboxCaption = lightbox ? lightbox.querySelector('[data-lightbox-caption]') : null;
+  var lightboxCloseEls = lightbox ? lightbox.querySelectorAll('[data-lightbox-close]') : [];
+  var activeKey = 'timeline';
+
+  function renderTags(tags) {
+    if (!tagsEl) return;
+    tagsEl.innerHTML = '';
+    (tags || []).forEach(function (tag) {
+      var chip = document.createElement('span');
+      chip.textContent = tag;
+      tagsEl.appendChild(chip);
+    });
+  }
+
+  function applyItem(key) {
+    var safeKey = chapter3Items[key] ? key : 'timeline';
+    var item = chapter3Items[safeKey];
+    activeKey = safeKey;
+
+    hotspots.forEach(function (hotspot) {
+      hotspot.classList.toggle('is-active', hotspot.getAttribute('data-key') === safeKey);
+    });
+
+    if (titleEl) titleEl.textContent = item.title;
+    if (copyEl) copyEl.textContent = item.copy;
+    if (metaAEl) metaAEl.textContent = item.metaA;
+    if (metaBEl) metaBEl.textContent = item.metaB;
+    renderTags(item.tags);
+
+    if (detailPreview) {
+      detailPreview.style.setProperty('--focus-x', item.focusX);
+      detailPreview.style.setProperty('--focus-y', item.focusY);
+    }
+
+    if (detailImage) {
+      detailImage.alt = item.title + '局部预览';
+    }
+
+    if (detailImageButton) {
+      detailImageButton.setAttribute('data-lightbox-caption', item.caption);
+      detailImageButton.setAttribute('data-lightbox-title', item.title);
+    }
+  }
+
+  hotspots.forEach(function (hotspot) {
+    function activateHotspot() {
+      applyItem(hotspot.getAttribute('data-key'));
+    }
+
+    hotspot.addEventListener('pointerenter', activateHotspot);
+    hotspot.addEventListener('focus', activateHotspot);
+    hotspot.addEventListener('click', activateHotspot);
+    hotspot.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        activateHotspot();
+      }
+    });
+  });
+
+  function openLightbox(caption) {
+    if (!lightbox || !lightboxImage) return;
+    lightboxImage.src = './images/overview.png';
+    lightboxImage.alt = caption || '第三章放大预览';
+    if (lightboxCaption) lightboxCaption.textContent = caption || '第三章总览主图';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function handleDocumentKeydown(event) {
+    if (event.key === 'Escape' && lightbox && lightbox.classList.contains('is-open')) {
+      closeLightbox();
+    }
+  }
+
+  if (boardImage) {
+    boardImage.addEventListener('click', function () {
+      var caption = boardImage.getAttribute('data-lightbox-caption') || '第三章总览主图';
+      openLightbox(caption);
+    });
+  }
+
+  if (detailImageButton) {
+    detailImageButton.addEventListener('click', function () {
+      var item = chapter3Items[activeKey] || chapter3Items.timeline;
+      openLightbox(item.caption);
+    });
+  }
+
+  Array.prototype.forEach.call(lightboxCloseEls, function (el) {
+    el.addEventListener('click', closeLightbox);
+  });
+
+  document.addEventListener('keydown', handleDocumentKeydown);
+
+  applyItem(activeKey);
+
+  window.__chapterBoardCleanup = function () {
+    closeLightbox();
+    document.removeEventListener('keydown', handleDocumentKeydown);
+    window.__chapterBoardCleanup = null;
+  };
+}
+</script>
+<script src="../../shell.js"></script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
