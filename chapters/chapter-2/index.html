@@ -56,9 +56,7 @@ body.page-chapter-2 .hero {
 
 body.page-chapter-2 .hero-cover,
 body.page-chapter-2 .hero-card,
-body.page-chapter-2 .board,
-body.page-chapter-2 .summary-card,
-body.page-chapter-2 .pager a {
+body.page-chapter-2 .summary-card {
   border: 1px solid var(--panel-stroke);
   box-shadow: var(--shadow);
 }
@@ -71,14 +69,6 @@ body.page-chapter-2 .hero-cover {
   background:
     linear-gradient(180deg, rgba(117, 83, 49, 0.14), rgba(117, 83, 49, 0.06)),
     linear-gradient(135deg, rgba(255,255,255,0.18), transparent 48%);
-}
-
-body.page-chapter-2 .hero-cover button {
-  all: unset;
-  cursor: zoom-in;
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 
 body.page-chapter-2 .hero-cover img {
@@ -117,8 +107,7 @@ body.page-chapter-2 .tag-row {
   gap: 10px;
 }
 
-body.page-chapter-2 .tag-row span,
-body.page-chapter-2 .detail-meta span {
+body.page-chapter-2 .tag-row span {
   display: inline-flex;
   align-items: center;
   padding: 7px 13px;
@@ -136,220 +125,6 @@ body.page-chapter-2 .hero-note {
   color: #7f6852;
   font-size: 14px;
   line-height: 1.85;
-}
-
-body.page-chapter-2 .board {
-  padding: 26px;
-  border-radius: 34px;
-  background: linear-gradient(180deg, rgba(255,252,247,0.88), rgba(255,245,230,0.68));
-  backdrop-filter: blur(12px);
-}
-
-body.page-chapter-2 .board-header {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-body.page-chapter-2 .board-title {
-  color: var(--text-dark);
-  font-size: 28px;
-  margin: 8px 0 0;
-}
-
-body.page-chapter-2 .board-intro {
-  max-width: 700px;
-  color: var(--text-soft);
-  font-size: 15px;
-  line-height: 1.9;
-}
-
-body.page-chapter-2 .board-hint {
-  color: #8a6b4b;
-  font-size: 13px;
-  white-space: nowrap;
-}
-
-body.page-chapter-2 .board-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
-  gap: 24px;
-  align-items: stretch;
-}
-
-body.page-chapter-2 .board-media {
-  position: relative;
-  border-radius: 28px;
-  overflow: hidden;
-  min-height: 580px;
-  background: linear-gradient(180deg, rgba(249,239,220,0.96), rgba(235,214,181,0.84));
-}
-
-body.page-chapter-2 .board-media button.board-open {
-  all: unset;
-  position: absolute;
-  inset: 0;
-  cursor: zoom-in;
-}
-
-body.page-chapter-2 .board-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-body.page-chapter-2 .board-hotspots {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-body.page-chapter-2 .board-hotspot {
-  position: absolute;
-  pointer-events: auto;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 249, 240, 0.52);
-  background: rgba(255, 244, 223, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(181, 134, 86, 0.08);
-  cursor: pointer;
-  transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
-}
-
-body.page-chapter-2 .board-hotspot::before {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  border-radius: 12px;
-  border: 1px dashed rgba(255, 245, 229, 0.28);
-  opacity: 0;
-  transition: opacity .22s ease;
-}
-
-body.page-chapter-2 .board-hotspot:hover,
-body.page-chapter-2 .board-hotspot:focus-visible,
-body.page-chapter-2 .board-hotspot.is-active {
-  transform: translateY(-1px);
-  background: rgba(255, 221, 170, 0.14);
-  border-color: rgba(255, 247, 234, 0.84);
-  box-shadow: 0 16px 36px rgba(121, 84, 49, 0.14), inset 0 0 0 1px rgba(181, 134, 86, 0.12);
-  outline: none;
-}
-
-body.page-chapter-2 .board-hotspot:hover::before,
-body.page-chapter-2 .board-hotspot:focus-visible::before,
-body.page-chapter-2 .board-hotspot.is-active::before {
-  opacity: 1;
-}
-
-body.page-chapter-2 .board-hotspot span {
-  position: absolute;
-  left: 14px;
-  top: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(255, 252, 246, 0.9);
-  color: #8a6441;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  box-shadow: 0 10px 18px rgba(121, 84, 49, 0.12);
-}
-
-body.page-chapter-2 .board-hotspot span::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(180, 136, 95, 0.76);
-}
-
-body.page-chapter-2 .board-side {
-  display: grid;
-  gap: 18px;
-}
-
-body.page-chapter-2 .detail-card {
-  padding: 24px;
-  border-radius: 28px;
-  border: 1px solid rgba(157, 122, 83, 0.14);
-  background: rgba(255, 250, 242, 0.84);
-}
-
-body.page-chapter-2 .detail-preview {
-  position: relative;
-  min-height: 260px;
-  overflow: hidden;
-  border-radius: 22px;
-  border: 1px solid rgba(157, 122, 83, 0.14);
-  background:
-    linear-gradient(180deg, rgba(255,249,240,0.1), rgba(255,238,206,0.22)),
-    url("./images/overview.webp");
-  background-repeat: no-repeat;
-  background-size: 260%;
-  background-position: 35% 20%;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.26);
-}
-
-body.page-chapter-2 .detail-preview button {
-  all: unset;
-  position: absolute;
-  inset: 0;
-  cursor: zoom-in;
-}
-
-body.page-chapter-2 .detail-preview::after {
-  content: "点击查看完整主图";
-  position: absolute;
-  right: 14px;
-  bottom: 14px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(255,252,247,0.9);
-  color: #8a6441;
-  font-size: 12px;
-  box-shadow: 0 10px 18px rgba(121, 84, 49, 0.12);
-  pointer-events: none;
-}
-
-body.page-chapter-2 .detail-index {
-  color: var(--accent-strong);
-  font-size: 12px;
-  letter-spacing: 0.16em;
-}
-
-body.page-chapter-2 .detail-title {
-  margin: 10px 0 0;
-  color: var(--text-dark);
-  font-size: 24px;
-}
-
-body.page-chapter-2 .detail-text {
-  margin-top: 14px;
-  color: var(--text-soft);
-  font-size: 15px;
-  line-height: 1.92;
-}
-
-body.page-chapter-2 .detail-meta {
-  margin-top: 16px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-body.page-chapter-2 .detail-caption {
-  margin-top: 16px;
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: rgba(180, 136, 95, 0.08);
-  color: #7b624d;
-  font-size: 14px;
-  line-height: 1.8;
 }
 
 body.page-chapter-2 .summary-grid {
@@ -377,93 +152,14 @@ body.page-chapter-2 .summary-card p {
   line-height: 1.9;
 }
 
-body.page-chapter-2 .pager {
-  margin-top: 6px;
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-body.page-chapter-2 .pager a {
-  flex: 1;
-  padding: 16px 20px;
-  border-radius: 999px;
-  background: rgba(255, 251, 245, 0.86);
-  text-align: center;
-  color: var(--text-main);
-  text-decoration: none;
-  transition: transform .24s ease, background .24s ease;
-}
-
-body.page-chapter-2 .pager a:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.96);
-}
-
 body.page-chapter-2 footer {
   padding: 4px 24px 40px;
 }
 
-body.page-chapter-2 .lightbox {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(37, 24, 12, 0.82);
-  z-index: 30;
-}
-
-body.page-chapter-2 .lightbox.is-open {
-  display: flex;
-}
-
-body.page-chapter-2 .lightbox-dialog {
-  position: relative;
-  width: min(1200px, 100%);
-  max-height: min(92vh, 980px);
-  padding: 18px;
-  border-radius: 28px;
-  background: rgba(255, 250, 242, 0.96);
-  border: 1px solid rgba(255,255,255,0.16);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.28);
-}
-
-body.page-chapter-2 .lightbox-close {
-  all: unset;
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  background: rgba(255,255,255,0.92);
-  color: var(--text-dark);
-  font-size: 26px;
-  box-shadow: 0 12px 20px rgba(86, 57, 29, 0.16);
-}
-
-body.page-chapter-2 .lightbox img {
-  width: 100%;
-  max-height: calc(92vh - 36px);
-  object-fit: contain;
-  display: block;
-  border-radius: 18px;
-}
-
 @media (max-width: 1080px) {
   body.page-chapter-2 .hero,
-  body.page-chapter-2 .board-grid,
   body.page-chapter-2 .summary-grid {
     grid-template-columns: 1fr;
-  }
-
-  body.page-chapter-2 .board-media {
-    min-height: 500px;
   }
 }
 
@@ -477,44 +173,9 @@ body.page-chapter-2 .lightbox img {
   }
 
   body.page-chapter-2 .hero-card,
-  body.page-chapter-2 .board,
-  body.page-chapter-2 .summary-card,
-  body.page-chapter-2 .detail-card {
+  body.page-chapter-2 .summary-card {
     padding: 20px;
     border-radius: 24px;
-  }
-
-  body.page-chapter-2 .board-header {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  body.page-chapter-2 .board-media {
-    min-height: 340px;
-  }
-
-  body.page-chapter-2 .board-hotspot span {
-    left: 10px;
-    top: 10px;
-    padding: 6px 10px;
-    font-size: 11px;
-  }
-
-  body.page-chapter-2 .detail-preview {
-    min-height: 220px;
-  }
-
-  body.page-chapter-2 .pager {
-    flex-direction: column;
-  }
-
-  body.page-chapter-2 .lightbox {
-    padding: 14px;
-  }
-
-  body.page-chapter-2 .lightbox-dialog {
-    padding: 12px;
-    border-radius: 22px;
   }
 }
 </style>
@@ -530,16 +191,12 @@ body.page-chapter-2 .lightbox img {
   <a href="../../process/index.html">制作过程</a>
   <a href="../../thanks/index.html">感谢</a>
 </nav>
-<div class="prev-arm-hint" aria-hidden="true"></div>
-<div class="next-arm-hint" aria-hidden="true"></div>
 <div id="page-content">
   <div class="wrap">
     <div class="chapter-shell">
       <section class="hero">
         <div class="hero-cover">
-          <button type="button" class="js-open-lightbox" aria-label="查看第二章总览大图">
-            <img src="./images/overview.webp" alt="第二章《萨沙的家》总览图">
-          </button>
+          <img src="./images/overview.webp" alt="第二章《萨沙的家》总览图">
         </div>
         <div class="hero-card">
           <div class="eyebrow">CHAPTER 02</div>
@@ -561,68 +218,7 @@ body.page-chapter-2 .lightbox img {
         </div>
       </section>
 
-      <section class="board" aria-labelledby="overview-title">
-        <div class="board-header">
-          <div>
-            <div class="eyebrow">OVERVIEW BOARD</div>
-            <h2 class="board-title" id="overview-title">章节设计总览</h2>
-          </div>
-          <p class="board-hint">点击热点切换右侧说明，点击图片可放大查看</p>
-        </div>
-        <p class="board-intro">
-          总览图把第二章的时间推进、痛点回应、设计策略与空间表现放在同一张画面里。
-          热点说明聚焦“温暖、安全、低门槛、破冰”四个关键词，帮助阅读者快速抓住本章如何让关系启动变得更自然。
-        </p>
-
-        <div class="board-grid">
-          <div class="board-media">
-            <button type="button" class="board-open js-open-lightbox" aria-label="查看第二章总览大图">
-              <img src="./images/overview.webp" alt="第二章总览图热点分区">
-            </button>
-            <div class="board-hotspots" role="tablist" aria-label="第二章热点列表">
-              <button type="button" class="board-hotspot is-active" data-key="timeline" style="left:8%; top:12%; width:55%; height:15%;" role="tab" aria-selected="true">
-                <span>设计时间线</span>
-              </button>
-              <button type="button" class="board-hotspot" data-key="pain" style="left:5%; top:27%; width:57%; height:11%;" role="tab" aria-selected="false">
-                <span>对应痛点</span>
-              </button>
-              <button type="button" class="board-hotspot" data-key="goal" style="left:5%; top:39%; width:57%; height:11%;" role="tab" aria-selected="false">
-                <span>设计目标</span>
-              </button>
-              <button type="button" class="board-hotspot" data-key="role" style="left:4%; top:53%; width:60%; height:40%;" role="tab" aria-selected="false">
-                <span>角色行为时间线</span>
-              </button>
-              <button type="button" class="board-hotspot" data-key="interaction" style="left:67%; top:12%; width:30%; height:37%;" role="tab" aria-selected="false">
-                <span>交互动线图</span>
-              </button>
-              <button type="button" class="board-hotspot" data-key="render" style="left:67%; top:56%; width:30%; height:37%;" role="tab" aria-selected="false">
-                <span>Unity场景渲染图</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="board-side">
-            <div class="detail-preview" id="detail-preview" aria-hidden="true">
-              <button type="button" class="js-open-lightbox" aria-label="查看第二章总览大图"></button>
-            </div>
-            <article class="detail-card">
-              <div class="detail-index" id="detail-index">01 / 06</div>
-              <h3 class="detail-title" id="detail-title">设计时间线</h3>
-              <p class="detail-text" id="detail-text">
-                这一段时间线强调“先安顿，再靠近”。从进入室内、电话沟通，到引入轻量协作任务，
-                节奏被处理得更慢更柔和，让用户不是被推着社交，而是在安全感中逐渐愿意参与。
-              </p>
-              <div class="detail-meta" id="detail-meta">
-                <span>温暖氛围</span>
-                <span>低压力启动</span>
-              </div>
-              <div class="detail-caption" id="detail-caption">
-                放大的局部会停留在总览图左上区域，对应章节从“到达室内”到“愿意尝试一起行动”的第一段推进。
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
+      <img src="./images/overview.webp" alt="第二章总览流程图" style="width:100%;display:block;border-radius:24px;">
 
       <section class="summary-grid" aria-label="章节摘要">
         <article class="summary-card">
@@ -639,22 +235,13 @@ body.page-chapter-2 .lightbox img {
         </article>
       </section>
 
-      <div class="pager">
-        <a href="../index.html">返回章节总览</a>
-        <a href="../chapter-3/index.html">下一章：皮埃尔的梦想 →</a>
-      </div>
     </div>
   </div>
 
   <footer>Within · 协作同行 ｜ 愿每一段旅程都有人同行</footer>
 </div>
 
-<div class="lightbox" id="chapter-lightbox" aria-hidden="true">
-  <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="第二章总览大图">
-    <button type="button" class="lightbox-close" id="lightbox-close" aria-label="关闭大图">×</button>
-    <img src="./images/overview.webp" alt="第二章《萨沙的家》总览大图">
-  </div>
-</div>
+
 
 <script id="page-config">
 window.__pageConfig = {
@@ -662,158 +249,6 @@ window.__pageConfig = {
   prev: '../chapter-1/index.html',
   next: '../chapter-3/index.html'
 };
-</script>
-<script id="page-script">
-(function () {
-  if (typeof window.__chapterBoardCleanup === 'function') {
-    try {
-      window.__chapterBoardCleanup();
-    } catch (e) {}
-  }
-
-  var root = document.body;
-  if (!root || !root.classList.contains('page-chapter-2')) {
-    return;
-  }
-
-  var hotspotData = {
-    timeline: {
-      index: '01 / 06',
-      title: '设计时间线',
-      text: '这一段时间线强调“先安顿，再靠近”。从进入室内、电话沟通，到引入轻量协作任务，节奏被处理得更慢更柔和，让用户不是被推着社交，而是在安全感中逐渐愿意参与。',
-      tags: ['温暖氛围', '低压力启动'],
-      caption: '放大的局部停留在总览图左上区域，对应章节从“到达室内”到“愿意尝试一起行动”的第一段推进。',
-      position: '35% 20%'
-    },
-    pain: {
-      index: '02 / 06',
-      title: '对应痛点',
-      text: '即便已经进入更安全的室内，用户也未必会立刻放松下来。害怕打扰、不会开口、担心被误解，都会让“已经靠近”仍然无法转化成真正的互动。',
-      tags: ['表达门槛', '关系迟滞'],
-      caption: '这里聚焦痛点区域的局部放大，强调“安全环境已出现，但社交启动仍旧困难”的断层感。',
-      position: '27% 34%'
-    },
-    goal: {
-      index: '03 / 06',
-      title: '设计目标',
-      text: '设计目标不是逼迫用户主动表态，而是借由温暖家庭空间与轻任务，把“先一起做点什么”变成交流起点，让协作先发生，再慢慢转化成表达。',
-      tags: ['自然破冰', '首次配合'],
-      caption: '目标区域的局部强调章节方法论：先建立被接纳的氛围，再让合作动作承担破冰功能。',
-      position: '27% 45%'
-    },
-    role: {
-      index: '04 / 06',
-      title: '角色行为时间线',
-      text: '角色行为被安排为缓慢接近、互相试探、逐步配合的节奏。第二章不追求高密度对白，而是通过行动与回应让“愿意留下来一起做事”成为关系启动的证据。',
-      tags: ['陪伴感', '缓慢靠近'],
-      caption: '角色行为时间线的放大局部更突出停留、回应与共同动作，让本章的温和节奏更容易被读出来。',
-      position: '31% 73%'
-    },
-    interaction: {
-      index: '05 / 06',
-      title: '交互动线图',
-      text: '交互动线围绕室内移动、电话触发和协作绘画展开，路径短、反馈轻、操作直接，避免复杂规则打断情绪，让破冰建立在顺手可做的共同任务上。',
-      tags: ['轻协作', '顺手互动'],
-      caption: '右上区域展示动线放大，重点是动作负担小、反馈明确，让第一次合作更容易发生。',
-      position: '84% 27%'
-    },
-    render: {
-      index: '06 / 06',
-      title: 'Unity场景渲染图',
-      text: '暖黄室内光线、木色家具与安定的空间包裹感，共同构成第二章的情绪底色。视觉上先让人觉得“这里可以待着”，协作与表达才会真正有机会开始。',
-      tags: ['家庭空间', '被接住的感觉'],
-      caption: '场景渲染局部聚焦暖光与室内材质，强调本章“安全、安静、可停留”的视觉氛围。',
-      position: '84% 78%'
-    }
-  };
-
-  var hotspots = Array.prototype.slice.call(document.querySelectorAll('.board-hotspot'));
-  var detailIndex = document.getElementById('detail-index');
-  var detailTitle = document.getElementById('detail-title');
-  var detailText = document.getElementById('detail-text');
-  var detailMeta = document.getElementById('detail-meta');
-  var detailCaption = document.getElementById('detail-caption');
-  var detailPreview = document.getElementById('detail-preview');
-  var lightbox = document.getElementById('chapter-lightbox');
-  var lightboxClose = document.getElementById('lightbox-close');
-  var openButtons = Array.prototype.slice.call(document.querySelectorAll('.js-open-lightbox'));
-
-  function renderTags(tags) {
-    detailMeta.innerHTML = '';
-    tags.forEach(function (tag) {
-      var tagEl = document.createElement('span');
-      tagEl.textContent = tag;
-      detailMeta.appendChild(tagEl);
-    });
-  }
-
-  function activateHotspot(key) {
-    var current = hotspotData[key];
-    if (!current) {
-      return;
-    }
-
-    hotspots.forEach(function (hotspot) {
-      var isActive = hotspot.getAttribute('data-key') === key;
-      hotspot.classList.toggle('is-active', isActive);
-      hotspot.setAttribute('aria-selected', isActive ? 'true' : 'false');
-    });
-
-    detailIndex.textContent = current.index;
-    detailTitle.textContent = current.title;
-    detailText.textContent = current.text;
-    detailCaption.textContent = current.caption;
-    detailPreview.style.backgroundPosition = current.position;
-    renderTags(current.tags);
-  }
-
-  function openLightbox() {
-    lightbox.classList.add('is-open');
-    lightbox.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove('is-open');
-    lightbox.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  function handleDocumentKeydown(event) {
-    if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
-      closeLightbox();
-    }
-  }
-
-  function handleLightboxBackdrop(event) {
-    if (event.target === lightbox) {
-      closeLightbox();
-    }
-  }
-
-  hotspots.forEach(function (hotspot) {
-    hotspot.addEventListener('click', function () {
-      activateHotspot(hotspot.getAttribute('data-key'));
-    });
-  });
-
-  openButtons.forEach(function (button) {
-    button.addEventListener('click', openLightbox);
-  });
-
-  lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', handleLightboxBackdrop);
-  document.addEventListener('keydown', handleDocumentKeydown);
-
-  activateHotspot('timeline');
-
-  window.__chapterBoardCleanup = function () {
-    closeLightbox();
-    lightbox.removeEventListener('click', handleLightboxBackdrop);
-    document.removeEventListener('keydown', handleDocumentKeydown);
-    window.__chapterBoardCleanup = null;
-  };
-})();
 </script>
 <script src="../../shell.js"></script>
 </body>

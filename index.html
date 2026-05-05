@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -130,59 +130,6 @@ body.is-leaving-next .logo {
   line-height: 1.9;
 }
 
-.scroll-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  z-index: 3;
-  width: 26px;
-  height: 26px;
-  text-decoration: none;
-  transition: transform .25s ease, opacity .25s ease;
-}
-
-.scroll-hint::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 12px;
-  height: 12px;
-  border-right: 1.5px solid rgba(91,154,160,0.88);
-  border-bottom: 1.5px solid rgba(91,154,160,0.88);
-  transform: translate(-50%, -60%) rotate(45deg);
-  animation: hintArrow 2.2s ease-in-out infinite;
-}
-
-.scroll-hint:hover {
-  transform: translateX(-50%) translateY(-2px);
-  opacity: 0.85;
-}
-
-body.is-leaving-next .scroll-hint {
-  opacity: 0;
-  transform: translateX(-50%) translateY(10px);
-}
-
-@keyframes hintArrow {
-  0% {
-    opacity: 0.28;
-    transform: translate(-50%, -72%) rotate(45deg);
-  }
-  35% {
-    opacity: 0.9;
-  }
-  70% {
-    opacity: 0.9;
-    transform: translate(-50%, -42%) rotate(45deg);
-  }
-  100% {
-    opacity: 0.28;
-    transform: translate(-50%, -28%) rotate(45deg);
-  }
-}
-
 @media (max-width: 860px) {
   .cover {
     padding: 84px 14px 20px;
@@ -210,9 +157,6 @@ body.is-leaving-next .scroll-hint {
     height: 86px;
   }
 
-  .scroll-hint {
-    bottom: 22px;
-  }
 }
 </style>
 </head>
@@ -228,8 +172,6 @@ body.is-leaving-next .scroll-hint {
   <a href="process/index.html">制作过程</a>
   <a href="thanks/index.html">感谢</a>
 </nav>
-<div class="next-arm-hint" aria-hidden="true"></div>
-
 <div id="page-content">
   <main class="cover">
     <div class="poly-bg" aria-hidden="true">
@@ -246,7 +188,6 @@ body.is-leaving-next .scroll-hint {
         <div class="logo-caption">具身认知视角下大学生社交数字化设计研究</div>
       </div>
     </div>
-    <a class="scroll-hint" href="about/index.html" aria-label="向下进入项目介绍"></a>
   </main>
 </div>
 

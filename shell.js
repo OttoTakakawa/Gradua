@@ -49,8 +49,11 @@
     if (href.indexOf('research/index.html') !== -1) return 'research';
     if (href.indexOf('design/index.html') !== -1) return 'design';
     if (href.indexOf('chapters/index.html') !== -1) return 'chapters';
+    if (/chapter-\d+\/index\.html/.test(href)) return 'chapters';
+    if (/^\.\.\/index\.html(?:[?#].*)?$/.test(href) && state.currentPage === 'chapters') return 'chapters';
     if (href.indexOf('process/index.html') !== -1) return 'process';
     if (href.indexOf('thanks/index.html') !== -1) return 'thanks';
+    if (/^\.\/index\.html/.test(href) && state.currentPage === 'index') return 'index';
     if (/index\.html(?:[?#].*)?$/.test(href)) return 'index';
     return null;
   }
@@ -70,6 +73,9 @@
 
   function applyNavIndicator(metrics, immediate) {
     if (!nav || !navIndicator || !metrics) return;
+    if (state.currentPage === 'chapters') {
+      immediate = true;
+    }
     if (immediate) {
       var prev = navIndicator.style.transition;
       navIndicator.style.transition = 'none';
@@ -116,6 +122,11 @@
       previousMetrics = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null');
     } catch (e) {
       previousMetrics = null;
+    }
+    if (previousMetrics && previousMetrics.page === state.currentPage) {
+      applyNavIndicator(currentMetrics, true);
+      saveNavIndicatorMetrics(currentMetrics, state.currentPage);
+      return;
     }
     if (previousMetrics && typeof previousMetrics.x === 'number' && typeof previousMetrics.y === 'number' &&
         typeof previousMetrics.width === 'number' && typeof previousMetrics.height === 'number') {
@@ -428,6 +439,8 @@
         pageContentEl.innerHTML = newContent.innerHTML;
       }
 
+      ensureHintDivs();
+
       updateNavActive(doc);
 
       var configScript = doc.getElementById('page-config');
@@ -606,6 +619,17 @@
       .catch(function () { window.location.href = url; });
   }
 
+  function ensureHintDivs() {
+    ['prev-arm-hint', 'next-arm-hint'].forEach(function (cls) {
+      if (!document.querySelector('.' + cls)) {
+        var div = document.createElement('div');
+        div.className = cls;
+        div.setAttribute('aria-hidden', 'true');
+        document.body.insertBefore(div, pageContentEl);
+      }
+    });
+  }
+
   function init() {
     var config = window.__pageConfig || {};
     state.currentPage = config.current || 'index';
@@ -614,6 +638,7 @@
 
     navActiveLink = nav ? nav.querySelector('.nav a.active') : null;
 
+    ensureHintDivs();
     bindNavLinks();
     animateNavIndicatorFromPrevious();
     setupRevealAnimations();

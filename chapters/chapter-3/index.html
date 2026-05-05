@@ -33,7 +33,6 @@ body.page-chapter-3 .wrap {
 }
 
 body.page-chapter-3 .hero,
-body.page-chapter-3 .board,
 body.page-chapter-3 .summary-grid {
   margin-top: 28px;
 }
@@ -47,19 +46,13 @@ body.page-chapter-3 .hero {
 
 body.page-chapter-3 .hero-card,
 body.page-chapter-3 .hero-visual,
-body.page-chapter-3 .board-shell,
-body.page-chapter-3 .detail-panel,
-body.page-chapter-3 .summary-card,
-body.page-chapter-3 .pager a,
-body.page-chapter-3 .lightbox-stage {
+body.page-chapter-3 .summary-card {
   border: 1px solid var(--chapter3-border);
   box-shadow: var(--shadow);
 }
 
 body.page-chapter-3 .hero-card,
 body.page-chapter-3 .hero-visual,
-body.page-chapter-3 .board-shell,
-body.page-chapter-3 .detail-panel,
 body.page-chapter-3 .summary-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.56));
   backdrop-filter: blur(10px);
@@ -97,8 +90,7 @@ body.page-chapter-3 .tag-row {
   gap: 8px;
 }
 
-body.page-chapter-3 .tag-row span,
-body.page-chapter-3 .detail-tags span {
+body.page-chapter-3 .tag-row span {
   padding: 6px 12px;
   border-radius: 999px;
   border: 1px solid rgba(95, 143, 149, 0.16);
@@ -115,9 +107,7 @@ body.page-chapter-3 .hero-visual {
   padding: 18px;
 }
 
-body.page-chapter-3 .hero-visual::before,
-body.page-chapter-3 .board-shell::before,
-body.page-chapter-3 .detail-panel::before {
+body.page-chapter-3 .hero-visual::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -157,220 +147,6 @@ body.page-chapter-3 .hero-visual-note {
   color: #54757b;
   font-size: 13px;
   line-height: 1.7;
-}
-
-body.page-chapter-3 .section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 18px;
-  margin-bottom: 14px;
-}
-
-body.page-chapter-3 .section-head h2 {
-  font-size: 28px;
-  color: var(--text-dark);
-}
-
-body.page-chapter-3 .section-head p {
-  max-width: 660px;
-  color: var(--text-soft);
-  font-size: 15px;
-  line-height: 1.9;
-}
-
-body.page-chapter-3 .board {
-  display: grid;
-  gap: 22px;
-}
-
-body.page-chapter-3 .board-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.22fr) minmax(300px, 0.78fr);
-  gap: 22px;
-  align-items: stretch;
-}
-
-body.page-chapter-3 .board-shell,
-body.page-chapter-3 .detail-panel {
-  position: relative;
-  border-radius: 30px;
-  overflow: hidden;
-}
-
-body.page-chapter-3 .board-shell {
-  padding: 18px;
-}
-
-body.page-chapter-3 .board-frame {
-  position: relative;
-  z-index: 1;
-  border-radius: 24px;
-  overflow: hidden;
-  background: linear-gradient(180deg, rgba(240, 246, 244, 0.96), rgba(235, 241, 243, 0.92));
-  min-height: 620px;
-}
-
-body.page-chapter-3 .board-media {
-  position: relative;
-  width: 100%;
-  min-height: 620px;
-}
-
-body.page-chapter-3 .board-media img {
-  width: 100%;
-  height: 100%;
-  min-height: 620px;
-  object-fit: contain;
-  display: block;
-  cursor: zoom-in;
-}
-
-body.page-chapter-3 .board-hotspot {
-  position: absolute;
-  border-radius: 18px;
-  border: 1px solid rgba(95, 143, 149, 0.26);
-  background: rgba(95, 143, 149, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
-  cursor: pointer;
-  transition: background .22s ease, border-color .22s ease, box-shadow .22s ease, transform .22s ease;
-}
-
-body.page-chapter-3 .board-hotspot::after {
-  content: attr(data-label);
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(248, 252, 252, 0.82);
-  color: var(--chapter3-accent-strong);
-  font-size: 12px;
-  line-height: 1.2;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity .2s ease, transform .2s ease;
-}
-
-body.page-chapter-3 .board-hotspot:hover,
-body.page-chapter-3 .board-hotspot:focus-visible,
-body.page-chapter-3 .board-hotspot.is-active {
-  background: rgba(95, 143, 149, 0.15);
-  border-color: rgba(95, 143, 149, 0.64);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.24),
-    0 10px 24px rgba(95, 143, 149, 0.12);
-}
-
-body.page-chapter-3 .board-hotspot:hover::after,
-body.page-chapter-3 .board-hotspot:focus-visible::after,
-body.page-chapter-3 .board-hotspot.is-active::after {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-body.page-chapter-3 .detail-panel {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-body.page-chapter-3 .detail-panel > * {
-  position: relative;
-  z-index: 1;
-}
-
-body.page-chapter-3 .detail-kicker {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  color: var(--chapter3-accent-strong);
-}
-
-body.page-chapter-3 .detail-panel h3 {
-  font-size: 26px;
-  color: var(--text-dark);
-  line-height: 1.25;
-}
-
-body.page-chapter-3 .detail-copy {
-  color: var(--text-soft);
-  font-size: 15px;
-  line-height: 1.9;
-}
-
-body.page-chapter-3 .detail-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-body.page-chapter-3 .detail-meta {
-  display: grid;
-  gap: 10px;
-}
-
-body.page-chapter-3 .detail-meta-row {
-  display: flex;
-  gap: 10px;
-  align-items: start;
-  color: var(--text-soft);
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-body.page-chapter-3 .detail-meta-row strong {
-  min-width: 78px;
-  color: var(--text-dark);
-  font-weight: 600;
-}
-
-body.page-chapter-3 .detail-preview {
-  position: relative;
-  border-radius: 22px;
-  overflow: hidden;
-  background: linear-gradient(180deg, rgba(232, 242, 240, 0.92), rgba(233, 239, 242, 0.94));
-  border: 1px solid rgba(95, 143, 149, 0.16);
-  min-height: 250px;
-}
-
-body.page-chapter-3 .detail-preview::after {
-  content: "点击查看大图";
-  position: absolute;
-  right: 14px;
-  bottom: 14px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(244, 249, 248, 0.84);
-  color: var(--chapter3-accent-strong);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-}
-
-body.page-chapter-3 .detail-preview-button {
-  width: 100%;
-  height: 100%;
-  min-height: 250px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: zoom-in;
-}
-
-body.page-chapter-3 .detail-preview-image {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  object-position: var(--focus-x, 50%) var(--focus-y, 50%);
-  transform: scale(2.05);
-  transform-origin: var(--focus-x, 50%) var(--focus-y, 50%);
-  display: block;
-  transition: transform .32s ease, object-position .32s ease;
-}
-
-body.page-chapter-3 .detail-preview-button:hover .detail-preview-image,
-body.page-chapter-3 .detail-preview-button:focus-visible .detail-preview-image {
-  transform: scale(2.14);
 }
 
 body.page-chapter-3 .summary-grid {
@@ -414,114 +190,14 @@ body.page-chapter-3 .summary-card p {
   line-height: 1.9;
 }
 
-body.page-chapter-3 .pager {
-  margin-top: 34px;
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-body.page-chapter-3 .pager a {
-  flex: 1;
-  padding: 16px 20px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.84);
-  text-align: center;
-  color: var(--text-main);
-  text-decoration: none;
-  transition: transform .25s ease, background .25s ease;
-}
-
-body.page-chapter-3 .pager a:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.96);
-}
-
 body.page-chapter-3 footer {
   padding: 24px 24px 40px;
 }
 
-body.page-chapter-3 .lightbox {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  z-index: 1200;
-}
-
-body.page-chapter-3 .lightbox.is-open {
-  display: flex;
-}
-
-body.page-chapter-3 .lightbox-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(24, 34, 40, 0.58);
-  backdrop-filter: blur(8px);
-}
-
-body.page-chapter-3 .lightbox-stage {
-  position: relative;
-  z-index: 1;
-  width: min(1100px, calc(100vw - 32px));
-  max-height: calc(100vh - 32px);
-  border-radius: 28px;
-  overflow: hidden;
-  background: rgba(243, 247, 246, 0.98);
-}
-
-body.page-chapter-3 .lightbox-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 18px;
-  border-bottom: 1px solid rgba(95, 143, 149, 0.12);
-}
-
-body.page-chapter-3 .lightbox-caption {
-  color: var(--text-soft);
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-body.page-chapter-3 .lightbox-close {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(95, 143, 149, 0.12);
-  color: var(--chapter3-accent-strong);
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-body.page-chapter-3 .lightbox-image-wrap {
-  padding: 18px;
-  background: linear-gradient(180deg, rgba(238, 244, 243, 0.88), rgba(236, 242, 245, 0.94));
-}
-
-body.page-chapter-3 .lightbox-image-wrap img {
-  width: 100%;
-  max-height: calc(100vh - 132px);
-  object-fit: contain;
-  display: block;
-}
-
 @media (max-width: 960px) {
   body.page-chapter-3 .hero,
-  body.page-chapter-3 .board-grid,
   body.page-chapter-3 .summary-grid {
     grid-template-columns: 1fr;
-  }
-
-  body.page-chapter-3 .board-frame,
-  body.page-chapter-3 .board-media,
-  body.page-chapter-3 .board-media img {
-    min-height: 500px;
   }
 }
 
@@ -533,8 +209,6 @@ body.page-chapter-3 .lightbox-image-wrap img {
 
   body.page-chapter-3 .hero-card,
   body.page-chapter-3 .hero-visual,
-  body.page-chapter-3 .board-shell,
-  body.page-chapter-3 .detail-panel,
   body.page-chapter-3 .summary-card {
     border-radius: 24px;
   }
@@ -545,34 +219,6 @@ body.page-chapter-3 .lightbox-image-wrap img {
 
   body.page-chapter-3 .hero-visual-inner {
     min-height: 220px;
-  }
-
-  body.page-chapter-3 .board-frame,
-  body.page-chapter-3 .board-media,
-  body.page-chapter-3 .board-media img {
-    min-height: 360px;
-  }
-
-  body.page-chapter-3 .detail-preview,
-  body.page-chapter-3 .detail-preview-button {
-    min-height: 220px;
-  }
-
-  body.page-chapter-3 .detail-preview-image {
-    height: 220px;
-  }
-
-  body.page-chapter-3 .pager {
-    flex-direction: column;
-  }
-
-  body.page-chapter-3 .lightbox {
-    padding: 16px;
-  }
-
-  body.page-chapter-3 .lightbox-stage {
-    width: min(100vw - 12px, 1100px);
-    border-radius: 22px;
   }
 }
 </style>
@@ -589,9 +235,6 @@ body.page-chapter-3 .lightbox-image-wrap img {
   <a href="../../process/index.html">制作过程</a>
   <a href="../../thanks/index.html">感谢</a>
 </nav>
-<div class="prev-arm-hint" aria-hidden="true"></div>
-<div class="next-arm-hint" aria-hidden="true"></div>
-
 <div id="page-content">
   <div class="wrap">
     <section class="hero">
@@ -617,59 +260,7 @@ body.page-chapter-3 .lightbox-image-wrap img {
       </div>
     </section>
 
-    <section class="board" aria-labelledby="chapter-3-board-title">
-      <div class="section-head">
-        <div>
-          <h2 id="chapter-3-board-title">梦境协同总览</h2>
-        </div>
-        <p>统一主图承载第三章的时间线、角色行为与交互动线，通过热点切换查看每一块内容在复杂协作中的职责。</p>
-      </div>
-
-      <div class="board-grid" data-chapter-board>
-        <div class="board-shell">
-          <div class="board-frame">
-            <div class="board-media">
-              <img
-                src="./images/overview.webp"
-                alt="第三章 梦境协同总览图"
-                data-board-image
-                data-lightbox-caption="第三章总览主图：森林、城堡与抽象梦境共同构成高密度协同结构。"
-              >
-              <button class="board-hotspot is-active" type="button" style="left:8%;top:12%;width:55%;height:15%;" data-key="timeline" data-label="设计时间线" aria-label="查看设计时间线"></button>
-              <button class="board-hotspot" type="button" style="left:5%;top:27%;width:57%;height:11%;" data-key="pain" data-label="对应痛点" aria-label="查看对应痛点"></button>
-              <button class="board-hotspot" type="button" style="left:5%;top:39%;width:57%;height:11%;" data-key="goal" data-label="设计目标" aria-label="查看设计目标"></button>
-              <button class="board-hotspot" type="button" style="left:4%;top:53%;width:60%;height:40%;" data-key="role" data-label="角色行为时间线" aria-label="查看角色行为时间线"></button>
-              <button class="board-hotspot" type="button" style="left:67%;top:12%;width:30%;height:37%;" data-key="interaction" data-label="交互动线图" aria-label="查看交互动线图"></button>
-              <button class="board-hotspot" type="button" style="left:67%;top:56%;width:30%;height:37%;" data-key="render" data-label="Unity场景渲染图" aria-label="查看Unity场景渲染图"></button>
-            </div>
-          </div>
-        </div>
-
-        <aside class="detail-panel" aria-live="polite">
-          <div class="detail-kicker">FOCUS AREA</div>
-          <h3 data-detail-title>设计时间线</h3>
-          <p class="detail-copy" data-detail-copy>
-            第三章的设计时间线不是单一路径，而是随着梦境层次不断折返推进。森林到城堡的过渡承担情绪抬升，
-            抽象段落则把原本线性的合作任务打散成需要共同判断的多线程协作。
-          </p>
-          <div class="detail-tags" data-detail-tags></div>
-          <div class="detail-meta">
-            <div class="detail-meta-row"><strong>协同重点</strong><span data-detail-meta-a>在场景切换中保持共识，及时交换线索与位置判断。</span></div>
-            <div class="detail-meta-row"><strong>体验指向</strong><span data-detail-meta-b>让用户感受到梦境并非背景变化，而是不断提高判断成本的协作结构。</span></div>
-          </div>
-          <div class="detail-preview" style="--focus-x:35%;--focus-y:20%;">
-            <button
-              class="detail-preview-button"
-              type="button"
-              aria-label="查看当前热点局部大图"
-              data-detail-image-button
-            >
-              <img class="detail-preview-image" src="./images/overview.webp" alt="设计时间线局部预览" data-detail-image>
-            </button>
-          </div>
-        </aside>
-      </div>
-    </section>
+      <img src="./images/overview.webp" alt="第三章总览流程图" style="width:100%;display:block;border-radius:24px;">
 
     <section class="summary-grid" aria-label="第三章摘要">
       <article class="summary-card">
@@ -682,30 +273,14 @@ body.page-chapter-3 .lightbox-image-wrap img {
       </article>
       <article class="summary-card">
         <h3>设计目标</h3>
-        <p>把“能配合”推进为“能理解”，让协作从轻量互动进入真实的关系深化阶段，促成更深层的共创判断与互相体会。</p>
+        <p>把"能配合"推进为"能理解"，让协作从轻量互动进入真实的关系深化阶段，促成更深层的共创判断与互相体会。</p>
       </article>
     </section>
 
-    <div class="pager">
-      <a href="../index.html">返回章节总览</a>
-      <a href="../chapter-4/index.html">下一章：太空之梦 →</a>
-    </div>
   </div>
 
   <footer>Within · 协作同行 ｜ 愿每一段旅程都有人同行</footer>
 
-  <div class="lightbox" id="chapter-3-lightbox" aria-hidden="true">
-    <div class="lightbox-backdrop" data-lightbox-close></div>
-    <div class="lightbox-stage" role="dialog" aria-modal="true" aria-label="第三章主图放大预览">
-      <div class="lightbox-toolbar">
-        <div class="lightbox-caption" data-lightbox-caption>第三章总览主图</div>
-        <button class="lightbox-close" type="button" aria-label="关闭大图" data-lightbox-close>×</button>
-      </div>
-      <div class="lightbox-image-wrap">
-        <img src="./images/overview.webp" alt="第三章放大预览" data-lightbox-image>
-      </div>
-    </div>
-  </div>
 </div>
 
 <script id="page-config">
@@ -714,204 +289,6 @@ window.__pageConfig = {
   prev: '../chapter-2/index.html',
   next: '../chapter-4/index.html'
 };
-</script>
-<script id="page-script">
-if (typeof window.__chapterBoardCleanup === 'function') {
-  try {
-    window.__chapterBoardCleanup();
-  } catch (e) {}
-}
-
-var chapter3Root = document.getElementById('page-content');
-
-if (chapter3Root) {
-  var chapter3Items = {
-    timeline: {
-      title: '设计时间线',
-      copy: '第三章的设计时间线不再追求直线推进，而是让梦境层次随着森林、城堡与抽象段落不断转换。场景变化同步抬高沟通成本，使用户必须在每一次转场中重新确认彼此的位置、线索与下一步判断。',
-      tags: ['梦境层次', '场景切换', '协同升级'],
-      metaA: '通过连续转场维持共同判断，避免各自只跟随单一叙事线。',
-      metaB: '让用户意识到第三章的难点来自结构复杂度，而不只是任务数量增加。',
-      focusX: '35%',
-      focusY: '20%',
-      caption: '设计时间线：梦境层次的切换决定了协作节奏如何逐步加深。'
-    },
-    pain: {
-      title: '对应痛点',
-      copy: '这一部分强调第三章最核心的协作压力：信息被拆分在不同角色、不同景别和不同空间逻辑中。用户不能只等待提示，而要不断核对自己掌握的信息是否足以支持下一次共同决策。',
-      tags: ['信息拆分', '持续沟通', '共同决策'],
-      metaA: '用户需要在复杂信息中判断哪些内容必须立即共享，哪些需要暂时保留观察。',
-      metaB: '梦境的不稳定感转化为协作中的不确定性，迫使双方真正开始互相依赖。',
-      focusX: '27%',
-      focusY: '34%',
-      caption: '对应痛点：第三章把分散信息与高判断成本推到前台。'
-    },
-    goal: {
-      title: '设计目标',
-      copy: '设计目标不只是让两个人继续合作，而是让他们从“会配合”进入“会理解”。第三章借由多层空间和复杂任务，把共创判断、互相补位和关系深化放到同一套体验结构里。',
-      tags: ['关系深化', '互相理解', '共创判断'],
-      metaA: '让协作不再停留于同步动作，而是转化为对彼此思路的理解与预判。',
-      metaB: '通过梦境结构把抽象的关系推进具体化，让情感变化有清晰的行为证据。',
-      focusX: '27%',
-      focusY: '45%',
-      caption: '设计目标：第三章要把协作从功能配合推进到关系理解。'
-    },
-    role: {
-      title: '角色行为时间线',
-      copy: '角色行为时间线展示了第三章如何把行动拆分成不同职责。两位用户会在不同阶段轮流承担观察、反馈、解释与确认的工作，协同关系因此变得更像共同编织一场梦，而不是完成单一谜题。',
-      tags: ['角色分工', '行为接力', '深度协同'],
-      metaA: '每位用户都拥有局部优势，但任何一方都无法独立完成整体判断。',
-      metaB: '行为层面的轮换让双方在协作中持续看见彼此的作用，从而推动关系深化。',
-      focusX: '31%',
-      focusY: '73%',
-      caption: '角色行为时间线：多角色轮换补位构成第三章的深层协同。'
-    },
-    interaction: {
-      title: '交互动线图',
-      copy: '交互动线图体现了第三章最复杂的一点：空间与信息都在流动。用户要在多条路径之间反复确认输入和反馈，让沟通成为穿越梦境结构的主通道，而不是附加操作。',
-      tags: ['交互路径', '判断流动', '信息往返'],
-      metaA: '交互不只是点击或移动，而是不断交换理解、修正路径和确认目标。',
-      metaB: '动线越复杂，越需要稳定的共同语境，这正是第三章关系深化的关键。 ',
-      focusX: '84%',
-      focusY: '27%',
-      caption: '交互动线图：梦境里的路径变化不断考验双方是否仍在同一理解中。'
-    },
-    render: {
-      title: 'Unity场景渲染图',
-      copy: 'Unity 场景渲染图对应第三章的氛围承载层。低多边形的森林与湖蓝色空间营造出轻微失真的梦境感，使视觉本身就参与到协作压力的构成中，让用户在观看与判断之间保持敏感。',
-      tags: ['场景渲染', 'Lowpoly氛围', '梦境空间'],
-      metaA: '画面既要保留完整空间线索，又要制造轻微陌生感，支撑复杂协同的情绪背景。',
-      metaB: '视觉氛围不只是装饰，而是帮助用户感知第三章多层空间逻辑的重要信息面。',
-      focusX: '84%',
-      focusY: '78%',
-      caption: 'Unity场景渲染图：梦境氛围与协同压力在同一张图里被同时建立。'
-    }
-  };
-
-  var hotspots = Array.prototype.slice.call(chapter3Root.querySelectorAll('.board-hotspot'));
-  var titleEl = chapter3Root.querySelector('[data-detail-title]');
-  var copyEl = chapter3Root.querySelector('[data-detail-copy]');
-  var tagsEl = chapter3Root.querySelector('[data-detail-tags]');
-  var metaAEl = chapter3Root.querySelector('[data-detail-meta-a]');
-  var metaBEl = chapter3Root.querySelector('[data-detail-meta-b]');
-  var detailPreview = chapter3Root.querySelector('.detail-preview');
-  var detailImage = chapter3Root.querySelector('[data-detail-image]');
-  var detailImageButton = chapter3Root.querySelector('[data-detail-image-button]');
-  var boardImage = chapter3Root.querySelector('[data-board-image]');
-
-  var lightbox = chapter3Root.querySelector('#chapter-3-lightbox');
-  var lightboxImage = lightbox ? lightbox.querySelector('[data-lightbox-image]') : null;
-  var lightboxCaption = lightbox ? lightbox.querySelector('[data-lightbox-caption]') : null;
-  var lightboxCloseEls = lightbox ? lightbox.querySelectorAll('[data-lightbox-close]') : [];
-  var activeKey = 'timeline';
-
-  function renderTags(tags) {
-    if (!tagsEl) return;
-    tagsEl.innerHTML = '';
-    (tags || []).forEach(function (tag) {
-      var chip = document.createElement('span');
-      chip.textContent = tag;
-      tagsEl.appendChild(chip);
-    });
-  }
-
-  function applyItem(key) {
-    var safeKey = chapter3Items[key] ? key : 'timeline';
-    var item = chapter3Items[safeKey];
-    activeKey = safeKey;
-
-    hotspots.forEach(function (hotspot) {
-      hotspot.classList.toggle('is-active', hotspot.getAttribute('data-key') === safeKey);
-    });
-
-    if (titleEl) titleEl.textContent = item.title;
-    if (copyEl) copyEl.textContent = item.copy;
-    if (metaAEl) metaAEl.textContent = item.metaA;
-    if (metaBEl) metaBEl.textContent = item.metaB;
-    renderTags(item.tags);
-
-    if (detailPreview) {
-      detailPreview.style.setProperty('--focus-x', item.focusX);
-      detailPreview.style.setProperty('--focus-y', item.focusY);
-    }
-
-    if (detailImage) {
-      detailImage.alt = item.title + '局部预览';
-    }
-
-    if (detailImageButton) {
-      detailImageButton.setAttribute('data-lightbox-caption', item.caption);
-      detailImageButton.setAttribute('data-lightbox-title', item.title);
-    }
-  }
-
-  hotspots.forEach(function (hotspot) {
-    function activateHotspot() {
-      applyItem(hotspot.getAttribute('data-key'));
-    }
-
-    hotspot.addEventListener('pointerenter', activateHotspot);
-    hotspot.addEventListener('focus', activateHotspot);
-    hotspot.addEventListener('click', activateHotspot);
-    hotspot.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        activateHotspot();
-      }
-    });
-  });
-
-  function openLightbox(caption) {
-    if (!lightbox || !lightboxImage) return;
-    lightboxImage.src = './images/overview.webp';
-    lightboxImage.alt = caption || '第三章放大预览';
-    if (lightboxCaption) lightboxCaption.textContent = caption || '第三章总览主图';
-    lightbox.classList.add('is-open');
-    lightbox.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeLightbox() {
-    if (!lightbox) return;
-    lightbox.classList.remove('is-open');
-    lightbox.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  function handleDocumentKeydown(event) {
-    if (event.key === 'Escape' && lightbox && lightbox.classList.contains('is-open')) {
-      closeLightbox();
-    }
-  }
-
-  if (boardImage) {
-    boardImage.addEventListener('click', function () {
-      var caption = boardImage.getAttribute('data-lightbox-caption') || '第三章总览主图';
-      openLightbox(caption);
-    });
-  }
-
-  if (detailImageButton) {
-    detailImageButton.addEventListener('click', function () {
-      var item = chapter3Items[activeKey] || chapter3Items.timeline;
-      openLightbox(item.caption);
-    });
-  }
-
-  Array.prototype.forEach.call(lightboxCloseEls, function (el) {
-    el.addEventListener('click', closeLightbox);
-  });
-
-  document.addEventListener('keydown', handleDocumentKeydown);
-
-  applyItem(activeKey);
-
-  window.__chapterBoardCleanup = function () {
-    closeLightbox();
-    document.removeEventListener('keydown', handleDocumentKeydown);
-    window.__chapterBoardCleanup = null;
-  };
-}
 </script>
 <script src="../../shell.js"></script>
 
