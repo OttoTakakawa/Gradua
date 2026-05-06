@@ -10,14 +10,14 @@ body.page-about {
   --text-dark: #243241;
   --text-soft: #7d8f9f;
   --border: rgba(112,136,160,0.14);
-  --panel: rgba(255,255,255,0.74);
-  --panel-soft: rgba(255,255,255,0.58);
-  --shadow: 0 22px 70px rgba(73, 97, 122, 0.10);
-  --shadow-hover: 0 28px 82px rgba(73, 97, 122, 0.14);
+  --panel: rgba(255,255,255,0.78);
+  --panel-soft: rgba(255,255,255,0.60);
+  --shadow: 0 18px 52px rgba(73, 97, 122, 0.08);
+  --shadow-hover: 0 22px 58px rgba(73, 97, 122, 0.12);
   background:
-    radial-gradient(circle at 14% 14%, rgba(138,180,196,0.12), transparent 28%),
-    radial-gradient(circle at 84% 18%, rgba(196,168,130,0.10), transparent 30%),
-    linear-gradient(180deg, #f6f8fb 0%, #eef2f6 46%, #edf1f4 100%);
+    radial-gradient(circle at 14% 14%, rgba(138,180,196,0.10), transparent 28%),
+    radial-gradient(circle at 84% 18%, rgba(170,182,204,0.08), transparent 30%),
+    linear-gradient(180deg, #f7f9fb 0%, #eff3f7 46%, #edf2f6 100%);
 }
 
 body.page-about::before {
@@ -41,24 +41,24 @@ body.page-about::after {
   min-height: 760px;
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-  gap: 28px;
-  padding: 56px;
-  border: 1px solid rgba(148,176,200,0.20);
-  border-radius: 28px;
+  gap: 24px;
+  padding: 48px;
+  border: 1px solid rgba(148,176,200,0.14);
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow);
   background:
-    linear-gradient(90deg, rgba(241,246,249,0.96) 0%, rgba(241,246,249,0.84) 42%, rgba(241,246,249,0.46) 70%, rgba(241,246,249,0.12) 100%),
-    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(138,180,196,0.03)),
+    linear-gradient(90deg, rgba(243,247,250,0.96) 0%, rgba(243,247,250,0.88) 44%, rgba(243,247,250,0.52) 72%, rgba(243,247,250,0.18) 100%),
+    linear-gradient(135deg, rgba(255,255,255,0.10), rgba(138,180,196,0.02)),
     url("../images/剪贴板图片.jpg") center 28% / cover no-repeat;
 }
 
 .hero::before {
   content: "";
   position: absolute;
-  inset: 18px;
-  border: 1px solid rgba(255,255,255,0.42);
-  border-radius: 22px;
+  inset: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 14px;
   pointer-events: none;
 }
 
@@ -69,6 +69,7 @@ body.page-about::after {
   top: -6%;
   width: 52%;
   height: 120%;
+  opacity: 0.5;
   background:
     linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0)),
     linear-gradient(135deg, transparent 0 47%, rgba(255,255,255,0.14) 48%, transparent 49%);
@@ -95,33 +96,34 @@ body.page-about::after {
   align-items: center;
   gap: 10px;
   width: fit-content;
-  padding: 9px 16px;
-  border-radius: 10px;
-  background: rgba(138,180,196,0.12);
-  border: 1px solid rgba(138,180,196,0.18);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(138,180,196,0.09);
+  border: 1px solid rgba(138,180,196,0.14);
   color: var(--cyan-deep);
   font-size: 12px;
-  letter-spacing: .16em;
+  letter-spacing: .08em;
 }
 
 .hero h1 {
   margin-top: 22px;
-  font-size: clamp(82px, 10vw, 146px);
-  line-height: .9;
-  letter-spacing: .04em;
-  color: #59798b;
+  font-size: clamp(42px, 5.6vw, 72px);
+  line-height: 1.02;
+  letter-spacing: .08em;
+  color: #4f6678;
   text-shadow: 0 1px 0 rgba(255,255,255,0.7);
 }
 
 .hero .cn-title {
-  margin-top: 18px;
-  font-size: clamp(32px, 3.6vw, 56px);
-  color: var(--blue);
-  letter-spacing: .22em;
+  margin-top: 14px;
+  font-size: clamp(14px, 1.8vw, 20px);
+  color: #7a8ea0;
+  letter-spacing: .18em;
   font-weight: 500;
+  text-transform: uppercase;
 }
 
-.hero .cn-title span { color: var(--cyan); }
+.hero .cn-title span { color: #93a6b8; }
 
 .hero .desc {
   max-width: 660px;
@@ -158,7 +160,7 @@ body.page-about::after {
 .chapter-card,
 .summary-box,
 .entry-card {
-  border: 1px solid rgba(148,176,200,0.18);
+  border: 1px solid rgba(148,176,200,0.12);
   box-shadow: var(--shadow);
 }
 
@@ -168,8 +170,8 @@ body.page-about::after {
 .chapter-card,
 .summary-box,
 .entry-card {
-  border-radius: 18px;
-  background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.52));
+  border-radius: 16px;
+  background: rgba(255,255,255,0.62);
 }
 
 .hero-panel {
@@ -179,7 +181,7 @@ body.page-about::after {
 .panel-kicker {
   color: var(--cyan-deep);
   font-size: 12px;
-  letter-spacing: .18em;
+  letter-spacing: .08em;
 }
 
 .panel-title {
@@ -204,7 +206,7 @@ body.page-about::after {
 
 .panel-line {
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(255,255,255,0.58);
   border: 1px solid rgba(148,176,200,0.16);
   color: var(--text-main);
@@ -241,7 +243,7 @@ body.page-about::after {
   align-items: center;
   justify-content: center;
   padding: 14px 24px;
-  border-radius: 12px;
+  border-radius: 14px;
   text-decoration: none;
   font-size: 15px;
   letter-spacing: .04em;
@@ -249,20 +251,20 @@ body.page-about::after {
 }
 
 .btn-primary {
-  color: #fff;
-  background: linear-gradient(135deg, #8ab4c4, #6b8fa3);
-  box-shadow: 0 8px 28px rgba(107,143,163,0.22);
+  color: #f6f8fb;
+  background: #5f758a;
+  box-shadow: 0 10px 28px rgba(95,117,138,0.18);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(107,143,163,0.30);
+  box-shadow: 0 14px 34px rgba(95,117,138,0.22);
 }
 
 .btn-secondary {
   color: var(--blue);
-  background: rgba(255,255,255,0.82);
-  border: 1px solid rgba(148,176,200,0.22);
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(148,176,200,0.18);
 }
 
 .btn-secondary:hover {
@@ -275,10 +277,8 @@ body.page-about::after {
 }
 
 .section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 20px;
+  display: block;
+  text-align: center;
   margin-bottom: 22px;
 }
 
@@ -293,6 +293,7 @@ body.page-about::after {
   color: var(--text-soft);
   font-size: 15px;
   line-height: 1.9;
+  margin: 10px auto 0;
 }
 
 .grid-2,
@@ -312,7 +313,7 @@ body.page-about::after {
 .chapter-card,
 .summary-box,
 .entry-card {
-  padding: 28px;
+  padding: 26px;
   position: relative;
   overflow: hidden;
   transition: transform .3s, box-shadow .3s;
@@ -335,7 +336,7 @@ body.page-about::after {
   right: 0;
   width: 120px;
   height: 120px;
-  background: linear-gradient(135deg, rgba(138,180,196,0.15), transparent 70%);
+  background: linear-gradient(135deg, rgba(138,180,196,0.12), transparent 70%);
   clip-path: polygon(0 0, 100% 0, 100% 100%);
   pointer-events: none;
 }
@@ -387,7 +388,7 @@ body.page-about::after {
 
 .media-box {
   padding: 22px 18px;
-  border-radius: 16px;
+  border-radius: 14px;
   background: rgba(255,255,255,0.74);
   border: 1px solid rgba(148,176,200,0.16);
   text-align: center;
@@ -407,7 +408,7 @@ body.page-about::after {
 .chapter-card .chapter-num {
   margin-bottom: 10px;
   font-size: 12px;
-  letter-spacing: .18em;
+  letter-spacing: .08em;
   color: var(--blue);
 }
 
@@ -431,8 +432,8 @@ body.page-about::after {
 .stat-card {
   padding: 24px 18px;
   border: 1px solid rgba(148,176,200,0.18);
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,255,255,0.56));
+  border-radius: 14px;
+  background: rgba(255,255,255,0.64);
   box-shadow: 0 14px 42px rgba(99,124,148,0.08);
 }
 
@@ -538,9 +539,9 @@ footer {
   <div class="wrap">
     <section class="hero">
       <div class="hero-copy">
-        <div class="hero-badge">MASTER PROJECT · XR / 互动叙事 / 社交设计</div>
-        <h1>Within</h1>
-        <div class="cn-title">协作同<span>行</span></div>
+        <div class="hero-badge">毕业设计 / XR 互动叙事 / 社交设计</div>
+        <h1>协作同行</h1>
+        <div class="cn-title">WITH<span>IN</span></div>
         <p class="desc">
           一项从具身认知视角出发的社交数字化设计研究，
           也是一段关于成长、共情与协作的 VR 互动叙事旅程。
@@ -559,7 +560,7 @@ footer {
 
       <div class="hero-side">
         <div class="hero-panel">
-          <div class="panel-kicker">PROJECT FOCUS</div>
+          <div class="panel-kicker">项目聚焦</div>
           <div class="panel-title">不是展示一张海报，<br>而是进入一段协作旅程</div>
           <div class="panel-copy">
             项目试图回应大学生"线上活跃、线下疏离"的现实处境，
@@ -667,25 +668,25 @@ footer {
 
       <div class="grid-4">
         <div class="chapter-card">
-          <div class="chapter-num">CHAPTER 01</div>
+          <div class="chapter-num">章节一</div>
           <h3>孤独的城市</h3>
           <p>以雨夜城市的疏离感作为开端，让用户先进入萨沙的内心状态，为后续协作的发生建立情绪底座。</p>
           <a class="chapter-link" href="../chapters/chapter-1/index.html">进入第一章 →</a>
         </div>
         <div class="chapter-card">
-          <div class="chapter-num">CHAPTER 02</div>
+          <div class="chapter-num">章节二</div>
           <h3>萨沙的家</h3>
           <p>在较为私密和安全的空间中启动轻量协作，让沟通第一次以低门槛、低风险的形式自然发生。</p>
           <a class="chapter-link" href="../chapters/chapter-2/index.html">进入第二章 →</a>
         </div>
         <div class="chapter-card">
-          <div class="chapter-num">CHAPTER 03</div>
+          <div class="chapter-num">章节三</div>
           <h3>皮埃尔的梦想</h3>
           <p>通过梦境化场景承载更复杂的共同决策与协同解谜，把伙伴关系从配合推进到理解与共创。</p>
           <a class="chapter-link" href="../chapters/chapter-3/index.html">进入第三章 →</a>
         </div>
         <div class="chapter-card">
-          <div class="chapter-num">CHAPTER 04</div>
+          <div class="chapter-num">章节四</div>
           <h3>太空之梦</h3>
           <p>在高强度协作中抵达终章，使用户在完成任务后自然过渡到现实层面的自由交流与情感沉淀。</p>
           <a class="chapter-link" href="../chapters/chapter-4/index.html">进入第四章 →</a>

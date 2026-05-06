@@ -21,6 +21,9 @@ h2 {
   color: var(--text-soft);
   max-width: 860px;
   margin-bottom: 32px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 .chapter-stack {
   display: grid;
@@ -35,10 +38,10 @@ h2 {
   gap: 26px;
   align-items: stretch;
   padding: 22px;
-  border-radius: 30px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.48));
-  border: 1px solid rgba(148,176,200,0.18);
-  box-shadow: 0 20px 54px rgba(99,124,148,0.08);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.60);
+  border: 1px solid rgba(148,176,200,0.12);
+  box-shadow: 0 18px 48px rgba(99,124,148,0.08);
 }
 .chapter-section.is-reversed {
   grid-template-areas:
@@ -53,9 +56,9 @@ h2 {
 }
 .chapter-video-shell {
   padding: 16px;
-  border-radius: 24px;
+  border-radius: 18px;
   background: rgba(255,255,255,0.62);
-  border: 1px solid rgba(148,176,200,0.16);
+  border: 1px solid rgba(148,176,200,0.14);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
 }
 .chapter-video-shell video {
@@ -88,7 +91,7 @@ h2 {
 .chapter-kicker {
   color: var(--cyan-deep);
   font-size: 12px;
-  letter-spacing: .18em;
+  letter-spacing: .08em;
   margin-bottom: 10px;
 }
 .chapter-body h3 {
@@ -163,7 +166,7 @@ h2 {
   display: block;
   padding: 0;
   border: 1px solid rgba(148,176,200,0.18);
-  border-radius: 18px;
+  border-radius: 14px;
   overflow: hidden;
   background: rgba(255,255,255,0.72);
   box-shadow: 0 12px 30px rgba(99,124,148,0.08);
@@ -197,7 +200,7 @@ h2 {
 }
 .chapter-point {
   padding: 14px 16px;
-  border-radius: 16px;
+  border-radius: 12px;
   background: rgba(255,255,255,0.54);
   border: 1px solid rgba(148,176,200,0.14);
   color: var(--text-soft);
@@ -244,10 +247,10 @@ h2 {
 }
 .replace-note {
   padding: 24px 26px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.48));
-  border: 1px solid rgba(148,176,200,0.18);
-  box-shadow: 0 18px 46px rgba(99,124,148,0.08);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.60);
+  border: 1px solid rgba(148,176,200,0.16);
+  box-shadow: 0 16px 42px rgba(99,124,148,0.08);
 }
 .replace-note strong {
   display: block;
@@ -363,7 +366,7 @@ h2 {
 </nav>
 <div id="page-content">
   <div class="wrap">
-    <div class="eyebrow">PROCESS & VIDEO</div>
+    <div class="eyebrow">制作过程</div>
     <h2>制作过程</h2>
     <p class="lead">
       从概念草图到 VR 场景搭建，从交互逻辑调试到用户测试迭代——
@@ -385,7 +388,7 @@ h2 {
           </p>
         </div>
         <div class="chapter-body">
-          <div class="chapter-kicker">CHAPTER 01</div>
+          <div class="chapter-kicker">阶段一</div>
           <h3>概念与视觉建立</h3>
           <p>确定 Low-Poly 美术风格，绘制主视觉海报，构建四章叙事结构与情绪节奏。这个阶段的重点不是单纯做出一张海报，而是把“孤独如何被看见、协作如何被感知、共情如何被触发”先变成明确的视觉与叙事框架。</p>
           <div class="chapter-points">
@@ -438,7 +441,7 @@ h2 {
           </p>
         </div>
         <div class="chapter-body">
-          <div class="chapter-kicker">CHAPTER 02</div>
+          <div class="chapter-kicker">阶段二</div>
           <h3>Unity / VR 开发</h3>
           <p>使用 Unity 2022.3 + XR Interaction Toolkit + PICO SDK 搭建场景，实现抓取、瞬移、绘画等核心交互。这个阶段把前期叙事转化成可体验的空间行动，让用户不只是“看见主题”，而是通过身体参与真正进入情境。</p>
           <div class="chapter-points">
@@ -491,7 +494,7 @@ h2 {
           </p>
         </div>
         <div class="chapter-body">
-          <div class="chapter-kicker">CHAPTER 03</div>
+          <div class="chapter-kicker">阶段三</div>
           <h3>跨媒介系统整合</h3>
           <p>设计同步显示大屏、实体协作卡片、移动端回应者等辅助媒介，构建完整的信息流闭环。这里的重点不是“再加几个展示物”，而是让 VR 体验真正和现实中的社交回应方式发生连接，形成更完整的协作链路。</p>
           <div class="chapter-points">
@@ -544,7 +547,7 @@ h2 {
           </p>
         </div>
         <div class="chapter-body">
-          <div class="chapter-kicker">CHAPTER 04</div>
+          <div class="chapter-kicker">阶段四</div>
           <h3>用户测试与迭代</h3>
           <p>邀请 20 名大学生参与测试，根据反馈优化交互难度、叙事节奏与社交引导机制。这个阶段让作品从“可以运行”逐步转向“可以被理解、愿意被参与、能够真正引发交流”的状态。</p>
           <div class="chapter-points">
@@ -697,5 +700,4 @@ if (processLightbox) {
 
 </body>
 </html>
-
 
