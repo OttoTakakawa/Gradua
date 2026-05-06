@@ -71,12 +71,76 @@ body.page-chapter-2 .hero-cover {
     linear-gradient(135deg, rgba(255,255,255,0.18), transparent 48%);
 }
 
-body.page-chapter-2 .hero-cover img {
+body.page-chapter-2 .video-placeholder {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  display: block;
-  background: linear-gradient(180deg, rgba(255,248,236,0.84), rgba(239,223,194,0.62));
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+
+body.page-chapter-2 .video-placeholder-inner {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  border-radius: 24px;
+  border: 1px dashed rgba(157, 122, 83, 0.26);
+  background:
+    linear-gradient(180deg, rgba(255, 250, 242, 0.62), rgba(245, 232, 209, 0.46)),
+    linear-gradient(135deg, rgba(255,255,255,0.12), transparent 52%);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+  padding: 24px;
+}
+
+body.page-chapter-2 .video-placeholder-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 136, 95, 0.18);
+  background: rgba(180, 136, 95, 0.12);
+  color: var(--accent-strong);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+body.page-chapter-2 .video-placeholder-play {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 136, 95, 0.26);
+  background: rgba(180, 136, 95, 0.12);
+}
+
+body.page-chapter-2 .video-placeholder-play::before {
+  content: "";
+  position: absolute;
+  left: 30px;
+  top: 23px;
+  border-style: solid;
+  border-width: 14px 0 14px 22px;
+  border-color: transparent transparent transparent rgba(118, 84, 52, 0.92);
+}
+
+body.page-chapter-2 .video-placeholder-title {
+  color: var(--text-dark);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+body.page-chapter-2 .video-placeholder-copy {
+  max-width: 22em;
+  color: #7f6852;
+  font-size: 14px;
+  line-height: 1.8;
 }
 
 body.page-chapter-2 .hero-card {
@@ -196,7 +260,14 @@ body.page-chapter-2 footer {
     <div class="chapter-shell">
       <section class="hero">
         <div class="hero-cover">
-          <img src="./images/overview.webp" alt="第二章《萨沙的家》总览图">
+          <div class="video-placeholder" aria-label="第二章视频占位区域">
+            <div class="video-placeholder-inner">
+              <span class="video-placeholder-badge">Video Placeholder</span>
+              <span class="video-placeholder-play" aria-hidden="true"></span>
+              <strong class="video-placeholder-title">第二章视频占位</strong>
+              <span class="video-placeholder-copy">后续可替换为《萨沙的家》章节演示视频。</span>
+            </div>
+          </div>
         </div>
         <div class="hero-card">
           <div class="eyebrow">CHAPTER 02</div>
