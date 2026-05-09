@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -89,10 +89,7 @@ h2 {
   padding-top: 6px;
 }
 .chapter-kicker {
-  color: var(--cyan-deep);
-  font-size: 12px;
-  letter-spacing: .08em;
-  margin-bottom: 10px;
+  display: none;
 }
 .chapter-body h3 {
   color: var(--text-dark);
@@ -263,6 +260,73 @@ h2 {
   font-size: 14px;
   line-height: 1.9;
 }
+.result-section {
+  margin-top: 52px;
+}
+.result-head {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.result-head h3 {
+  font-size: 32px;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+.result-head p {
+  max-width: 900px;
+  margin: 10px auto 0;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.result-card {
+  padding: 26px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.60);
+  border: 1px solid rgba(148,176,200,0.12);
+  box-shadow: 0 18px 48px rgba(99,124,148,0.08);
+}
+.result-card h4 {
+  font-size: 19px;
+  color: var(--cyan-deep);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.result-card p {
+  font-size: 15px;
+  line-height: 1.95;
+  color: var(--text-soft);
+}
+.result-stats {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.result-stat-card {
+  padding: 24px 18px;
+  border: 1px solid rgba(148,176,200,0.18);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.62);
+  box-shadow: 0 16px 42px rgba(99,124,148,0.08);
+}
+.result-stat-num {
+  font-size: 18px;
+  line-height: 1.1;
+  color: var(--cyan-deep);
+  font-weight: 600;
+}
+.result-stat-desc {
+  margin-top: 8px;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.8;
+}
 .lightbox {
   position: fixed;
   inset: 0;
@@ -341,7 +405,14 @@ h2 {
   .gallery-track {
     grid-auto-columns: minmax(220px, 78%);
   }
+  .result-grid,
+  .result-stats {
+    grid-template-columns: 1fr;
+  }
   h2 {
+    font-size: 28px;
+  }
+  .result-head h3 {
     font-size: 28px;
   }
 }
@@ -593,6 +664,43 @@ h2 {
         <p>当前占位素材已统一放在 <code>process/media/videos/</code> 和 <code>process/media/images/</code>。后续只需要用同名文件直接覆盖，例如把第一章视频替换成 <code>chapter-01.mp4</code>，把第一章图片继续按 <code>chapter-01-01</code>、<code>chapter-01-02</code> 这样的命名覆盖或新增即可；如果某一章图片超过 4 张，继续往后补成 <code>chapter-01-05</code>、<code>chapter-01-06</code>，再在这一章的图片带里复制一个卡片节点就能继续扩展。</p>
       </div>
     </div>
+
+    <section class="result-section">
+      <div class="result-head">
+        <h3>结果验证</h3>
+        <p>作品不只建立了理论与叙事框架，也通过实际测试验证了其在社交引导上的正向作用。</p>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-card">
+          <h4>测试结论</h4>
+          <p>20 名大学生参与测试后，项目在"降低与陌生人沟通的尴尬感""让任务中的交流变得自然""促进体验结束后的继续交流"等维度上，都呈现出明确的正向反馈。</p>
+        </div>
+        <div class="result-card">
+          <h4>核心验证</h4>
+          <p>具身交互让用户更容易进入情境；渐进式协作让沟通不再突兀；跨媒介信息差则把现实交流变成了体验推进的必要条件。</p>
+        </div>
+      </div>
+
+      <div class="result-stats">
+        <div class="result-stat-card">
+          <div class="result-stat-num">18/20</div>
+          <div class="result-stat-desc">缓解与陌生人交流的尴尬感</div>
+        </div>
+        <div class="result-stat-card">
+          <div class="result-stat-num">18/20</div>
+          <div class="result-stat-desc">愿意与本次搭档继续交流</div>
+        </div>
+        <div class="result-stat-card">
+          <div class="result-stat-num">75%</div>
+          <div class="result-stat-desc">认可任务让沟通更自然</div>
+        </div>
+        <div class="result-stat-card">
+          <div class="result-stat-num">70%</div>
+          <div class="result-stat-desc">对视觉风格给出正向评价</div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="lightbox" id="process-lightbox" aria-hidden="true">
@@ -700,4 +808,3 @@ if (processLightbox) {
 
 </body>
 </html>
-

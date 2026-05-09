@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -92,7 +92,7 @@ body.page-about::after {
 }
 
 .hero-badge {
-  display: inline-flex;
+  display: none;
   align-items: center;
   gap: 10px;
   width: fit-content;
@@ -179,13 +179,11 @@ body.page-about::after {
 }
 
 .panel-kicker {
-  color: var(--cyan-deep);
-  font-size: 12px;
-  letter-spacing: .08em;
+  display: none;
 }
 
 .panel-title {
-  margin-top: 10px;
+  margin-top: 0;
   color: var(--text-dark);
   font-size: 28px;
   line-height: 1.25;
@@ -276,6 +274,14 @@ body.page-about::after {
   margin-top: 64px;
 }
 
+.section-structure {
+  margin-top: 136px;
+}
+
+.section-structure + .section {
+  margin-top: 136px;
+}
+
 .section-head {
   display: block;
   text-align: center;
@@ -283,9 +289,10 @@ body.page-about::after {
 }
 
 .section-head h2 {
-  font-size: 30px;
+  font-size: 32px;
   color: var(--text-dark);
   line-height: 1.2;
+  letter-spacing: -.01em;
 }
 
 .section-head p {
@@ -294,6 +301,23 @@ body.page-about::after {
   font-size: 15px;
   line-height: 1.9;
   margin: 10px auto 0;
+}
+
+.thesis-bridge {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto 42px;
+  padding: 0;
+  text-align: left;
+}
+
+.thesis-bridge p {
+  max-width: none;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 2.05;
+  text-align: left;
 }
 
 .grid-2,
@@ -308,6 +332,12 @@ body.page-about::after {
 .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.summary-grid {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  justify-content: center;
+}
 
 .card,
 .chapter-card,
@@ -345,9 +375,10 @@ body.page-about::after {
 .chapter-card h3,
 .summary-box h3,
 .entry-card h3 {
-  font-size: 20px;
-  color: var(--text-dark);
+  font-size: 19px;
+  color: var(--cyan-deep);
   margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .card p,
@@ -406,10 +437,7 @@ body.page-about::after {
 }
 
 .chapter-card .chapter-num {
-  margin-bottom: 10px;
-  font-size: 12px;
-  letter-spacing: .08em;
-  color: var(--blue);
+  display: none;
 }
 
 .chapter-link {
@@ -427,6 +455,781 @@ body.page-about::after {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
+}
+
+.framework-shell {
+  width: min(1320px, 100%);
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  padding: 34px 36px 38px;
+  background:
+    radial-gradient(ellipse at 52% 46%,
+      rgba(208,218,228,0.96) 0%,
+      rgba(218,228,237,0.84) 22%,
+      rgba(231,238,245,0.52) 46%,
+      rgba(241,245,249,0.18) 70%,
+      rgba(245,248,251,0.00) 100%);
+}
+
+.framework-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(132,156,178,0.18), transparent 34%),
+    radial-gradient(circle at 18% 50%, rgba(255,255,255,0.08), transparent 34%),
+    radial-gradient(circle at 84% 48%, rgba(255,255,255,0.06), transparent 30%);
+  pointer-events: none;
+}
+
+.framework-layout,
+.framework-content,
+.framework-intro {
+  position: relative;
+  z-index: 1;
+}
+
+.framework-layout {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 34px;
+  align-items: stretch;
+}
+
+.framework-intro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.framework-intro h2 {
+  font-size: 28px;
+  line-height: 1.18;
+  color: var(--text-dark);
+  letter-spacing: -0.01em;
+  text-align: center;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: nowrap;
+}
+
+.framework-content {
+  min-width: 0;
+}
+
+.circle-diagram-shell {
+  width: min(1380px, 100%);
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+}
+
+.structure-shell {
+  width: min(1380px, 100%);
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+
+.structure-horizontal {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  display: grid;
+  grid-template-columns: 210px 320px 420px 320px 320px;
+  gap: 42px;
+  align-items: center;
+}
+
+.section-structure .structure-horizontal {
+  width: min(1180px, calc(100% - 220px));
+  grid-template-columns: 184px 216px 280px 216px 216px;
+  gap: 20px;
+  justify-content: center;
+}
+
+.structure-horizontal::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 1px;
+  background: rgba(148,176,200,0.22);
+  transform: translateY(-50%);
+}
+
+.structure-lane {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 30px;
+  align-content: center;
+}
+
+.structure-lane.is-single {
+  align-self: stretch;
+}
+
+.structure-lane.is-stack::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  bottom: 18%;
+  width: 1px;
+  background: rgba(148,176,200,0.18);
+  transform: translateX(-50%);
+}
+
+.structure-traditional-card {
+  position: relative;
+  z-index: 1;
+  padding: 30px 28px 32px;
+  border-radius: 14px;
+  border: 1px solid rgba(148,176,200,0.16);
+  background: rgba(255,255,255,0.72);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.section-structure .structure-lane {
+  gap: 18px;
+}
+
+.structure-traditional-card.accent-cyan { border-top: 3px solid var(--cyan-deep); }
+.structure-traditional-card.accent-purple { border-top: 3px solid var(--purple); }
+.structure-traditional-card.accent-warm { border-top: 3px solid var(--warm); }
+
+.structure-traditional-card.is-theory {
+  padding: 32px 24px;
+}
+
+.structure-traditional-card.is-core {
+  padding: 40px 36px 42px;
+}
+
+.section-structure .structure-traditional-card {
+  overflow: hidden;
+  padding: 22px 20px 24px;
+  border-radius: 16px;
+}
+
+.section-structure .structure-traditional-card.is-theory {
+  padding: 22px 20px 24px;
+}
+
+.section-structure .structure-traditional-card.is-core {
+  padding: 22px 20px 24px;
+}
+
+.section-structure .structure-traditional-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, rgba(138,180,196,0.12), transparent 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+
+.structure-traditional-card h3 {
+  color: var(--text-dark);
+  font-size: 24px;
+  line-height: 1.3;
+  margin-bottom: 14px;
+}
+
+.structure-traditional-card p {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 2.05;
+}
+
+.section-structure .structure-traditional-card h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.section-structure .structure-traditional-card p {
+  font-size: 11.5px;
+  line-height: 1.85;
+}
+
+.structure-theory {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: 100%;
+}
+
+.structure-theory-card {
+  width: min(420px, 100%);
+  padding: 18px 28px;
+  border-radius: 16px;
+  border: 1px solid rgba(148,176,200,0.18);
+  background: rgba(255,255,255,0.72);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.structure-theory::after,
+.structure-mid::before,
+.structure-bottom::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: rgba(148,176,200,0.24);
+}
+
+.structure-theory::after {
+  top: 100%;
+  height: 22px;
+}
+
+.structure-theory-card strong {
+  display: block;
+  color: var(--text-dark);
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.structure-theory-card span {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.structure-flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+  width: 100%;
+}
+
+.structure-flow::before {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 50%;
+  height: 1px;
+  background: rgba(148,176,200,0.22);
+  transform: translateY(-50%);
+}
+
+.structure-flow > * {
+  position: relative;
+  z-index: 1;
+}
+
+.structure-node {
+  padding: 22px 22px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(148,176,200,0.14);
+  background: rgba(255,255,255,0.66);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.structure-node.accent-cyan { border-top: 3px solid var(--cyan-deep); }
+.structure-node.accent-purple { border-top: 3px solid var(--purple); }
+.structure-node.accent-warm { border-top: 3px solid var(--warm); }
+
+.structure-node h3 {
+  color: var(--text-dark);
+  font-size: 20px;
+  line-height: 1.32;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.structure-node p {
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.structure-node.is-center {
+  padding: 28px 28px 30px;
+}
+
+.structure-node.is-center h3 {
+  font-size: 22px;
+}
+
+.structure-node.is-side {
+  align-self: center;
+}
+
+.structure-mid {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  width: min(560px, 100%);
+}
+
+.structure-mid::before {
+  top: -18px;
+  height: 18px;
+}
+
+.structure-bottom {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 360px));
+  gap: 22px;
+  width: 100%;
+  justify-content: center;
+}
+
+.structure-bottom::before {
+  top: -18px;
+  height: 18px;
+}
+
+.structure-bottom::after {
+  content: "";
+  position: absolute;
+  left: 26%;
+  right: 26%;
+  top: 0;
+  height: 1px;
+  background: rgba(148,176,200,0.22);
+}
+
+.circle-diagram-row {
+  position: relative;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.circle-diagram-row::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(148,176,200,0.22);
+  pointer-events: none;
+}
+
+.circle-diagram-row.is-theory::before {
+  top: calc(100% + 4px);
+  width: 1px;
+  height: 22px;
+}
+
+.circle-diagram-row.is-triad {
+  grid-template-columns: repeat(3, minmax(220px, 300px));
+}
+
+.circle-diagram-row.is-triad::before {
+  left: 18%;
+  right: 18%;
+  top: 50%;
+  width: auto;
+  height: 1px;
+  transform: none;
+}
+
+.circle-diagram-row.is-mechanism::before,
+.circle-diagram-row.is-process::before {
+  top: calc(-22px);
+  width: 1px;
+  height: 22px;
+}
+
+.circle-diagram-row.is-bottom {
+  grid-template-columns: repeat(2, minmax(280px, 340px));
+}
+
+.circle-diagram-row.is-bottom::before {
+  left: 24%;
+  right: 24%;
+  top: 0;
+  width: auto;
+  height: 1px;
+  transform: none;
+}
+
+.circle-bubble {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  border-radius: 999px;
+  border: 1px solid rgba(148,176,200,0.18);
+  background: rgba(255,255,255,0.68);
+  box-shadow: 0 16px 44px rgba(99,124,148,0.08);
+}
+
+.circle-bubble strong {
+  color: var(--text-dark);
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.circle-bubble p {
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.circle-bubble.is-small {
+  width: 196px;
+  min-height: 196px;
+  padding: 20px;
+}
+
+.circle-bubble.is-small strong {
+  font-size: 16px;
+}
+
+.circle-bubble.is-medium {
+  width: 248px;
+  min-height: 248px;
+}
+
+.circle-bubble.is-large {
+  width: 288px;
+  min-height: 288px;
+  padding: 28px;
+}
+
+.circle-bubble.is-wide {
+  width: 332px;
+  min-height: 240px;
+  border-radius: 44px;
+}
+
+.circle-bubble.is-center {
+  background: linear-gradient(180deg, rgba(241,245,248,0.96), rgba(233,239,244,0.84));
+}
+
+.circle-bubble.is-cyan {
+  border-color: rgba(118,165,184,0.26);
+  background: rgba(234,244,247,0.82);
+}
+
+.circle-bubble.is-purple {
+  border-color: rgba(163,154,191,0.24);
+  background: rgba(241,237,247,0.84);
+}
+
+.circle-bubble.is-warm {
+  border-color: rgba(199,176,141,0.24);
+  background: rgba(247,242,232,0.86);
+}
+
+.circle-bubble.is-support {
+  width: 220px;
+  min-height: 220px;
+}
+
+.circle-bubble.is-support strong,
+.circle-bubble.is-bottom strong {
+  font-size: 20px;
+}
+
+.circle-bubble.is-bottom p {
+  max-width: 18em;
+}
+
+.framework-head {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+
+.framework-head-label,
+.framework-dimension,
+.framework-copy,
+.framework-core {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(148,176,200,0.16);
+  background: rgba(255,255,255,0.60);
+  box-shadow: var(--shadow);
+}
+
+.framework-head-label::before,
+.framework-dimension::before,
+.framework-copy::before,
+.framework-core::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, rgba(138,180,196,0.12), transparent 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+
+.framework-head-label,
+.framework-dimension {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 22px 18px;
+  color: #2f3f51;
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.framework-head-label {
+  border-top: 3px solid var(--cyan-deep);
+}
+
+.framework-core {
+  padding: 26px 30px;
+  border-top: 3px solid var(--purple);
+}
+
+.framework-core strong {
+  display: block;
+  color: var(--text-dark);
+  font-size: 22px;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.framework-core p {
+  margin-top: 10px;
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.framework-list {
+  display: grid;
+  gap: 16px;
+}
+
+.framework-row {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.framework-dimension {
+  font-size: 17px;
+  border-top: 3px solid var(--cyan-deep);
+}
+
+.framework-copy {
+  padding: 22px 26px;
+  color: #586b7c;
+  font-size: 15px;
+  line-height: 1.9;
+  text-align: center;
+  border-top: 3px solid var(--warm);
+}
+
+.roadmap-shell {
+  width: 100%;
+  margin: 22px auto 0;
+  display: grid;
+  gap: 18px;
+}
+
+.roadmap-title-block,
+.roadmap-label,
+.roadmap-node,
+.roadmap-conclusion {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(148,176,200,0.16);
+  background: rgba(255,255,255,0.72);
+  box-shadow: var(--shadow);
+}
+
+.roadmap-title-block::before,
+.roadmap-label::before,
+.roadmap-node::before,
+.roadmap-conclusion::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, rgba(138,180,196,0.12), transparent 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+
+.roadmap-title-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  margin-bottom: 28px;
+  padding: 22px 28px;
+}
+
+.roadmap-title-block strong {
+  color: var(--text-dark);
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+}
+
+.roadmap-stage {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.roadmap-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  align-self: center;
+  width: 88px;
+  text-align: center;
+  min-height: 86px;
+  padding: 14px 10px;
+  color: var(--text-dark);
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 600;
+  border-top: 0;
+  box-shadow: 0 10px 24px rgba(99,124,148,0.06);
+  transform: translateY(18px);
+}
+
+.roadmap-label::before {
+  opacity: 0;
+}
+
+.roadmap-card {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 18px 16px 20px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.roadmap-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.roadmap-card-header strong,
+.roadmap-conclusion strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 0;
+  width: 100%;
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-dark);
+  font-size: 16px;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.roadmap-grid.is-compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.roadmap-node {
+  padding: 16px 14px 18px;
+}
+
+.roadmap-node h3 {
+  color: var(--cyan-deep);
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  white-space: nowrap;
+}
+
+.roadmap-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.roadmap-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,176,200,0.14);
+  background: rgba(138,180,196,0.09);
+  color: #5a7a8c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.roadmap-node.accent-cyan {
+  border-top: 3px solid var(--cyan-deep);
+}
+
+.roadmap-node.accent-purple {
+  border-top: 3px solid var(--purple);
+}
+
+.roadmap-node.accent-warm {
+  border-top: 3px solid var(--warm);
+}
+
+.roadmap-conclusion {
+  display: flex;
+  justify-content: center;
+  padding: 20px 16px;
+  border-top: 3px solid var(--purple);
 }
 
 .stat-card {
@@ -476,10 +1279,35 @@ footer {
   .grid-4,
   .grid-3,
   .grid-2,
-  .summary-grid,
   .media-strip,
-  .stats-wide {
+  .stats-wide,
+  .framework-head,
+  .framework-row,
+  .framework-layout,
+  .structure-horizontal,
+  .structure-flow,
+  .structure-bottom,
+  .circle-diagram-row.is-bottom,
+  .roadmap-stage,
+  .roadmap-grid,
+  .roadmap-grid.is-compact {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(280px, 360px));
+  }
+
+  .circle-diagram-row.is-triad {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .circle-bubble.is-small,
+  .circle-bubble.is-medium,
+  .circle-bubble.is-large,
+  .circle-bubble.is-wide,
+  .circle-bubble.is-support {
+    width: 100%;
   }
 }
 
@@ -505,11 +1333,26 @@ footer {
   .grid-4,
   .grid-3,
   .grid-2,
-  .summary-grid,
   .media-strip,
   .stats-wide,
-  .stat-band {
+  .stat-band,
+  .framework-head,
+  .framework-row,
+  .framework-layout,
+  .structure-horizontal,
+  .structure-flow,
+  .structure-bottom,
+  .circle-diagram-row.is-triad,
+  .circle-diagram-row.is-bottom,
+  .roadmap-stage,
+  .roadmap-grid,
+  .roadmap-grid.is-compact {
     grid-template-columns: 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: minmax(280px, 520px);
+    justify-content: center;
   }
 
   .section-head {
@@ -517,8 +1360,74 @@ footer {
   }
 
   .section-head h2 {
-    font-size: 26px;
+    font-size: 28px;
     margin-bottom: 10px;
+  }
+
+  .framework-shell {
+    padding: 22px;
+  }
+
+  .framework-head,
+  .framework-row {
+    gap: 14px;
+  }
+
+  .circle-diagram-shell {
+    gap: 16px;
+  }
+
+  .circle-diagram-row::before,
+  .circle-diagram-row.is-triad::before,
+  .circle-diagram-row.is-bottom::before {
+    display: none;
+  }
+
+  .circle-bubble {
+    min-height: 0 !important;
+    border-radius: 32px;
+  }
+
+  .structure-shell {
+    gap: 20px;
+  }
+
+  .structure-theory-card {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .structure-horizontal::before,
+  .structure-lane.is-stack::before {
+    display: none;
+  }
+
+  .structure-theory::after,
+  .structure-flow::before,
+  .structure-mid::before,
+  .structure-bottom::before,
+  .structure-bottom::after {
+    display: none;
+  }
+
+  .framework-intro {
+    padding: 0;
+  }
+
+  .framework-intro h2 {
+    writing-mode: horizontal-tb;
+    text-orientation: initial;
+  }
+
+  .framework-head-label,
+  .framework-dimension,
+  .framework-copy,
+  .framework-core,
+  .roadmap-label,
+  .roadmap-card,
+  .roadmap-node,
+  .roadmap-conclusion {
+    border-radius: 18px;
   }
 }
 </style>
@@ -597,7 +1506,10 @@ footer {
     <section class="section">
       <div class="section-head">
         <h2>研究锚点</h2>
-        <p>这一页集中说明项目为什么成立、依据什么展开，以及它最终试图带来的设计价值。</p>
+      </div>
+
+      <div class="thesis-bridge">
+        <p>通信技术的发展促进了移动性和实时性等关键属性的提升，极大增强了人们维护远距离关系的能力，但与此同时，线下社交活动的减少也逐渐成为一种普遍现象。在生活习惯高度数字化的年轻群体中，以移动互联网为基础的媒介化社交使“持续在线”成为常态，却也带来了沟通碎片化和共同情景缺失的问题，使面对面互动逐渐退化为非必要选项，进而引发社交疏离与孤独感，作为数字原住民的大学生群体正处于这一变化的核心位置。</p>
       </div>
 
       <div class="grid-3">
@@ -618,86 +1530,11 @@ footer {
 
     <section class="section">
       <div class="section-head">
-        <h2>协作机制</h2>
-        <p>项目的核心不是让所有人看同一个画面，而是通过不同角色的职责差异与多媒介信息拆分，促使沟通在情境中自然发生。</p>
-      </div>
-
-      <div class="grid-3">
-        <div class="card accent-cyan">
-          <h3>探索者</h3>
-          <p>佩戴 XR 头显进入虚拟场景，以第一人称完成移动、抓取、绘画与探索，是具身体验的核心承载者。</p>
-          <div class="tag-list">
-            <span class="tag">XR头显</span>
-            <span class="tag">具身交互</span>
-            <span class="tag">场景探索</span>
-          </div>
-        </div>
-        <div class="card accent-purple">
-          <h3>引导者</h3>
-          <p>借助同步大屏和实体线索卡掌握更完整的信息框架，通过语言提示与策略判断为探索者提供协作支持。</p>
-          <div class="tag-list">
-            <span class="tag">同步大屏</span>
-            <span class="tag">实体道具</span>
-            <span class="tag">策略指引</span>
-          </div>
-        </div>
-        <div class="card accent-warm">
-          <h3>回应者</h3>
-          <p>围观参与者通过轻量互动方式参与线索补充与反馈，让项目具备更大的社交覆盖面和现场活力。</p>
-          <div class="tag-list">
-            <span class="tag">移动端</span>
-            <span class="tag">轻量参与</span>
-            <span class="tag">社交暖场</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="media-strip">
-        <div class="media-box">XR虚拟场景<small>沉浸情境构建</small></div>
-        <div class="media-box">同步显示大屏<small>共享全局信息</small></div>
-        <div class="media-box">实体协作卡片<small>线索分配与触发</small></div>
-        <div class="media-box">线下空间互动<small>面对面交流延伸</small></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>章节预览</h2>
-        <p>作品通过四段递进式叙事旅程，将情绪铺垫、协作强度与关系深化组织成完整体验结构。</p>
-      </div>
-
-      <div class="grid-4">
-        <div class="chapter-card">
-          <div class="chapter-num">章节一</div>
-          <h3>孤独的城市</h3>
-          <p>以雨夜城市的疏离感作为开端，让用户先进入萨沙的内心状态，为后续协作的发生建立情绪底座。</p>
-          <a class="chapter-link" href="../chapters/chapter-1/index.html">进入第一章 →</a>
-        </div>
-        <div class="chapter-card">
-          <div class="chapter-num">章节二</div>
-          <h3>萨沙的家</h3>
-          <p>在较为私密和安全的空间中启动轻量协作，让沟通第一次以低门槛、低风险的形式自然发生。</p>
-          <a class="chapter-link" href="../chapters/chapter-2/index.html">进入第二章 →</a>
-        </div>
-        <div class="chapter-card">
-          <div class="chapter-num">章节三</div>
-          <h3>皮埃尔的梦想</h3>
-          <p>通过梦境化场景承载更复杂的共同决策与协同解谜，把伙伴关系从配合推进到理解与共创。</p>
-          <a class="chapter-link" href="../chapters/chapter-3/index.html">进入第三章 →</a>
-        </div>
-        <div class="chapter-card">
-          <div class="chapter-num">章节四</div>
-          <h3>太空之梦</h3>
-          <p>在高强度协作中抵达终章，使用户在完成任务后自然过渡到现实层面的自由交流与情感沉淀。</p>
-          <a class="chapter-link" href="../chapters/chapter-4/index.html">进入第四章 →</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
         <h2>设计机会点</h2>
-        <p>在总体层面，Within 的设计价值最终落在降低启动压力、强化具身反馈与用风格承接情绪三个方向上。</p>
+      </div>
+
+      <div class="thesis-bridge">
+        <p>本文以当代大学生群体线下社交失衡的现实问题为出发点，以促进现实社交行为的发生作为主要目标，探讨 XR 技术如何在设计层面被转化为一种社交引导媒介。研究结合具身认知与体验设计相关理论，以互动作品的设计实践为主要载体，探索以技术为媒介、以内容为核心的社交促进数字化设计方案。重点关注 XR 技术在公共空间中的应用情境，探讨其在降低社交启动门槛、引导沟通行为以及增强共同参与感方面的具体作用。</p>
       </div>
 
       <div class="summary-grid">
@@ -717,64 +1554,273 @@ footer {
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <h2>结果验证</h2>
-        <p>作品不只建立了理论与叙事框架，也通过实际测试验证了其在社交引导上的正向作用。</p>
+      <div class="thesis-bridge">
+        <p>基于上述背景，本研究在具身认知理论视角下，以互动作品“Within”为实践对象，引入“跨媒介协作”为核心的社交激励方式，对大学生社交数字化设计展开探索。相较于传统 XR 体验将主要内容局限于头显中的路径，本研究尝试将其作为社交互动过程中的引导媒介，成为社交互动中的关键环节，并将 XR 虚拟场景、同步显示界面、实体线索及线下空间互动进行设计组织，使不同媒介在体验中承担互补功能。</p>
       </div>
+      <div class="framework-shell">
+        <div class="framework-layout">
+          <div class="framework-intro">
+            <h2>跨媒介体验特征</h2>
+          </div>
 
-      <div class="grid-2">
-        <div class="card">
-          <h3>测试结论</h3>
-          <p>20 名大学生参与测试后，项目在"降低与陌生人沟通的尴尬感""让任务中的交流变得自然""促进体验结束后的继续交流"等维度上，都呈现出明确的正向反馈。</p>
-        </div>
-        <div class="card">
-          <h3>核心验证</h3>
-          <p>具身交互让用户更容易进入情境；渐进式协作让沟通不再突兀；跨媒介信息差则把现实交流变成了体验推进的必要条件。</p>
+          <div class="framework-content">
+            <div class="framework-head">
+              <div class="framework-head-label">特征维度</div>
+              <div class="framework-core">
+                <strong>核心内涵</strong>
+                <p>Within 通过 XR 虚拟场景、同步显示界面、实体线索与现实互动的协同组织，把不同媒介整合为一套彼此支撑、共同服务社交引导目标的体验体系。</p>
+              </div>
+            </div>
+
+            <div class="framework-list">
+              <div class="framework-row">
+                <div class="framework-dimension">媒介边界消融</div>
+                <div class="framework-copy">不同媒介在虚拟与现实、数字与实体之间打破原有技术与场景壁垒，形成可连续切换、彼此渗透的整体体验结构。</div>
+              </div>
+              <div class="framework-row">
+                <div class="framework-dimension">多模态感官整合</div>
+                <div class="framework-copy">通过视觉、听觉、触觉与行动反馈的协同组织，强化体验中的沉浸感、在场感与真实感，使社交不只停留在语言层面。</div>
+              </div>
+              <div class="framework-row">
+                <div class="framework-dimension">双向参与共创</div>
+                <div class="framework-copy">项目不再沿用“创作者传递内容、用户被动接收”的单向逻辑，而是让参与者在协作、判断与互动中共同塑造体验过程。</div>
+              </div>
+              <div class="framework-row">
+                <div class="framework-dimension">内容延伸与互补</div>
+                <div class="framework-copy">核心内容会在不同媒介中形成差异化呈现与互补性表达，每一种媒介承担独特功能，而不是对同一信息的简单重复。</div>
+              </div>
+              <div class="framework-row">
+                <div class="framework-dimension">功能目标导向</div>
+                <div class="framework-copy">所有媒介整合都围绕明确目标展开。在 Within 中，这一目标并非展示技术本身，而是更低压力、更自然地激发沟通、协作与现实交流。</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="stats-wide">
-        <div class="stat-card">
-          <div class="stat-num">18/20</div>
-          <div class="stat-desc">缓解与陌生人交流的尴尬感</div>
+    <section class="section section-structure">
+      <div class="thesis-bridge">
+        <p>在实践层面上，本研究基于“跨媒介协作”机制展开设计策略，以大学生的社交场景为切入点，围绕数字化设计在现实人际互动中的应用展开实践探索。研究通过 XR 设备、同步显示界面与纸质媒介的组合，构建以任务为核心的互动情境，并在此基础上设计了包含角色分工与信息分配的协作机制。在这一过程中，交流不再依赖个体主动发起，而是在完成任务的过程中逐步产生，从而使互动由“刻意交流”转向情境中的“自然协作”。</p>
+      </div>
+      <div class="structure-horizontal">
+        <div class="structure-lane is-single">
+          <div class="structure-traditional-card is-theory">
+            <h3>理论支撑</h3>
+            <p>具身认知理论</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">18/20</div>
-          <div class="stat-desc">愿意与本次搭档继续交流</div>
+
+        <div class="structure-lane is-stack">
+          <div class="structure-traditional-card accent-cyan">
+            <h3>XR虚拟媒介</h3>
+            <p>头显沉浸终端，承载空间探索与具身交互。</p>
+          </div>
+          <div class="structure-traditional-card accent-warm">
+            <h3>纸质卡片</h3>
+            <p>互动实体终端，承担线索分发与信息支援。</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">75%</div>
-          <div class="stat-desc">认可任务让沟通更自然</div>
+
+        <div class="structure-lane is-single">
+          <div class="structure-traditional-card is-core">
+            <h3>跨媒介协作叙事体系</h3>
+            <p>让虚拟场景、实体线索与现实交流围绕同一任务连续运作，形成完整的社交引导结构。</p>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">70%</div>
-          <div class="stat-desc">对视觉风格给出正向评价</div>
+
+        <div class="structure-lane is-stack">
+          <div class="structure-traditional-card accent-purple">
+            <h3>协作机制</h3>
+            <p>非对称角色分工与信息差异化沟通</p>
+          </div>
+          <div class="structure-traditional-card accent-cyan">
+            <h3>互动过程</h3>
+            <p>协作沟通、共享信息、完成挑战</p>
+          </div>
+        </div>
+
+        <div class="structure-lane is-stack">
+          <div class="structure-traditional-card accent-purple">
+            <h3>核心创新</h3>
+            <p>突破 XR 孤立终端框架，让技术转变为社交引导媒介。</p>
+          </div>
+          <div class="structure-traditional-card accent-warm">
+            <h3>核心目标</h3>
+            <p>把虚拟具身体验转化为现实社交互动的自然契机。</p>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <h2>继续深入</h2>
-        <p>如果这一页负责建立项目全貌，那么后续页面就分别承接研究证据、设计落地、章节细看与过程记录。</p>
+      <div class="thesis-bridge">
+        <p>本研究以具身认知理论为核心理论视角，以互动作品“Within”为实践载体，围绕大学生社交情境中的诸多问题与痛点，提出“跨媒介协作”这一设计机制。本研究通过文献研究、问卷调查、案例分析与实践创作法，系统梳理了具身认知、跨媒介设计与大学生社交引导的相关研究成果，明确了当前数字化设计在大学生社交互动引导中的不足。在此基础上，构建了具身认知视角下社交数字化设计的核心原则、设计方法与设计步骤全流程。</p>
       </div>
+      <div class="roadmap-title-block">
+        <strong>论文研究框架图</strong>
+      </div>
+      <div class="roadmap-shell">
+        <div class="roadmap-stage">
+          <div class="roadmap-label">提出问题</div>
+          <div class="roadmap-card">
+            <div class="roadmap-card-header">
+              <strong>导言</strong>
+            </div>
+            <div class="roadmap-grid is-compact">
+              <div class="roadmap-node accent-cyan">
+                <h3>研究背景</h3>
+              </div>
+              <div class="roadmap-node accent-purple">
+                <h3>研究目的和意义</h3>
+              </div>
+              <div class="roadmap-node accent-warm">
+                <h3>国内外相关研究现状</h3>
+              </div>
+              <div class="roadmap-node accent-cyan">
+                <h3>研究思路和方法</h3>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div class="grid-3">
-        <a class="entry-card" href="../research/index.html">
-          <h3>角色分配</h3>
-          <p>查看大学生社交困境、问卷分析、图表证据与设计机会点。</p>
-          <div class="entry-link">进入页面 →</div>
-        </a>
-        <a class="entry-card" href="../design/index.html">
-          <h3>协作机制</h3>
-          <p>查看论文第四章中的方案定位、机制设计、技术实现与体验流程。</p>
-          <div class="entry-link">进入页面 →</div>
-        </a>
-        <a class="entry-card" href="../process/index.html">
-          <h3>制作过程</h3>
-          <p>查看从概念、视觉到 Unity / XR 落地的开发过程与过程素材。</p>
-          <div class="entry-link">进入页面 →</div>
-        </a>
+        <div class="roadmap-stage">
+          <div class="roadmap-label">理论研究</div>
+          <div class="roadmap-card">
+            <div class="roadmap-card-header">
+              <strong>具身认知视角下社交数字化设计的理论基础</strong>
+            </div>
+            <div class="roadmap-grid">
+              <div class="roadmap-node accent-cyan">
+                <h3>具身认知理论及其社交作用机制</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">具身认知理论的发展脉络</span>
+                  <span class="roadmap-chip">具身交互对社交的作用机制</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-purple">
+                <h3>互动作品的跨媒介化与协作转向</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">互动作品的发展脉络</span>
+                  <span class="roadmap-chip">跨媒介化与协作转向</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-warm">
+                <h3>具身视角下“跨媒介协作”数字化设计可行性</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">理论适配</span>
+                  <span class="roadmap-chip">设计可行性</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-stage">
+          <div class="roadmap-label">问题调研<br>需求分析</div>
+          <div class="roadmap-card">
+            <div class="roadmap-card-header">
+              <strong>大学生社交互动现状与设计需求调研</strong>
+            </div>
+            <div class="roadmap-grid">
+              <div class="roadmap-node accent-cyan">
+                <h3>大学生社交互动现状与核心痛点</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">特征表现</span>
+                  <span class="roadmap-chip">形成原因</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-purple">
+                <h3>社交互动数字化相关设计案例分析</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">现有案例分析</span>
+                  <span class="roadmap-chip">案例总结</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-warm">
+                <h3>大学生社交互动数字化设计需求调研</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">社交互动偏好调研</span>
+                  <span class="roadmap-chip">虚拟环境风格偏好与交互需求调研</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-stage">
+          <div class="roadmap-label">提出策略</div>
+          <div class="roadmap-card">
+            <div class="roadmap-card-header">
+              <strong>具身视角下大学生社交数字化设计策略</strong>
+            </div>
+            <div class="roadmap-grid">
+              <div class="roadmap-node accent-cyan">
+                <h3>具身认知视角下大学生社交数字化设计核心原则</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">渐进式社交引导原则</span>
+                  <span class="roadmap-chip">多模态感官原则</span>
+                  <span class="roadmap-chip">体验安全原则</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-purple">
+                <h3>大学生社交数字化设计策略</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">低对抗场景的多轮铺垫</span>
+                  <span class="roadmap-chip">具身交互与渐进式社交引导</span>
+                  <span class="roadmap-chip">跨媒介协作与社交转化</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-warm">
+                <h3>大学生社交数字化设计流程</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">前期调研定位</span>
+                  <span class="roadmap-chip">中期内容优化</span>
+                  <span class="roadmap-chip">后期交互优化</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-stage">
+          <div class="roadmap-label">设计实践</div>
+          <div class="roadmap-card">
+            <div class="roadmap-card-header">
+              <strong>具身认知视角下大学生社交数字化设计实践</strong>
+            </div>
+            <div class="roadmap-grid">
+              <div class="roadmap-node accent-cyan">
+                <h3>社交互动数字化设计方案架构与技术实现</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">设计方案的整体架构</span>
+                  <span class="roadmap-chip">设计方案的技术实现</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-purple">
+                <h3>基于设计策略的社交互动数字化设计创作</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">社交场景的数字化转译与构建</span>
+                  <span class="roadmap-chip">问题与章节的具体设计</span>
+                  <span class="roadmap-chip">跨媒介协作链路设计</span>
+                </div>
+              </div>
+              <div class="roadmap-node accent-warm">
+                <h3>设计方案体验测试与效果分析</h3>
+                <div class="roadmap-chip-list">
+                  <span class="roadmap-chip">体验活动全过程</span>
+                  <span class="roadmap-chip">用户反馈与数据统计</span>
+                  <span class="roadmap-chip">研究结论验证结果</span>
+                  <span class="roadmap-chip">设计优化与未来迭代方向</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-conclusion">
+          <strong>结论</strong>
+        </div>
       </div>
     </section>
   </div>
@@ -792,5 +1838,3 @@ window.__pageConfig = {
 
 </body>
 </html>
-
-

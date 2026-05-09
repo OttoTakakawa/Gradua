@@ -292,7 +292,7 @@ body.is-next-armed .next-arm-hint {
 }
 
 .eyebrow {
-  display: inline-flex;
+  display: none;
   align-items: center;
   gap: 10px;
   color: #75899b;
@@ -302,7 +302,7 @@ body.is-next-armed .next-arm-hint {
 }
 
 .eyebrow::before {
-  content: "";
+  content: none;
   width: 28px;
   height: 1px;
   background: linear-gradient(90deg, rgba(117, 137, 155, 0), rgba(117, 137, 155, 0.72));

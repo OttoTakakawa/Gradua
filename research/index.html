@@ -78,9 +78,10 @@ h1 {
 }
 
 .section-head h2 {
-  font-size: 30px;
+  font-size: 32px;
   color: var(--text-dark);
   line-height: 1.2;
+  letter-spacing: -.01em;
 }
 
 .section-head p {
@@ -109,8 +110,9 @@ h1 {
   pointer-events: none;
 }
 .card h3 {
-  font-size: 20px; color: var(--text-dark);
+  font-size: 19px; color: var(--cyan-deep);
   margin-bottom: 12px;
+  font-weight: 600;
 }
 .card p {
   font-size: 15px; line-height: 1.95;
@@ -151,6 +153,88 @@ h1 {
   border: 1px solid rgba(148,176,200,0.15);
 }
 
+.method-map {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 18px 8px 6px;
+}
+
+.method-map::before {
+  content: "";
+  position: absolute;
+  top: 86px;
+  width: 1px;
+  height: 32px;
+  background: rgba(138,180,196,0.34);
+}
+
+.method-core,
+.method-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 10px 18px;
+  border-radius: 18px;
+  text-align: center;
+  line-height: 1.5;
+  border: 1px solid rgba(148,176,200,0.18);
+  box-shadow: 0 10px 24px rgba(111,136,168,0.08);
+}
+
+.method-core {
+  min-height: 82px;
+  min-width: 200px;
+  padding: 18px 20px;
+  background: linear-gradient(180deg, rgba(138,180,196,0.22), rgba(138,180,196,0.12));
+  color: var(--text-dark);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.method-branches {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+  padding-top: 34px;
+}
+
+.method-branches::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: rgba(138,180,196,0.34);
+}
+
+.method-node {
+  position: relative;
+  background: rgba(255,255,255,0.72);
+  color: var(--text-main);
+  font-size: 14px;
+  min-height: 56px;
+}
+
+.method-node::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -34px;
+  width: 1px;
+  height: 34px;
+  background: rgba(138,180,196,0.34);
+  transform: translateX(-50%);
+}
+
 .accent-cyan { border-top: 3px solid var(--cyan-deep); }
 .accent-purple { border-top: 3px solid var(--purple); }
 .accent-warm { border-top: 3px solid var(--warm); }
@@ -162,9 +246,10 @@ h1 {
   box-shadow: none;
   border-radius: 0;
   overflow: visible;
-  max-width: 1240px;
+  width: 100%;
+  max-width: none;
   padding: 28px 0 30px;
-  margin: 0 auto 38px;
+  margin: 0 0 38px;
 }
 
 .table-head {
@@ -672,7 +757,7 @@ tbody tr:last-child td {
   overflow: hidden;
   height: 18px;
   border-radius: 999px;
-  background: rgba(138,180,196,0.10);
+  background: rgba(170,193,208,0.08);
 }
 
 .likert-segment {
@@ -768,7 +853,7 @@ tbody tr:last-child td {
     display: block;
   }
   .section-head h2 {
-    font-size: 26px;
+    font-size: 28px;
     margin-bottom: 10px;
   }
   .wrap { width: min(100%, calc(100% - 28px)); padding: 84px 0 40px; }
@@ -800,6 +885,29 @@ tbody tr:last-child td {
   .matrix-header,
   .matrix-row {
     min-width: 760px;
+  }
+  .method-map {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px 0 0;
+  }
+  .method-map::before,
+  .method-branches::before {
+    display: none;
+  }
+  .method-branches {
+    grid-template-columns: 1fr;
+    padding-top: 0;
+  }
+  .method-core,
+  .method-node {
+    width: 100%;
+  }
+  .method-node::before {
+    display: none;
+  }
+  .method-core {
+    min-height: 76px;
   }
 }
 </style>
@@ -889,12 +997,15 @@ tbody tr:last-child td {
             论文采用文献研究、问卷调查、案例分析与实践创作法，
             从前期调研、中期开发到后期测试，形成从理论构建到原型验证的完整闭环。
           </p>
-          <div class="tag-list">
-            <span class="tag">文献研究</span>
-            <span class="tag">问卷调查</span>
-            <span class="tag">案例分析</span>
-            <span class="tag">实践创作</span>
-            <span class="tag">Unity / XR</span>
+          <div class="method-map" aria-label="研究方法树状图">
+            <div class="method-core">研究方法链路</div>
+            <div class="method-branches">
+              <div class="method-node">文献研究</div>
+              <div class="method-node">问卷调查</div>
+              <div class="method-node">案例分析</div>
+              <div class="method-node">实践创作</div>
+              <div class="method-node">Unity / XR</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1027,7 +1138,7 @@ window.__pageConfig = {
 <script id="page-script">
 var likertLabels = ["非常不符合", "比较不符合", "一般", "比较符合", "非常符合"];
 var socialPalette = ["#4f5d9d", "#7288d8", "#cfd5e6", "#91b7db", "#78c9bd"];
-var designPalette = ["#c96f5b", "#d89a5b", "#c8b86a", "#8fb28a", "#67b8b2"];
+var designPalette = ["#dda090", "#e6bc8f", "#d6ca95", "#a9c7a4", "#8dcfc9"];
 
 var virtualSocialCharts = [
   {

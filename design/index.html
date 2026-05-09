@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -68,17 +68,24 @@ line-height: 1.95;
 margin-top: 58px;
 }
 
+.positioning-section {
+margin-top: 94px;
+padding-top: 46px;
+border-top: 1px solid rgba(148,176,200,0.16);
+}
+
 .section-head {
 display: block;
 text-align: center;
-margin-bottom: 22px;
+margin-bottom: 30px;
 }
 
 .section-head h2 {
-font-size: 30px;
+font-size: 38px;
 color: var(--text-dark);
 line-height: 1.2;
 margin: 0;
+letter-spacing: -.01em;
 }
 
 .section-head p {
@@ -89,6 +96,123 @@ line-height: 1.9;
 margin: 10px auto 0;
 display: none;
 }
+
+.section-subhead {
+margin-top: 42px;
+margin-bottom: 22px;
+text-align: center;
+}
+
+.section-subhead h3 {
+font-size: 24px;
+line-height: 1.24;
+color: var(--cyan-deep);
+letter-spacing: .02em;
+margin: 0;
+}
+
+.section-subhead p {
+max-width: 760px;
+margin: 10px auto 0;
+font-size: 14px;
+line-height: 1.9;
+color: var(--text-soft);
+}
+
+.positioning-chart-card {
+padding: 26px 0 6px;
+background: transparent;
+border: 0;
+box-shadow: none;
+}
+
+.positioning-chart-card::before {
+display: none;
+}
+
+.positioning-chart {
+position: relative;
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 20px 26px;
+padding-top: 0;
+}
+
+.positioning-chart-core {
+grid-column: 1 / -1;
+position: relative;
+display: grid;
+justify-items: center;
+gap: 10px;
+width: 100%;
+max-width: 760px;
+margin: 0 auto 10px;
+padding: 0 18px;
+background: transparent;
+border: 0;
+box-shadow: none;
+text-align: center;
+}
+
+.positioning-chart-core strong {
+font-size: 20px;
+line-height: 1.3;
+color: var(--text-dark);
+letter-spacing: .02em;
+}
+
+.positioning-chart-core span {
+display: block;
+width: 100%;
+font-size: 13px;
+line-height: 1.6;
+color: var(--text-soft);
+white-space: nowrap;
+text-align: center;
+}
+
+.positioning-chart-item {
+position: relative;
+min-height: 132px;
+padding: 20px 22px 20px 24px;
+border-radius: 16px;
+background: rgba(255,255,255,0.50);
+border: 1px solid rgba(148,176,200,0.14);
+box-shadow: 0 8px 22px rgba(99,124,148,0.04);
+}
+
+.positioning-chart-item::before {
+content: "";
+position: absolute;
+left: 24px;
+top: 20px;
+bottom: 20px;
+width: 2px;
+border-radius: 999px;
+background: var(--item-accent, rgba(148,176,200,0.32));
+}
+
+.positioning-chart-item h3 {
+margin: 0 0 8px 18px;
+font-size: 19px;
+line-height: 1.28;
+font-weight: 600;
+letter-spacing: -.01em;
+color: #3d6478;
+}
+
+.positioning-chart-item p {
+margin: 0 0 0 18px;
+max-width: 28ch;
+font-size: 13px;
+line-height: 1.78;
+color: #728292;
+}
+
+.positioning-chart-item.is-cyan { --item-accent: rgba(93,134,147,0.66); }
+.positioning-chart-item.is-purple { --item-accent: rgba(143,142,176,0.66); }
+.positioning-chart-item.is-warm { --item-accent: rgba(189,165,131,0.70); }
+.positioning-chart-item.is-blue { --item-accent: rgba(110,135,159,0.70); }
 
 .grid-2,
 .grid-3,
@@ -147,9 +271,10 @@ pointer-events: none;
 .summary-box h3,
 .stage-card h3,
 .media-box h3 {
-font-size: 20px;
-color: var(--text-dark);
+font-size: 19px;
+color: var(--cyan-deep);
 margin-bottom: 12px;
+font-weight: 600;
 }
 
 .card p,
@@ -200,7 +325,7 @@ min-height: 100%;
 }
 
 .mechanism-map {
-margin-top: 22px;
+margin-top: 52px;
 display: grid;
 grid-template-columns: minmax(0, 1.16fr) minmax(420px, 0.84fr);
 gap: 20px;
@@ -212,6 +337,7 @@ position: relative;
 display: flex;
 flex-direction: column;
 height: 100%;
+margin-top: 18px;
 border-radius: 0;
 overflow: visible;
 background: transparent;
@@ -1062,7 +1188,7 @@ padding: 22px 24px 24px;
 }
 
 .interactive-panel-badge {
-display: inline-flex;
+display: none;
 align-items: center;
 padding: 6px 10px;
 border-radius: 999px;
@@ -1310,10 +1436,7 @@ text-decoration: none;
 }
 
 .chapter-card .chapter-num {
-font-size: 12px;
-letter-spacing: .08em;
-margin-bottom: 10px;
-color: var(--blue);
+display: none;
 }
 
 .chapter-link {
@@ -1340,7 +1463,7 @@ justify-content: center;
 align-items: center;
 display: flex;
 flex-direction: column;
-margin-bottom: 28px;
+margin-bottom: 64px;
 }
 
 .case-study-section > .section-head p {
@@ -1348,9 +1471,10 @@ max-width: 880px;
 }
 
 .case-study-intro {
-grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
-margin-top: 22px;
+grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
+margin-top: 0;
 align-items: start;
+gap: 34px;
 }
 
 .case-intro-panel,
@@ -1362,50 +1486,55 @@ z-index: 1;
 .case-intro-panel h3,
 .case-cluster-head h3,
 .case-card h3 {
-color: var(--text-dark);
+color: var(--cyan-deep);
 line-height: 1.2;
 }
 
 .case-intro-panel h3 {
-font-size: 24px;
-margin-bottom: 14px;
-max-width: 640px;
+font-size: 28px;
+margin-bottom: 16px;
+max-width: 560px;
+letter-spacing: -.01em;
 }
 
 .case-intro-panel p {
+max-width: 56ch;
 font-size: 15px;
-line-height: 1.95;
+line-height: 2;
 color: var(--text-soft);
 }
 
 .case-intro-panel {
-padding: 0 12px 0 0;
+padding: 2px 10px 0 0;
 }
 
 .case-principles {
 display: grid;
-gap: 14px;
+gap: 16px;
 align-content: start;
+padding-top: 4px;
 }
 
 .case-principle {
-padding: 18px 0 18px 18px;
-border-left: 1px solid rgba(148,176,200,0.26);
-background: linear-gradient(90deg, rgba(255,255,255,0.66), rgba(255,255,255,0));
+padding: 18px 0 18px 22px;
+border-left: 2px solid rgba(148,176,200,0.28);
+background: linear-gradient(90deg, rgba(255,255,255,0.58), rgba(255,255,255,0));
 }
 
 .case-principle strong {
 display: block;
-font-size: 13px;
-letter-spacing: .1em;
-color: var(--cyan-deep);
-margin-bottom: 8px;
+font-size: 15px;
+font-weight: 600;
+letter-spacing: .02em;
+color: var(--text-dark);
+margin-bottom: 6px;
 }
 
 .case-principle p {
-font-size: 14px;
-line-height: 1.85;
+font-size: 13px;
+line-height: 1.8;
 color: var(--text-soft);
+max-width: 34ch;
 }
 
 .case-cluster {
@@ -1541,7 +1670,7 @@ box-shadow: 0 14px 30px rgba(99,124,148,0.10);
 }
 
 .case-card h3 {
-font-size: 24px;
+font-size: 22px;
 }
 
 .case-body p {
@@ -1551,20 +1680,30 @@ color: var(--text-soft);
 }
 
 .case-insight {
-padding: 4px 0 4px 18px;
-border-radius: 0;
-background: linear-gradient(90deg, rgba(138,180,196,0.10), rgba(255,255,255,0));
-border: 0;
-border-left: 2px solid rgba(91,154,160,0.34);
-margin-top: auto;
+display: grid;
+justify-items: start;
+gap: 10px;
+padding: 16px 18px;
+border-radius: 16px;
+background: rgba(114,138,176,0.08);
+border: 1px solid rgba(148,176,200,0.16);
+box-shadow: 0 10px 24px rgba(99,124,148,0.06);
+margin-top: 6px;
 }
 
 .case-insight strong {
-display: block;
-font-size: 13px;
-letter-spacing: .1em;
+display: inline-block;
+font-size: 12px;
+letter-spacing: .08em;
 color: var(--cyan-deep);
-margin-bottom: 8px;
+margin-bottom: 0;
+}
+
+.case-insight p {
+margin: 0;
+font-size: 14px;
+line-height: 1.84;
+color: var(--text-main);
 }
 
 .card-demo-stage {
@@ -1690,9 +1829,10 @@ transform: scale(1.08);
 .card-demo-note {
 position: relative;
 z-index: 1;
-margin: 0 auto 18px;
+margin: 18px auto 0;
 text-align: center;
 font-size: 13px;
+letter-spacing: .04em;
 letter-spacing: .04em;
 color: #6b7f92;
 max-width: 760px;
@@ -1759,7 +1899,7 @@ display: block;
 
 .section-head h2 {
 margin-bottom: 10px;
-font-size: 26px;
+font-size: 30px;
 }
 
 .case-study-section > .section-head {
@@ -1769,6 +1909,26 @@ display: block;
 .case-study-intro {
 grid-template-columns: 1fr;
 }
+
+.positioning-chart {
+grid-template-columns: 1fr;
+padding-top: 0;
+}
+
+.positioning-chart::before,
+.positioning-chart::after {
+display: none;
+}
+
+.positioning-chart-core {
+position: relative;
+left: auto;
+top: auto;
+transform: none;
+width: 100%;
+margin-bottom: 4px;
+}
+
 
 .case-cluster-head {
 display: flex;
@@ -2018,36 +2178,39 @@ grid-template-columns: 1fr;
       </div>
     </div>
 
-    <div class="section">
+    <div class="section positioning-section">
       <div class="section-head">
-        <h2>方案定位与目标</h2>
-        <p>这一层回答"核心设计究竟在解决什么"。页面内容主要提炼自论文第四章前半部分的方案定位与核心设计目标。</p>
+        <h2>方案定位、目标与技术实现</h2>
+        <p>这一节将论文第四章前半部分的方案定位、核心目标与技术实现合并展示，统一回答“设计究竟解决什么，以及如何稳定落地”。</p>
       </div>
 
-      <div class="grid-2">
-        <div class="card accent-cyan">
-          <h3>方案定位</h3>
-          <p>以消费级 XR 一体机为核心载体，面向高校校园场景构建可落地的社交数字化设计方案，区别于单纯娱乐型 XR 产品与临床心理干预工具。</p>
-        </div>
-        <div class="card accent-purple">
-          <h3>具身交互</h3>
-          <p>以身体动作为核心交互入口，让抓取、移动、点按与环境反馈共同构成沉浸式认知闭环，打破传统屏幕媒介的离身式交互局限。</p>
-        </div>
-        <div class="card accent-warm">
-          <h3>自然社交引导</h3>
-          <p>通过非对称分工、信息拆分与任务驱动，让交流从"刻意发起"转变为"完成任务时自然发生"，从而降低大学生的社交启动门槛。</p>
-        </div>
-        <div class="card accent-cyan">
-          <h3>轻量化落地</h3>
-          <p>基于 Unity 与消费级设备完成轻量化开发，控制硬件成本、运维门槛与场地要求，使方案更适合展陈、校园活动与持续迭代。</p>
+      <div class="card positioning-chart-card">
+        <div class="positioning-chart" aria-label="方案定位与目标结构图">
+          <div class="positioning-chart-core">
+            <strong>Within 方案结构</strong>
+            <span>以校园社交场景为核心，围绕媒介载体、交互方式、社交目标与落地条件建立完整设计闭环。</span>
+          </div>
+          <div class="positioning-chart-item is-cyan">
+            <h3>方案定位</h3>
+            <p>以消费级 XR 一体机为核心载体，面向高校校园场景构建可落地的社交数字化方案。</p>
+          </div>
+          <div class="positioning-chart-item is-purple">
+            <h3>具身交互</h3>
+            <p>以身体动作为核心入口，让抓取、移动、点按与环境反馈共同构成沉浸式认知闭环。</p>
+          </div>
+          <div class="positioning-chart-item is-warm">
+            <h3>自然社交引导</h3>
+            <p>通过非对称分工、信息拆分与任务驱动，让交流从刻意发起转为任务中自然发生。</p>
+          </div>
+          <div class="positioning-chart-item is-blue">
+            <h3>轻量化落地</h3>
+            <p>基于 Unity 与消费级设备完成轻量化开发，兼顾成本控制、场地适配与后续迭代。</p>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="section">
-      <div class="section-head">
-        <h2>技术实现</h2>
-        <p>论文第四章将技术实现拆成开发模式、开发平台规范与具体功能实现三部分，核心都围绕"稳定落地"和"适配一体机性能"展开。</p>
+      <div class="section-subhead">
+        <h3>技术实现</h3>
+        <p>围绕“稳定落地”和“适配一体机性能”，把开发模式、平台规范与关键系统实现统一收束到这一节内部。</p>
       </div>
 
       <div class="grid-3">
@@ -2131,6 +2294,43 @@ grid-template-columns: 1fr;
       <div class="section-head">
         <h2>跨媒介协作机制</h2>
         <p>这是论文第四章最关键的设计结构。不同角色拥有不同权限、视角和信息来源，只有持续沟通，体验才会继续推进。</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card accent-cyan">
+          <h3>探索者</h3>
+          <p>佩戴 XR 头显进入虚拟场景，以第一人称完成移动、抓取、绘画与探索，是具身体验的核心承载者。</p>
+          <div class="tag-list">
+            <span class="tag">XR头显</span>
+            <span class="tag">具身交互</span>
+            <span class="tag">场景探索</span>
+          </div>
+        </div>
+        <div class="card accent-purple">
+          <h3>引导者</h3>
+          <p>借助同步大屏和实体线索卡掌握更完整的信息框架，通过语言提示与策略判断为探索者提供协作支持。</p>
+          <div class="tag-list">
+            <span class="tag">同步大屏</span>
+            <span class="tag">实体道具</span>
+            <span class="tag">策略指引</span>
+          </div>
+        </div>
+        <div class="card accent-warm">
+          <h3>回应者</h3>
+          <p>围观参与者通过轻量互动方式参与线索补充与反馈，让项目具备更大的社交覆盖面和现场活力。</p>
+          <div class="tag-list">
+            <span class="tag">移动端</span>
+            <span class="tag">轻量参与</span>
+            <span class="tag">社交暖场</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="media-grid" style="margin-top:34px;">
+        <div class="media-box"><strong>XR虚拟场景</strong><p>沉浸情境构建</p></div>
+        <div class="media-box"><strong>同步显示大屏</strong><p>共享全局信息</p></div>
+        <div class="media-box"><strong>实体协作卡片</strong><p>线索分配与触发</p></div>
+        <div class="media-box"><strong>线下空间互动</strong><p>面对面交流延伸</p></div>
       </div>
 
       <div class="mechanism-map" data-mechanism-map>
@@ -2261,9 +2461,8 @@ grid-template-columns: 1fr;
       <div class="card-demo-stage">
         <div class="card-demo-head">
           <h3>纸质协作卡片效果尝试</h3>
-          <p>先使用你提供的卡片图作为占位符，在网页中测试“轻漂浮 + 错峰节奏 + 克制悬停”的展示状态。后续替换正式卡面后，可以直接沿用这一套结构继续扩展。</p>
+          <p>在实践层面上，本研究基于“跨媒介协作”机制展开设计策略，通过 XR 设备、同步显示界面与纸质媒介的组合，构建以任务为核心的互动情境，并在此基础上设计包含角色分工与信息分配的协作机制。</p>
         </div>
-        <p class="card-demo-note">卡片会以传送带的方式持续横向循环；点击任意卡片可暂停并聚焦放大，点击空白区域可恢复循环。</p>
         <div class="card-belt-shell" data-card-belt>
           <div class="card-belt-viewport" data-card-belt-viewport aria-label="纸质协作卡片传送带演示">
             <div class="card-belt-track" data-card-belt-track>
@@ -2290,6 +2489,7 @@ grid-template-columns: 1fr;
             </div>
           </div>
         </div>
+        <p class="card-demo-note">卡片会以传送带的方式持续横向循环；点击任意卡片可暂停并聚焦放大，点击空白区域可恢复循环。</p>
       </div>
     </div>
   </div>
