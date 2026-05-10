@@ -49,7 +49,7 @@ h1 {
 }
 
 .section {
-  margin-top: 58px;
+  margin-top: 52px;
 }
 
 .section-charts {
@@ -61,8 +61,8 @@ h1 {
 }
 
 .section-charts .section-head h2 {
-  font-size: clamp(38px, 4.2vw, 48px);
-  line-height: 1.15;
+  font-size: clamp(34px, 4vw, 50px);
+  line-height: 1.2;
 }
 
 .section-charts .section-head p {
@@ -74,11 +74,11 @@ h1 {
 .section-head {
   display: block;
   text-align: center;
-  margin-bottom: 22px;
+  margin-bottom: 28px;
 }
 
 .section-head h2 {
-  font-size: 32px;
+  font-size: clamp(34px, 4vw, 50px);
   color: var(--text-dark);
   line-height: 1.2;
   letter-spacing: -.01em;
@@ -89,7 +89,7 @@ h1 {
   color: var(--text-soft);
   font-size: 15px;
   line-height: 1.9;
-  margin: 10px auto 0;
+  margin: 12px auto 0;
 }
 
 .card {
@@ -110,24 +110,24 @@ h1 {
   pointer-events: none;
 }
 .card h3 {
-  font-size: 19px; color: var(--cyan-deep);
+  font-size: 24px; color: var(--cyan-deep);
   margin-bottom: 12px;
   font-weight: 600;
 }
 .card p {
-  font-size: 15px; line-height: 1.95;
+  font-size: 15px; line-height: 1.9;
   color: var(--text-soft);
 }
 
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
+  gap: 28px;
 }
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
+  gap: 28px;
 }
 
 .feature-list { display: grid; gap: 10px; margin-top: 16px; }
@@ -137,8 +137,8 @@ h1 {
   background: rgba(255,255,255,0.55);
   border-radius: 12px;
   color: var(--text-main);
-  line-height: 1.7;
-  font-size: 14px;
+  line-height: 1.9;
+  font-size: 15px;
 }
 
 .tag-list {
@@ -149,7 +149,7 @@ h1 {
   padding: 6px 14px; border-radius: 999px;
   font-size: 13px;
   background: rgba(138,180,196,0.10);
-  color: #5a7a8c;
+  color: var(--cyan-deep);
   border: 1px solid rgba(148,176,200,0.15);
 }
 
@@ -182,7 +182,7 @@ h1 {
   padding: 10px 18px;
   border-radius: 18px;
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.6;
   border: 1px solid rgba(148,176,200,0.18);
   box-shadow: 0 10px 24px rgba(111,136,168,0.08);
 }
@@ -220,7 +220,7 @@ h1 {
   position: relative;
   background: rgba(255,255,255,0.72);
   color: var(--text-main);
-  font-size: 14px;
+  font-size: 15px;
   min-height: 56px;
 }
 
@@ -262,8 +262,8 @@ h1 {
 }
 
 .table-head h3 {
-  font-size: 28px;
-  line-height: 1.3;
+  font-size: 24px;
+  line-height: 1.2;
   color: var(--text-dark);
 }
 
@@ -271,8 +271,8 @@ h1 {
   max-width: 760px;
   margin: 0 auto;
   color: var(--text-soft);
-  font-size: 14px;
-  line-height: 1.85;
+  font-size: 15px;
+  line-height: 1.9;
 }
 
 .table-wrap {
@@ -305,8 +305,8 @@ th, td {
   border-bottom: 1px solid rgba(148,176,200,0.14);
   text-align: center;
   vertical-align: middle;
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 15px;
+  line-height: 1.9;
 }
 
 th {
@@ -338,7 +338,7 @@ td:first-child {
 }
 
 td:last-child {
-  color: #6f8090;
+  color: var(--text-soft);
 }
 
 td {
@@ -372,7 +372,7 @@ tbody tr:last-child td {
 
 .chart-card > p {
   color: var(--text-soft);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.9;
 }
 
@@ -436,11 +436,11 @@ tbody tr:last-child td {
 }
 
 .style-name {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   text-align: center;
   color: var(--text-dark);
-  font-size: 16px;
-  line-height: 1.4;
+  font-size: 15px;
+  line-height: 1.2;
   letter-spacing: 0.01em;
 }
 
@@ -529,7 +529,7 @@ tbody tr:last-child td {
 
 .donut-title {
   color: var(--text-main);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
   max-width: 20em;
 }
@@ -548,7 +548,7 @@ tbody tr:last-child td {
   margin: 0 auto;
   text-align: center;
   font-size: 13px;
-  line-height: 1.75;
+  line-height: 1.6;
   color: rgba(136,153,168,0.92);
 }
 
@@ -633,7 +633,7 @@ tbody tr:last-child td {
 .chart-subsection p {
   color: var(--text-soft);
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.9;
 }
 
 .chart-card.wide > h3,
@@ -704,8 +704,8 @@ tbody tr:last-child td {
 
 .matrix-question {
   color: var(--text-main);
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 15px;
+  line-height: 1.9;
   padding-right: 10px;
 }
 
@@ -748,8 +748,8 @@ tbody tr:last-child td {
 
 .likert-label {
   color: var(--text-main);
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 15px;
+  line-height: 1.9;
 }
 
 .likert-bar {
@@ -789,7 +789,7 @@ tbody tr:last-child td {
   padding: 12px 14px;
   border-radius: 14px;
   background: rgba(42, 52, 63, 0.92);
-  color: #f4f7fa;
+  color: #f6f8fb;
   box-shadow: 0 18px 40px rgba(22, 29, 36, 0.24);
   pointer-events: none;
   opacity: 0;
@@ -810,7 +810,7 @@ tbody tr:last-child td {
 .chart-tooltip span {
   display: block;
   font-size: 12px;
-  line-height: 1.7;
+  line-height: 1.6;
   color: rgba(244,247,250,0.86);
 }
 
@@ -818,7 +818,7 @@ tbody tr:last-child td {
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  gap: 28px;
 }
 
 .summary-box {
