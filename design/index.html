@@ -1748,15 +1748,15 @@ margin-top: 10px;
 .card-belt-viewport {
 position: relative;
 overflow: hidden;
-padding: 28px 8px 54px;
+padding: 64px 8px 54px;
 mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
 .card-belt-track {
 display: flex;
-align-items: flex-end;
-gap: 24px;
+align-items: center;
+gap: 48px;
 width: max-content;
 will-change: transform;
 transform: translate3d(0, 0, 0);
@@ -1777,8 +1777,10 @@ transition: opacity .28s ease;
 .card-belt-card {
 position: relative;
 display: block;
+width: 100%;
 transition: transform .82s cubic-bezier(0.22, 1, 0.36, 1), filter .28s ease;
 transform-origin: center center;
+perspective: 1200px;
 }
 
 .card-belt-card::after {
@@ -1794,14 +1796,53 @@ filter: blur(11px);
 opacity: 0.7;
 pointer-events: none;
 transition: opacity .32s ease, transform .82s cubic-bezier(0.22, 1, 0.36, 1);
+z-index: -1;
+}
+
+.card-belt-card-inner {
+position: relative;
+display: block;
+width: 100%;
+aspect-ratio: 54 / 86;
+transform-style: preserve-3d;
+transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+border-radius: 20px;
+overflow: visible;
+box-shadow: 0 24px 48px rgba(41,57,71,0.16);
+}
+
+.card-belt-card.is-flipped .card-belt-card-inner {
+transform: rotateY(180deg);
+}
+
+.card-belt-card-front {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+backface-visibility: hidden;
+-webkit-backface-visibility: hidden;
+border-radius: 20px;
+overflow: hidden;
+}
+
+.card-belt-card-back {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+backface-visibility: hidden;
+-webkit-backface-visibility: hidden;
+transform: rotateY(180deg);
+border-radius: 20px;
+overflow: hidden;
 }
 
 .card-belt-card img {
 display: block;
 width: 100%;
-height: auto;
-border-radius: 24px;
-box-shadow: 0 24px 48px rgba(41,57,71,0.16);
+height: 100%;
+object-fit: cover;
 }
 
 .card-belt-item:hover .card-belt-card {
@@ -2466,30 +2507,114 @@ grid-template-columns: 1fr;
         <div class="card-belt-shell" data-card-belt>
           <div class="card-belt-viewport" data-card-belt-viewport aria-label="纸质协作卡片传送带演示">
             <div class="card-belt-track" data-card-belt-track>
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="1" aria-label="合作挑战卡片 1">
-                <span class="card-belt-card">
-                  <img src="../images/cards/card-collab-challenge-placeholder.png" alt="合作挑战卡片占位图">
+              <!-- White Card 1 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w1" aria-label="White 卡片 1">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-1.jpg" alt="White 卡片 1 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
+                    </span>
+                  </span>
                 </span>
               </button>
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="2" aria-label="合作挑战卡片 2">
-                <span class="card-belt-card">
-                  <img src="../images/cards/card-collab-challenge-placeholder.png" alt="合作挑战卡片占位图">
+              <!-- White Card 2 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w2" aria-label="White 卡片 2">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-2.jpg" alt="White 卡片 2 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
+                    </span>
+                  </span>
                 </span>
               </button>
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="3" aria-label="合作挑战卡片 3">
-                <span class="card-belt-card">
-                  <img src="../images/cards/card-collab-challenge-placeholder.png" alt="合作挑战卡片占位图">
+              <!-- White Card 3 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w3" aria-label="White 卡片 3">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-3.jpg" alt="White 卡片 3 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
+                    </span>
+                  </span>
                 </span>
               </button>
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="4" aria-label="合作挑战卡片 4">
-                <span class="card-belt-card">
-                  <img src="../images/cards/card-collab-challenge-placeholder.png" alt="合作挑战卡片占位图">
+              <!-- White Card 4 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w4" aria-label="White 卡片 4">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-4.jpg" alt="White 卡片 4 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
+                    </span>
+                  </span>
+                </span>
+              </button>
+              <!-- Black Card 1 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b1" aria-label="Black 卡片 1">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-dark-1.jpg" alt="Black 卡片 1 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
+                    </span>
+                  </span>
+                </span>
+              </button>
+              <!-- Black Card 2 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b2" aria-label="Black 卡片 2">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-dark-2.jpg" alt="Black 卡片 2 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
+                    </span>
+                  </span>
+                </span>
+              </button>
+              <!-- Black Card 3 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b3" aria-label="Black 卡片 3">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-dark-3.jpg" alt="Black 卡片 3 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
+                    </span>
+                  </span>
+                </span>
+              </button>
+              <!-- Black Card 4 -->
+              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b4" aria-label="Black 卡片 4">
+                <span class="card-belt-card" data-flip-card>
+                  <span class="card-belt-card-inner">
+                    <span class="card-belt-card-front">
+                      <img src="../images/cards/card-dark-4.jpg" alt="Black 卡片 4 正面">
+                    </span>
+                    <span class="card-belt-card-back">
+                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
+                    </span>
+                  </span>
                 </span>
               </button>
             </div>
           </div>
         </div>
-        <p class="card-demo-note">卡片会以传送带的方式持续横向循环；点击任意卡片可暂停并聚焦放大，点击空白区域可恢复循环。</p>
+        <p class="card-demo-note">卡片会以传送带的方式持续横向循环；点击任意卡片可暂停并聚焦放大，右键点击卡片可翻转查看背面，点击空白区域可恢复循环。</p>
       </div>
     </div>
   </div>
@@ -3224,6 +3349,17 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-interactive-diagra
         return;
       }
       if (selectedItem) releaseFocus();
+    });
+
+    viewport.addEventListener('contextmenu', function(e) {
+      if (!selectedItem) return;
+      var card = e.target.closest('[data-card-belt-item]');
+      if (card !== selectedItem) return;
+      var flipCard = card.querySelector('[data-flip-card]');
+      if (!flipCard) return;
+      e.preventDefault();
+      e.stopPropagation();
+      flipCard.classList.toggle('is-flipped');
     });
 
     root.addEventListener('keydown', function(e) {

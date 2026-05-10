@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 104px 24px 40px;
+  padding: 104px 24px 180px;
 }
 
 .poly-bg {
@@ -130,9 +130,22 @@ body.is-leaving-next .logo {
   line-height: 1.9;
 }
 
+body.is-next-armed .page-index .next-arm-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 860px) {
+  body.is-next-armed .page-index .next-arm-hint {
+    bottom: 16px;
+  }
+}
+
 @media (max-width: 860px) {
   .cover {
-    padding: 84px 14px 20px;
+    padding: 84px 14px 140px;
   }
 
   .logo-shell {

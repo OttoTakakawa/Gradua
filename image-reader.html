@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图片转Base64 · 跨AI读图工具</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #1a1d23;
+  --surface: #21242b;
+  --border: rgba(255,255,255,0.08);
+  --text: #d4d8e0;
+  --text-soft: #8892a0;
+  --accent: #6ea8fe;
+  --accent-glow: rgba(110,168,254,0.18);
+  --green: #56d364;
+  --radius: 12px;
+}
+
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.app {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: #e6edf3;
+}
+
+.header p {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.dropzone {
+  position: relative;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: var(--surface);
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropzone:hover,
+.dropzone.drag-over {
+  border-color: var(--accent);
+  background: rgba(110,168,254,0.04);
+}
+
+.dropzone-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.dropzone-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.dropzone-label {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.dropzone-hint {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.hidden-input {
+  display: none;
+}
+
+.preview-area {
+  display: none;
+  gap: 20px;
+}
+
+.preview-area.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.preview-img-wrap {
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-img-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.preview-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.info-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.info-row span:first-child {
+  color: var(--text);
+  font-weight: 500;
+  min-width: 60px;
+}
+
+.format-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.format-tab {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all .18s;
+}
+
+.format-tab:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.16);
+}
+
+.format-tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.output-area {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.output-area textarea {
+  width: 100%;
+  min-height: 120px;
+  max-height: 320px;
+  padding: 16px;
+  padding-bottom: 48px;
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", "Consolas", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  resize: vertical;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.output-area textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.copy-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--accent);
+  background: rgba(110,168,254,0.12);
+  color: var(--accent);
+  cursor: pointer;
+  transition: all .18s;
+}
+
+.copy-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.copy-btn.copied {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: all .18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn.primary:hover {
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: var(--green);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease;
+  z-index: 100;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.size-warn {
+  color: #f0883e;
+  font-size: 12px;
+  display: none;
+}
+
+.size-warn.show {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .preview-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .preview-img-wrap {
+    width: 160px;
+    height: 160px;
+  }
+
+  .preview-info {
+    width: 100%;
+  }
+
+  .app { gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <h1>📷 图片转 Base64 文本</h1>
+    <p>拖入图片 → 复制 base64 → 粘贴给任意 AI 读图</p>
+  </div>
+
+  <div class="dropzone" id="dropzone">
+    <div class="dropzone-inner">
+      <div class="dropzone-icon">🖼️</div>
+      <div class="dropzone-label">拖放图片到此处，或点击选择</div>
+      <div class="dropzone-hint">支持 PNG / JPG / WebP / GIF / SVG</div>
+    </div>
+  </div>
+
+  <input type="file" class="hidden-input" id="fileInput" accept="image/*">
+
+  <div class="preview-area" id="previewArea">
+    <div class="preview-row">
+      <div class="preview-img-wrap">
+        <img id="previewImg" src="" alt="预览">
+      </div>
+      <div class="preview-info">
+        <div class="info-row"><span>文件名</span><span id="infoName">-</span></div>
+        <div class="info-row"><span>类型</span><span id="infoType">-</span></div>
+        <div class="info-row"><span>尺寸</span><span id="infoSize">-</span></div>
+        <div class="info-row"><span>Base64</span><span id="infoB64Len">-</span></div>
+      </div>
+    </div>
+
+    <div class="format-tabs">
+      <button class="format-tab active" data-format="dataurl">Data URL（推荐）</button>
+      <button class="format-tab" data-format="plain">纯 Base64</button>
+      <button class="format-tab" data-format="markdown">Markdown 图片</button>
+    </div>
+
+    <div class="size-warn" id="sizeWarn">⚠️ 图片较大，部分 AI 可能无法处理超过 20MB 的 base64 文本</div>
+
+    <div class="output-area">
+      <textarea id="output" readonly placeholder="转换后的 base64 文本将显示在这里..."></textarea>
+      <button class="copy-btn" id="copyBtn">📋 复制</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="newBtn">🔄 换一张图片</button>
+      <button class="btn primary" id="downloadBtn">💾 下载转换结果</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  var dropzone = document.getElementById('dropzone');
+  var fileInput = document.getElementById('fileInput');
+  var previewArea = document.getElementById('previewArea');
+  var previewImg = document.getElementById('previewImg');
+  var output = document.getElementById('output');
+  var copyBtn = document.getElementById('copyBtn');
+  var newBtn = document.getElementById('newBtn');
+  var downloadBtn = document.getElementById('downloadBtn');
+  var toast = document.getElementById('toast');
+  var sizeWarn = document.getElementById('sizeWarn');
+  var formatTabs = document.querySelectorAll('.format-tab');
+
+  var infoName = document.getElementById('infoName');
+  var infoType = document.getElementById('infoType');
+  var infoSize = document.getElementById('infoSize');
+  var infoB64Len = document.getElementById('infoB64Len');
+
+  var currentFormat = 'dataurl';
+  var currentDataUrl = '';
+  var currentBase64 = '';
+  var currentFileName = '';
+  var currentMimeType = '';
+
+  dropzone.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  dropzone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropzone.classList.add('drag-over');
+  });
+
+  dropzone.addEventListener('dragleave', function() {
+    dropzone.classList.remove('drag-over');
+  });
+
+  dropzone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropzone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleFile(files[0]);
+    }
+  });
+
+  fileInput.addEventListener('change', function() {
+    if (fileInput.files.length > 0) {
+      handleFile(fileInput.files[0]);
+    }
+  });
+
+  function handleFile(file) {
+    if (!file.type.match(/^image\//) && !file.name.match(/\.svg$/i)) {
+      showToast('⚠️ 请选择图片文件');
+      return;
+    }
+
+    currentFileName = file.name;
+    currentMimeType = file.type || 'image/png';
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      currentDataUrl = e.target.result;
+      var parts = currentDataUrl.split(',');
+      currentBase64 = parts.length > 1 ? parts[1] : currentDataUrl;
+
+      previewImg.src = currentDataUrl;
+      infoName.textContent = currentFileName;
+      infoType.textContent = currentMimeType;
+      infoSize.textContent = formatBytes(file.size);
+
+      var b64Len = currentBase64.length;
+      infoB64Len.textContent = b64Len.toLocaleString() + ' 字符 (' + formatBytes(Math.ceil(b64Len * 0.75)) + ')';
+
+      if (b64Len > 20000000) {
+        sizeWarn.classList.add('show');
+      } else {
+        sizeWarn.classList.remove('show');
+      }
+
+      updateOutput();
+
+      previewArea.classList.add('active');
+      dropzone.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function updateOutput() {
+    switch (currentFormat) {
+      case 'dataurl':
+        output.value = currentDataUrl;
+        break;
+      case 'plain':
+        output.value = currentBase64;
+        break;
+      case 'markdown':
+        output.value = '![' + (currentFileName || 'image') + '](' + currentDataUrl + ')';
+        break;
+    }
+  }
+
+  formatTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      formatTabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      currentFormat = tab.getAttribute('data-format');
+      updateOutput();
+    });
+  });
+
+  copyBtn.addEventListener('click', function() {
+    output.select();
+    output.setSelectionRange(0, 99999999);
+    navigator.clipboard.writeText(output.value).then(function() {
+      copyBtn.textContent = '✅ 已复制';
+      copyBtn.classList.add('copied');
+      showToast('✅ 已复制到剪贴板！可直接粘贴给 AI');
+      setTimeout(function() {
+        copyBtn.textContent = '📋 复制';
+        copyBtn.classList.remove('copied');
+      }, 2000);
+    }).catch(function() {
+      showToast('❌ 复制失败，请手动选择文本框内容');
+    });
+  });
+
+  newBtn.addEventListener('click', function() {
+    resetAll();
+  });
+
+  downloadBtn.addEventListener('click', function() {
+    var content = output.value;
+    var ext = currentFormat === 'markdown' ? '.md' : '.txt';
+    var filename = (currentFileName || 'image') + '_base64' + ext;
+    var blob = new Blob([content], { type: 'text/plain' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('💾 已下载 ' + filename);
+  });
+
+  function resetAll() {
+    previewArea.classList.remove('active');
+    dropzone.style.display = '';
+    fileInput.value = '';
+    output.value = '';
+    previewImg.src = '';
+    currentDataUrl = '';
+    currentBase64 = '';
+    currentFileName = '';
+    sizeWarn.classList.remove('show');
+  }
+
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(2) + ' MB';
+  }
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(function() {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+
+  document.addEventListener('paste', function(e) {
+    var items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.match(/^image\//)) {
+        e.preventDefault();
+        handleFile(items[i].getAsFile());
+        return;
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

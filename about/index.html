@@ -36,204 +36,325 @@ body.page-about::after {
   width: min(1520px, calc(100% - 56px));
 }
 
-.hero {
+/* ========================================
+   Louvre Intro — clean image display
+   ======================================== */
+
+.louvre-intro {
+  margin-top: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.louvre-intro-stage {
   position: relative;
-  min-height: 760px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-  gap: 24px;
-  padding: 48px;
-  border: 1px solid rgba(148,176,200,0.14);
-  border-radius: 20px;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  box-shadow: var(--shadow);
-  background:
-    linear-gradient(90deg, rgba(243,247,250,0.96) 0%, rgba(243,247,250,0.88) 44%, rgba(243,247,250,0.52) 72%, rgba(243,247,250,0.18) 100%),
-    linear-gradient(135deg, rgba(255,255,255,0.10), rgba(138,180,196,0.02)),
-    url("../images/剪贴板图片.jpg") center 28% / cover no-repeat;
+  padding: 36px 5vw;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 16px;
-  border: 1px solid rgba(255,255,255,0.28);
-  border-radius: 14px;
-  pointer-events: none;
+.stage-site {
+  color: #243241;
 }
 
-.hero::after {
-  content: "";
-  position: absolute;
-  right: -12%;
-  top: -6%;
-  width: 52%;
-  height: 120%;
-  opacity: 0.5;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0)),
-    linear-gradient(135deg, transparent 0 47%, rgba(255,255,255,0.14) 48%, transparent 49%);
-  background-size: auto, 100px 100px;
-  transform: skewX(-12deg);
-  pointer-events: none;
+.stage-site .louvre-intro-visual {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 72px;
 }
 
-.hero-copy,
-.hero-side {
-  position: relative;
-  z-index: 2;
+.stage-site .louvre-intro-img-wrap {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 28px 64px rgba(41,57,71,0.16);
 }
 
-.hero-copy {
+.stage-site .louvre-intro-img-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stage-3ds {
+  color: #243241;
+}
+
+.stage-3ds .louvre-intro-visual {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  align-items: center;
+  gap: 80px;
+}
+
+.stage-3ds .louvre-intro-img-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stage-3ds .louvre-intro-img-wrap img {
+  display: block;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 28px 52px rgba(0,0,0,0.12));
+}
+
+.stage-game {
+  color: #243241;
+}
+
+.stage-game .louvre-intro-visual {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 64px;
+}
+
+.stage-game .louvre-intro-img-wrap {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 28px 64px rgba(41,57,71,0.16);
+}
+
+.stage-game .louvre-intro-img-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Copy text */
+.louvre-intro-copy {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  max-width: 760px;
+  gap: 16px;
 }
 
-.hero-badge {
-  display: none;
+.louvre-intro-copy .stage-step {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.42;
+}
+
+.louvre-intro-copy .is-title {
+  font-size: clamp(30px, 4.2vw, 52px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.louvre-intro-copy .is-body {
+  font-size: 16px;
+  line-height: 1.9;
+  opacity: 0.72;
+  max-width: 440px;
+}
+
+.louvre-intro-copy .is-accent {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4a7d94;
+}
+
+.louvre-intro-copy .is-quiet {
+  font-size: 13px;
+  opacity: 0.36;
+  font-style: italic;
+}
+
+/* Chart rows — vertical: image → arrow ↓ → text */
+.chart-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: min(420px, 100%);
+  margin: 0 auto;
+}
+
+.chart-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.chart-row-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(41,57,71,0.12);
+}
+
+.chart-row-arrow {
+  width: 3px;
+  height: 36px;
+  background: #5a7a8c;
+  border-radius: 2px;
+  position: relative;
+}
+
+.chart-row-arrow::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid #5a7a8c;
+}
+
+.chart-row-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 700px) {
+  .chart-row-img {
+    aspect-ratio: 16/9;
+  }
+
+  .chart-row-text {
+    font-size: 16px;
+  }
+}
+
+/* Inspiration quote */
+.inspiration-quote {
+  text-align: center;
+  margin: 56px auto 36px;
+  max-width: 680px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(148,176,200,0.15);
+}
+
+.inspiration-quote-main {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+}
+
+.inspiration-quote-sub {
+  font-size: 16px;
+  color: var(--text-soft);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Media evolution: device → device */
+.media-evolution {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 0 auto 20px;
+  max-width: 560px;
+}
+
+.media-evolution-item {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
-  width: fit-content;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(138,180,196,0.09);
-  border: 1px solid rgba(138,180,196,0.14);
-  color: var(--cyan-deep);
-  font-size: 12px;
-  letter-spacing: .08em;
 }
 
-.hero h1 {
-  margin-top: 22px;
-  font-size: clamp(42px, 5.6vw, 72px);
-  line-height: 1.02;
-  letter-spacing: .08em;
-  color: #4f6678;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+.media-evolution-img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  background: #f8f9fb;
+  border-radius: 16px;
+  padding: 16px;
 }
 
-.hero .cn-title {
-  margin-top: 14px;
-  font-size: clamp(14px, 1.8vw, 20px);
-  color: #7a8ea0;
-  letter-spacing: .18em;
-  font-weight: 500;
-  text-transform: uppercase;
+.media-evolution-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
 }
 
-.hero .cn-title span { color: #93a6b8; }
-
-.hero .desc {
-  max-width: 660px;
-  margin-top: 28px;
-  color: #6c8292;
-  font-size: 17px;
-  line-height: 2;
+.media-evolution-arrow {
+  font-size: 36px;
+  color: #5a7a8c;
+  font-weight: 300;
+  line-height: 1;
 }
 
-.hero-meta {
-  margin-top: 18px;
-  color: var(--text-soft);
-  font-size: 14px;
-  line-height: 2;
+@media (max-width: 700px) {
+  .media-evolution {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .media-evolution-arrow {
+    transform: rotate(90deg);
+  }
+
+  .media-evolution-img {
+    width: 120px;
+  }
+
+  .media-evolution-label {
+    font-size: 16px;
+  }
 }
 
-.hero-actions {
-  margin-top: 34px;
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
+@media (max-width: 900px) {
+  .stage-site .louvre-intro-visual,
+  .stage-3ds .louvre-intro-visual,
+  .stage-game .louvre-intro-visual {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .stage-3ds .louvre-intro-visual {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .louvre-intro-stage {
+    min-height: auto;
+    padding: 48px 6vw;
+  }
+
+  .stage-3ds .louvre-intro-img-wrap img {
+    max-width: 280px;
+  }
 }
 
-.hero-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 18px;
-}
-
-.hero-panel,
-.hero-metric,
+/* Shared card styles */
 .card,
 .chapter-card,
 .summary-box,
 .entry-card {
   border: 1px solid rgba(148,176,200,0.12);
-  box-shadow: var(--shadow);
-}
-
-.hero-panel,
-.hero-metric,
-.card,
-.chapter-card,
-.summary-box,
-.entry-card {
   border-radius: 16px;
   background: rgba(255,255,255,0.62);
-}
-
-.hero-panel {
-  padding: 26px;
-}
-
-.panel-kicker {
-  display: none;
-}
-
-.panel-title {
-  margin-top: 0;
-  color: var(--text-dark);
-  font-size: 28px;
-  line-height: 1.25;
-}
-
-.panel-copy {
-  margin-top: 12px;
-  color: var(--text-soft);
-  font-size: 15px;
-  line-height: 1.9;
-}
-
-.panel-lines {
-  margin-top: 18px;
-  display: grid;
-  gap: 10px;
-}
-
-.panel-line {
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.58);
-  border: 1px solid rgba(148,176,200,0.16);
-  color: var(--text-main);
-  font-size: 14px;
-}
-
-.stat-band {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.hero-metric {
-  padding: 20px;
-}
-
-.hero-metric strong {
-  display: block;
-  color: var(--cyan-deep);
-  font-size: 34px;
-  line-height: 1.1;
-}
-
-.hero-metric span {
-  display: block;
-  margin-top: 8px;
-  color: var(--text-soft);
-  font-size: 13px;
-  line-height: 1.7;
+  box-shadow: var(--shadow);
 }
 
 .btn {
@@ -1154,20 +1275,12 @@ body.page-about::after {
 }
 
 .roadmap-card-header strong,
+.roadmap-title-block strong,
 .roadmap-conclusion strong {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 0;
-  width: 100%;
-  padding: 0;
-  border-radius: 0;
-  border: 0;
-  background: transparent;
   color: var(--text-dark);
-  font-size: 16px;
-  line-height: 1.35;
-  text-align: left;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -.01em;
 }
 
 .roadmap-grid {
@@ -1227,9 +1340,10 @@ body.page-about::after {
 
 .roadmap-conclusion {
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 20px 16px;
-  border-top: 3px solid var(--purple);
+  min-height: 92px;
+  padding: 22px 28px;
 }
 
 .stat-card {
@@ -1270,12 +1384,6 @@ footer {
 }
 
 @media (max-width: 1180px) {
-  .hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding: 42px;
-  }
-
   .grid-4,
   .grid-3,
   .grid-2,
@@ -1316,19 +1424,6 @@ footer {
     width: min(100%, calc(100% - 28px));
     padding: 84px 0 40px;
   }
-
-  .hero {
-    padding: 26px;
-    border-radius: 22px;
-    background:
-      linear-gradient(180deg, rgba(241,246,249,0.94) 0%, rgba(241,246,249,0.84) 48%, rgba(241,246,249,0.72) 100%),
-      url("../images/剪贴板图片.jpg") center 24% / cover no-repeat;
-  }
-
-  .hero::after { display: none; }
-
-  .hero h1 { font-size: 64px; }
-  .hero .cn-title { font-size: 28px; }
 
   .grid-4,
   .grid-3,
@@ -1446,61 +1541,97 @@ footer {
 </nav>
 <div id="page-content">
   <div class="wrap">
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="hero-badge">毕业设计 / XR 互动叙事 / 社交设计</div>
-        <h1>协作同行</h1>
-        <div class="cn-title">WITH<span>IN</span></div>
-        <p class="desc">
-          一项从具身认知视角出发的社交数字化设计研究，
-          也是一段关于成长、共情与协作的 VR 互动叙事旅程。
-          这不是单纯的头显体验，而是一个把虚拟协作延伸到现实交流中的跨媒介社交系统。
-        </p>
-        <div class="hero-meta">
-          研究方向：大学生社交数字化设计<br>
-          项目形式：XR 互动体验 / 跨媒介协作 / Low-Poly 叙事空间
-        </div>
-        <div class="hero-actions">
-          <a href="../research/index.html" class="btn btn-primary">进入问题研究</a>
-          <a href="../design/index.html" class="btn btn-secondary">进入核心设计</a>
-          <a href="../chapters/index.html" class="btn btn-secondary">进入章节导览</a>
+
+    <!-- 灵感来源 -->
+    <section class="section">
+      <div class="section-head">
+        <h2>灵感来源</h2>
+      </div>
+
+      <!-- 创意引入：卢浮宫导览 -->
+      <div class="louvre-intro">
+
+      <!-- Stage 1: Louvre website -->
+      <div class="louvre-intro-stage stage-site">
+        <div class="louvre-intro-visual">
+          <div class="louvre-intro-img-wrap">
+            <img src="../images/louvre-intro/img1-louvre-site.png" alt="卢浮宫官网导览服务页面">
+          </div>
+          <div class="louvre-intro-copy">
+            <p class="is-title">卢浮宫的<br>语音导览器</p>
+            <p class="is-body">每年数百万人，通过它了解艺术。<br>这是游客与艺术之间的第一座桥。</p>
+            <p class="is-quiet">向下滚动，看看这座桥的另一种可能</p>
+          </div>
         </div>
       </div>
 
-      <div class="hero-side">
-        <div class="hero-panel">
-          <div class="panel-kicker">项目聚焦</div>
-          <div class="panel-title">不是展示一张海报，<br>而是进入一段协作旅程</div>
-          <div class="panel-copy">
-            项目试图回应大学生"线上活跃、线下疏离"的现实处境，
-            将 XR 从单纯沉浸内容转化为社交引导媒介，让沟通、配合与共同判断成为体验推进的必要条件。
+      <!-- Stage 2: Nintendo 3DS -->
+      <div class="louvre-intro-stage stage-3ds">
+        <div class="louvre-intro-visual">
+          <div class="louvre-intro-copy">
+            <p class="is-title">当这座桥变成<br>一台任天堂 3DS</p>
+            <p class="is-body">事情变得不太一样。<br>游戏机，成为了艺术导览的新媒介。</p>
           </div>
-          <div class="panel-lines">
-            <div class="panel-line">具身认知作为方法切入</div>
-            <div class="panel-line">XR 作为社交引导媒介</div>
-            <div class="panel-line">协作从任务走向现实交流</div>
-          </div>
-        </div>
-
-        <div class="stat-band">
-          <div class="hero-metric">
-            <strong>4</strong>
-            <span>叙事章节</span>
-          </div>
-          <div class="hero-metric">
-            <strong>3</strong>
-            <span>角色分工层级</span>
-          </div>
-          <div class="hero-metric">
-            <strong>20</strong>
-            <span>测试样本</span>
-          </div>
-          <div class="hero-metric">
-            <strong>XR</strong>
-            <span>具身交互媒介</span>
+          <div class="louvre-intro-img-wrap">
+            <img src="../images/louvre-intro/img2-3ds.jpeg" alt="Nintendo 3DS Guide Louvre">
           </div>
         </div>
       </div>
+
+      <!-- Stage 3: 3DS Game -->
+      <div class="louvre-intro-stage stage-game">
+        <div class="louvre-intro-visual">
+          <div class="louvre-intro-img-wrap">
+            <img src="../images/louvre-intro/img3-louvre-game.png" alt="3DS 卢浮宫导览游戏界面">
+          </div>
+          <div class="louvre-intro-copy">
+            <p class="is-title">《3DS导游卢浮宫》</p>
+            <p class="is-body">游戏软件内部收录了庞大的艺术品资料，同时提供参观线路安排、语音导览、以及艺术品的 3D 效果全方位展示。该游戏在 2012 年投入卢浮宫使用。</p>
+            <p class="is-body">3DS 游戏机特有的裸眼 3D 体验，让这场艺术之旅变得更加独一无二。</p>
+            <p class="is-body">电子游戏设备成为了增强传统艺术的媒介，并且创造了独一无二的体验。</p>
+            <p class="is-accent">这种独一无二，只凭语言的描述，无法传达。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 图表：独特体验/设备/游戏 -->
+      <div class="chart-rows">
+        <div class="chart-row">
+          <img class="chart-row-img" src="../images/louvre-intro/img4-inspiration.png" alt="独特且有效的体验">
+          <div class="chart-row-arrow"></div>
+          <div class="chart-row-text">独特且有效的体验</div>
+        </div>
+        <div class="chart-row">
+          <img class="chart-row-img" src="../images/louvre-intro/img5-inspiration.jpg" alt="独特且新颖的设备">
+          <div class="chart-row-arrow"></div>
+          <div class="chart-row-text">独特且新颖的设备</div>
+        </div>
+        <div class="chart-row">
+          <img class="chart-row-img" src="../images/louvre-intro/img6-inspiration.png" alt="独特且有趣的游戏">
+          <div class="chart-row-arrow"></div>
+          <div class="chart-row-text">独特且有趣的游戏</div>
+        </div>
+      </div>
+
+      <!-- 引言：媒介即艺术创作工具 -->
+      <div class="inspiration-quote">
+        <p class="inspiration-quote-main">"把电子游戏机作为一种媒介来进行艺术创作"</p>
+        <p class="inspiration-quote-sub">存在以这种思路进行设计的可能。</p>
+      </div>
+
+      <!-- 媒介演进：裸眼3D → XR -->
+      <div class="media-evolution">
+        <div class="media-evolution-item">
+          <img class="media-evolution-img" src="../images/louvre-intro/img7-inspiration.png" alt="3DS 裸眼3D">
+          <span class="media-evolution-label">裸眼3D</span>
+        </div>
+        <div class="media-evolution-arrow">→</div>
+        <div class="media-evolution-item">
+          <img class="media-evolution-img" src="../images/louvre-intro/img8-inspiration.png" alt="XR 头显">
+          <span class="media-evolution-label">XR体验</span>
+        </div>
+      </div>
+    </div>
     </section>
 
     <section class="section">
@@ -1819,7 +1950,7 @@ footer {
         </div>
 
         <div class="roadmap-conclusion">
-          <strong>结论</strong>
+          <strong>结论：跨媒介沟通这一设计策略能有效促进真实社交的发生</strong>
         </div>
       </div>
     </section>
@@ -1834,6 +1965,7 @@ window.__pageConfig = {
   next: '../research/index.html'
 };
 </script>
+
 <script src="../shell.js"></script>
 
 </body>
