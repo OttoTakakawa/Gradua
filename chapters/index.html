@@ -10,6 +10,8 @@ html { scroll-behavior: smooth; }
 
 .wrap {
   width: min(1520px, calc(100% - 56px));
+  padding-top: 60px;
+  padding-bottom: 76px;
 }
 
 h1 {
@@ -29,22 +31,19 @@ h1 {
 }
 
 .map-wrap {
-  margin-top: 40px;
-}
-
-.map-shell {
-  border: 1px solid rgba(148,176,200,0.14);
-  box-shadow: var(--shadow);
+  margin-top: 0;
 }
 
 .map-shell {
   position: relative;
   overflow: hidden;
-  border-radius: 22px;
+  border-radius: 0;
   background: rgba(255,255,255,0.62);
-  max-width: 1120px;
-  aspect-ratio: 2 / 3;
+  max-width: 1280px;
+  aspect-ratio: 3 / 2;
   margin: 0 auto;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 6%, rgba(0,0,0,0.5) 12%, #000 20%, #000 80%, rgba(0,0,0,0.5) 88%, rgba(0,0,0,0.2) 94%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 6%, rgba(0,0,0,0.5) 12%, #000 20%, #000 80%, rgba(0,0,0,0.5) 88%, rgba(0,0,0,0.2) 94%, transparent 100%);
 }
 
 .map-shell img {
@@ -95,26 +94,26 @@ h1 {
 .hotspot:focus::after { opacity: 1; }
 
 .shape-1 {
-  left: 4%; top: 20%;
-  width: 36%; height: 32%;
+  left: 1%; top: 28%;
+  width: 22%; height: 40%;
   clip-path: polygon(22% 0, 100% 8%, 86% 100%, 0 74%, 10% 34%);
 }
 
 .shape-2 {
-  right: 5%; top: 20%;
-  width: 35%; height: 30%;
+  left: 20%; top: 28%;
+  width: 22%; height: 38%;
   clip-path: polygon(12% 4%, 100% 18%, 82% 100%, 6% 80%, 0 24%);
 }
 
 .shape-3 {
-  left: 8%; top: 54%;
-  width: 36%; height: 30%;
+  left: 54%; top: 28%;
+  width: 22%; height: 40%;
   clip-path: polygon(0 16%, 84% 0, 100% 84%, 24% 100%, 6% 66%);
 }
 
 .shape-4 {
-  right: 6%; top: 52%;
-  width: 34%; height: 32%;
+  left: 76%; top: 28%;
+  width: 22%; height: 40%;
   clip-path: polygon(16% 0, 100% 20%, 82% 100%, 0 78%, 4% 24%);
 }
 
@@ -150,16 +149,9 @@ footer a {
 </nav>
 <div id="page-content">
   <div class="wrap">
-    <div class="eyebrow">章节导览</div>
-    <h1>章节总览</h1>
-    <p class="lead">
-      点击海报中的四个章节碎片，进入对应章节页面。
-      这里仅负责建立整体顺序与入口，不展开章节正文。
-    </p>
-
     <div class="map-wrap">
       <div class="map-shell">
-        <img src="../images/剪贴板图片.jpg" alt="Within 可点击海报导航" width="1024" height="1536">
+        <img src="../images/chapter-map.png" alt="Within 可点击海报导航" width="1536" height="1024">
         <a class="hotspot shape-1" href="chapter-1/index.html" data-title="第一章 · 孤独的城市" aria-label="进入第一章 孤独的城市"></a>
         <a class="hotspot shape-2" href="chapter-2/index.html" data-title="第二章 · 萨沙的家" aria-label="进入第二章 萨沙的家"></a>
         <a class="hotspot shape-3" href="chapter-3/index.html" data-title="第三章 · 皮埃尔的梦想" aria-label="进入第三章 皮埃尔的梦想"></a>

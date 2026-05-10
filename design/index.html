@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -1879,10 +1879,50 @@ color: var(--text-soft);
 max-width: 760px;
 }
 
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.demo-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.60);
+  border: 1px solid rgba(148,176,200,0.12);
+  box-shadow: var(--shadow);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+
+.demo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.demo-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: rgba(245,247,250,0.92);
+}
+
+.demo-item figcaption {
+  padding: 12px 16px 14px;
+  font-size: 14px;
+  color: var(--text-soft);
+  letter-spacing: .02em;
+  text-align: center;
+}
+
 @media (max-width: 1320px) {
 .grid-4,
 .media-grid,
-.stage-grid {
+.stage-grid,
+.demo-grid {
 grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -2484,137 +2524,31 @@ grid-template-columns: 1fr;
         <p>第四章后半段把核心制作内容落到具体系统上，包括直觉式具身交互、纸质协作卡片，以及围绕四章展开的子章节任务设计。</p>
       </div>
 
-      <div class="summary-grid">
-        <div class="summary-box">
-          <h3>直觉式交互</h3>
-          <p>抓取、瞬移、点按、道具使用与黑板绘画等系统，都尽量贴近现实习惯，减少学习成本，让用户更快进入状态。</p>
-        </div>
-        <div class="summary-box">
-          <h3>协作卡片</h3>
-          <p>纸质卡片承担线索提示、同步配合、创意任务与纪念留存功能，是跨媒介协作闭环中的关键创新点。</p>
-        </div>
-        <div class="summary-box">
-          <h3>章节任务</h3>
-          <p>每一章都对应不同痛点与设计目标，从共情、破冰到深度协作与现实转化，形成完整的叙事和社交递进。</p>
-        </div>
-      </div>
-
-      <div class="card-demo-stage">
-        <div class="card-demo-head">
-          <h3>纸质协作卡片效果尝试</h3>
-          <p>在实践层面上，本研究基于“跨媒介协作”机制展开设计策略，通过 XR 设备、同步显示界面与纸质媒介的组合，构建以任务为核心的互动情境，并在此基础上设计包含角色分工与信息分配的协作机制。</p>
-        </div>
-        <div class="card-belt-shell" data-card-belt>
-          <div class="card-belt-viewport" data-card-belt-viewport aria-label="纸质协作卡片传送带演示">
-            <div class="card-belt-track" data-card-belt-track>
-              <!-- White Card 1 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w1" aria-label="White 卡片 1">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-1.jpg" alt="White 卡片 1 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-              <!-- White Card 2 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w2" aria-label="White 卡片 2">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-2.jpg" alt="White 卡片 2 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-              <!-- White Card 3 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w3" aria-label="White 卡片 3">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-3.jpg" alt="White 卡片 3 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-              <!-- White Card 4 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="w4" aria-label="White 卡片 4">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-4.jpg" alt="White 卡片 4 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-white.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-              <!-- Black Card 1 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b1" aria-label="Black 卡片 1">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-dark-1.jpg" alt="Black 卡片 1 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-              <!-- Black Card 2 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b2" aria-label="Black 卡片 2">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-dark-2.jpg" alt="Black 卡片 2 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-              <!-- Black Card 3 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b3" aria-label="Black 卡片 3">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-dark-3.jpg" alt="Black 卡片 3 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-              <!-- Black Card 4 -->
-              <button class="card-belt-item" type="button" data-card-belt-item data-card-key="b4" aria-label="Black 卡片 4">
-                <span class="card-belt-card" data-flip-card>
-                  <span class="card-belt-card-inner">
-                    <span class="card-belt-card-front">
-                      <img src="../images/cards/card-dark-4.jpg" alt="Black 卡片 4 正面">
-                    </span>
-                    <span class="card-belt-card-back">
-                      <img src="../images/cards/card-back-black.jpg" alt="卡片背面">
-                    </span>
-                  </span>
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <p class="card-demo-note">卡片会以传送带的方式持续横向循环；点击任意卡片可暂停并聚焦放大，右键点击卡片可翻转查看背面，点击空白区域可恢复循环。</p>
+      <div class="demo-grid">
+        <figure class="demo-item reveal-item" style="--reveal-delay: 80ms">
+          <img src="../images/demos/demo61.gif" alt="直觉式交互演示">
+          <figcaption>直觉式交互</figcaption>
+        </figure>
+        <figure class="demo-item reveal-item" style="--reveal-delay: 160ms">
+          <img src="../images/demos/demo85.gif" alt="协作卡片演示">
+          <figcaption>协作卡片</figcaption>
+        </figure>
+        <figure class="demo-item reveal-item" style="--reveal-delay: 240ms">
+          <img src="../images/demos/demo86.gif" alt="章节任务演示">
+          <figcaption>章节任务</figcaption>
+        </figure>
+        <figure class="demo-item reveal-item" style="--reveal-delay: 320ms">
+          <img src="../images/demos/demo89.gif" alt="跨媒介协作演示">
+          <figcaption>跨媒介协作</figcaption>
+        </figure>
+        <figure class="demo-item reveal-item" style="--reveal-delay: 400ms">
+          <img src="../images/demos/demo92.gif" alt="叙事转译演示">
+          <figcaption>叙事转译</figcaption>
+        </figure>
+        <figure class="demo-item reveal-item" style="--reveal-delay: 480ms">
+          <img src="../images/demos/demo94.gif" alt="空间体验演示">
+          <figcaption>空间体验</figcaption>
+        </figure>
       </div>
     </div>
   </div>
