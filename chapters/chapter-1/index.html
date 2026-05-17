@@ -44,7 +44,14 @@ body.page-chapter-1 #page-content {
 }
 
 body.page-chapter-1 .chapter-shell {
-  padding: 152px 0 84px;
+  padding: 152px 0 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body.page-chapter-1 .chapter-shell .wrap {
+  flex: 1 0 auto;
 }
 
 body.page-chapter-1 .wrap {
@@ -90,77 +97,10 @@ body.page-chapter-1 .hero-media {
     radial-gradient(circle at 22% 18%, rgba(126, 200, 255, 0.18), transparent 34%),
     radial-gradient(circle at 82% 82%, rgba(154, 141, 255, 0.18), transparent 32%);
   box-shadow: var(--chapter-shadow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 28px;
-}
-
-body.page-chapter-1 .video-placeholder {
-  width: 100%;
-  height: 100%;
-  min-height: 304px;
-  border-radius: 24px;
-  border: 1px dashed rgba(174, 215, 255, 0.32);
-  background: linear-gradient(180deg, rgba(9, 18, 38, 0.46), rgba(8, 14, 28, 0.22));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 24px;
-}
-
-body.page-chapter-1 .video-placeholder-inner {
-  display: grid;
-  justify-items: center;
-  gap: 14px;
-}
-
-body.page-chapter-1 .video-placeholder-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(174, 215, 255, 0.24);
-  background: rgba(126, 200, 255, 0.10);
-  color: rgba(226, 239, 255, 0.82);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-body.page-chapter-1 .video-placeholder-play {
+  overflow: hidden;
   position: relative;
-  width: 76px;
-  height: 76px;
-  border-radius: 999px;
-  border: 1px solid rgba(174, 215, 255, 0.30);
-  background: rgba(126, 200, 255, 0.10);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
 }
 
-body.page-chapter-1 .video-placeholder-play::before {
-  content: "";
-  position: absolute;
-  left: 30px;
-  top: 23px;
-  border-style: solid;
-  border-width: 14px 0 14px 22px;
-  border-color: transparent transparent transparent rgba(237, 245, 255, 0.94);
-}
-
-body.page-chapter-1 .video-placeholder-title {
-  font-size: 24px;
-  line-height: 1.2;
-  color: #f5f8ff;
-}
-
-body.page-chapter-1 .video-placeholder-copy {
-  max-width: 22em;
-  font-size: 14px;
-  line-height: 1.8;
-  color: rgba(223, 233, 252, 0.74);
-}
 
 body.page-chapter-1 .eyebrow {
   display: inline-flex;
@@ -245,9 +185,11 @@ body.page-chapter-1 .summary-card p {
 
 body.page-chapter-1 footer {
   width: min(1120px, calc(100% - 32px));
-  margin: 26px auto 0;
+  margin: auto auto 0;
   text-align: center;
   color: rgba(214, 226, 248, 0.62);
+  flex-shrink: 0;
+  padding-bottom: 40px;
 }
 
 @media (max-width: 980px) {
@@ -313,16 +255,8 @@ body.page-chapter-1 footer {
             <span>情绪铺垫</span>
           </div>
         </article>
-        <div class="hero-media" aria-label="第一章视频占位区域">
-          <!-- 【占位符-5】chapter1-video：第一章《孤独的城市》章节演示视频 -->
-          <div class="video-placeholder">
-            <div class="video-placeholder-inner">
-              <span class="video-placeholder-badge">【占位符-5】视频占位</span>
-              <span class="video-placeholder-play" aria-hidden="true"></span>
-              <strong class="video-placeholder-title">【占位符-5】第一章视频占位</strong>
-              <span class="video-placeholder-copy">后续可替换为《孤独的城市》章节演示视频。</span>
-            </div>
-          </div>
+        <div class="hero-media" aria-label="第一章《孤独的城市》章节演示">
+          <img src="./images/demo.gif" alt="第一章《孤独的城市》章节演示" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
       </section>
 

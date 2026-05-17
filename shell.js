@@ -439,6 +439,7 @@
       var newContent = doc.getElementById('page-content');
       if (pageContentEl && newContent) {
         pageContentEl.innerHTML = newContent.innerHTML;
+        fixRelativePaths(pageContentEl, absoluteUrl);
         bustMediaCache(pageContentEl);
       }
 
@@ -503,6 +504,19 @@
       var img = new Image();
       img.src = base + 'images/overview.webp';
     });
+  }
+
+  function fixRelativePaths(root, absoluteUrl) {
+    var baseDir = absoluteUrl.substring(0, absoluteUrl.lastIndexOf('/') + 1);
+    var imgs = root.querySelectorAll('img[src]');
+    for (var i = 0; i < imgs.length; i++) {
+      var src = imgs[i].getAttribute('src');
+      if (src && !/^(https?:\/\/|data:|blob:|\/)/i.test(src) && src.indexOf('?') !== 0) {
+        var a = document.createElement('a');
+        a.href = baseDir + src;
+        imgs[i].setAttribute('src', a.href);
+      }
+    }
   }
 
   function bustMediaCache(root) {

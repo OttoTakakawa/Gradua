@@ -73,10 +73,11 @@ body.page-thanks {
 }
 .about-self-block {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 64px;
   padding: 6px 0 0;
   text-align: left;
   position: relative;
+  overflow: hidden;
 }
 .about-self-block::before {
   content: "";
@@ -106,50 +107,68 @@ body.page-thanks {
   text-align: center;
 }
 .about-self-copy {
-  color: var(--text-soft);
+  color: var(--text-main);
   font-size: 15px;
   line-height: 1.9;
 }
 .about-self-grid {
   margin-top: 22px;
   display: grid;
-  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
   gap: 28px;
-  align-items: start;
+  align-items: stretch;
+}
+
+/* ── 毛玻璃卡片 ── */
+.about-self-card,
+.about-self-panel {
+  padding: 28px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(180,200,215,0.2);
+  box-shadow: 0 20px 48px rgba(86,105,128,0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.about-self-card:hover,
+.about-self-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 28px 56px rgba(86,105,128,0.1);
 }
 .about-self-card {
-  padding: 22px 24px 24px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.52);
-  border: 1px solid rgba(148,176,200,0.12);
   text-align: center;
 }
-.about-self-panel {
-  padding: 22px 24px 24px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.52);
-  border: 1px solid rgba(148,176,200,0.12);
+
+.about-self-card strong {
+  display: block;
+  color: var(--text-soft);
+  font-size: 15px;
+  margin-bottom: 50px;
+  letter-spacing: .04em;
 }
-.about-self-card strong,
 .about-self-panel strong {
   display: block;
-  color: var(--text-dark);
+  color: var(--text-soft);
   font-size: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  letter-spacing: .04em;
 }
 .about-self-card p,
 .about-self-panel p {
-  color: var(--text-soft);
+  color: var(--text-main);
   font-size: 15px;
   line-height: 1.9;
 }
+
+/* ── 头像 ── */
 .about-self-photo-shell {
   width: 180px;
   margin: 0 auto 16px;
   border-radius: 50%;
   overflow: hidden;
   background: #000;
-  box-shadow: 0 14px 36px rgba(99,124,148,0.08);
+  box-shadow: 0 0 0 2px rgba(180,200,215,0.2);
 }
 .about-self-photo-shell img {
   width: 100%;
@@ -164,32 +183,76 @@ body.page-thanks {
   font-size: 13px;
   line-height: 1.9;
 }
+.about-self-id {
+  font-size: 14px;
+  color: #6b8095;
+  line-height: 2;
+  margin-top: 6px;
+}
+.about-self-id b {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* ── 作品展示标题 ── */
 .about-self-work {
   margin-top: 30px;
+  text-align: center;
 }
 .about-self-work strong {
   display: block;
-  color: var(--text-dark);
+  color: var(--cyan-deep);
   font-size: 22px;
   margin-bottom: 12px;
+  letter-spacing: .02em;
 }
 .about-self-work p {
   color: var(--text-soft);
   font-size: 15px;
   line-height: 1.9;
 }
+
+/* ── 作品卡片 ── */
+@keyframes work-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .about-self-works {
   margin-top: 16px;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  grid-template-columns: 1fr;
+  gap: 28px;
 }
 .about-self-work-card {
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(148,176,200,0.14);
+  border: 1px solid rgba(180,200,215,0.18);
   background: rgba(255,255,255,0.56);
-  box-shadow: 0 16px 40px rgba(99,124,148,0.08);
+  box-shadow: 0 16px 40px rgba(86,105,128,0.06);
+  text-align: center;
+  opacity: 0;
+  animation: work-fade-in 0.7s cubic-bezier(.22,1,.36,1) forwards;
+}
+.about-self-work-card:nth-child(1) { animation-delay: 0s; }
+.about-self-work-card:nth-child(2) { animation-delay: 0.12s; }
+.about-self-work-card:nth-child(3) { animation-delay: 0.24s; }
+.about-self-work-card:nth-child(4) { animation-delay: 0.36s; }
+.about-self-work-card:nth-child(5) { animation-delay: 0.48s; }
+.about-self-work-card {
+  transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s ease;
+}
+.about-self-work-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 56px rgba(86,105,128,0.12);
 }
 .about-self-work-card.is-hero {
   grid-column: 1 / -1;
@@ -200,42 +263,62 @@ body.page-thanks {
   object-fit: cover;
   background: #eef2f6;
 }
-.about-self-work-card.is-hero img {
-  max-height: 620px;
-}
-.about-self-work-card:not(.is-hero) img {
-  aspect-ratio: 4 / 3;
+.about-self-work-card img {
+  max-height: none;
+  aspect-ratio: auto;
 }
 .about-self-work-caption {
   padding: 16px 18px;
   color: var(--text-soft);
   font-size: 13px;
   line-height: 1.85;
-  border-top: 1px solid rgba(148,176,200,0.12);
+  border-top: 1px solid rgba(180,200,215,0.14);
   background: rgba(255,255,255,0.62);
 }
+
+/* ── 简历条目 ── */
 .about-self-resume {
   margin-top: 16px;
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 .resume-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 14px;
 }
 .about-self-panel .about-self-resume {
   margin-top: 14px;
 }
+.work-entry {
+  text-align: center;
+  padding: 18px 0;
+}
+.work-entry .work-company {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.work-entry .work-meta {
+  display: block;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.8;
+}
 .resume-item {
-  padding: 12px 14px;
-  border-radius: 12px;
+  padding: 16px;
+  border-radius: 14px;
   background: rgba(255,255,255,0.56);
-  border: 1px solid rgba(148,176,200,0.12);
+  border: 1px solid rgba(180,200,215,0.16);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .resume-item strong {
-  margin-bottom: 6px;
+  margin-bottom: 20px;
   font-size: 15px;
+  color: #3a4a58;
 }
 .resume-item span {
   display: block;
@@ -263,7 +346,7 @@ body.page-thanks {
   display: block;
   color: var(--text-dark);
   font-size: 15px;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 }
 .credit-group span {
   display: block;
@@ -286,7 +369,7 @@ body.page-thanks {
 .credits-list {
   margin-top: 0;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px 12px;
 }
 .thanks-like-section {
@@ -295,6 +378,12 @@ body.page-thanks {
   text-align: center;
   border-top: 1px solid rgba(148,176,200,0.12);
   border-bottom: 1px solid rgba(148,176,200,0.12);
+}
+.like-invite {
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.9;
+  margin-bottom: 20px;
 }
 .like-row {
   display: flex;
@@ -362,10 +451,6 @@ body.page-thanks {
   font-size: 14px;
 }
 .name-chip {
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.72);
-  border: 1px solid rgba(148,176,200,0.14);
   color: var(--text-main);
   font-size: 13px;
   text-align: center;
@@ -479,7 +564,7 @@ body.page-thanks {
   text-align: center;
 }
 .data-actions {
-  display: flex;
+  display: none;
   gap: 6px;
   justify-content: center;
   margin-top: 10px;
@@ -590,22 +675,28 @@ body.page-thanks {
               <span>南京师范大学美术学院 江苏省艺术与科学中心</span>
             </div>
             <div class="credit-group credit-names">
-              <strong>感谢以下同学（按姓名笔画顺序）</strong>
+              <strong>感谢以下同学协助作品测试、技术分享 （笔画排序）</strong>
               <div class="credits-list">
                 <span class="name-chip">于昊</span>
                 <span class="name-chip">王非凡</span>
                 <span class="name-chip">王靖雯</span>
                 <span class="name-chip">龙德海</span>
+                <span class="name-chip">田景雯</span>
+                <span class="name-chip">朱亚东</span>
                 <span class="name-chip">刘拓</span>
                 <span class="name-chip">刘浩楠</span>
+                <span class="name-chip">刘润琦</span>
                 <span class="name-chip">庄晓鹏</span>
-                <span class="name-chip">朱亚东</span>
+                <span class="name-chip">许馨月</span>
+                <span class="name-chip">孙庭忆</span>
+                <span class="name-chip">肖天辰</span>
+                <span class="name-chip">吴从越</span>
                 <span class="name-chip">张俊昭</span>
                 <span class="name-chip">张磊</span>
-                <span class="name-chip">吴从越</span>
+                <span class="name-chip">封玥宏</span>
                 <span class="name-chip">查靖锋</span>
-                <span class="name-chip">孙庭忆</span>
                 <span class="name-chip">都皓湲</span>
+                <span class="name-chip">董旖欣</span>
                 <span class="name-chip">满立志</span>
                 <span class="name-chip">谭鹏翔</span>
               </div>
@@ -616,6 +707,10 @@ body.page-thanks {
     </div>
 
     <div class="thanks-like-section">
+      <p class="like-invite">
+        如果你也相信"同行"的力量，不妨点个赞，或写下一段评语。<br>
+        每一份回应，都是让这段旅程继续延伸的理由。
+      </p>
       <div class="like-row">
         <button class="like-btn" id="thanks-like-btn" aria-label="点赞">
           <svg class="like-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -642,6 +737,56 @@ body.page-thanks {
     </div>
 
     <section class="about-self-block">
+      <!-- lowpoly 几何装饰 -->
+      <svg class="about-self-lowpoly" aria-hidden="true" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;">
+        <g stroke="rgba(120,160,180,0.12)" stroke-width="0.6" fill="none">
+          <polygon points="0,0 120,30 60,140"/>
+          <polygon points="120,30 280,10 200,110"/>
+          <polygon points="280,10 440,50 360,150"/>
+          <polygon points="440,50 600,20 520,130"/>
+          <polygon points="600,20 760,60 680,170"/>
+          <polygon points="760,60 900,40 900,160"/>
+          <polygon points="60,140 200,110 140,240"/>
+          <polygon points="200,110 360,150 300,260"/>
+          <polygon points="360,150 520,130 460,250"/>
+          <polygon points="520,130 680,170 620,280"/>
+          <polygon points="680,170 900,160 820,290"/>
+          <polygon points="0,0 0,140 60,140"/>
+          <polygon points="0,140 60,140 0,260"/>
+          <polygon points="60,140 140,240 0,260"/>
+          <polygon points="140,240 300,260 220,370"/>
+          <polygon points="300,260 460,250 380,380"/>
+          <polygon points="460,250 620,280 540,390"/>
+          <polygon points="620,280 820,290 740,400"/>
+          <polygon points="820,290 900,320 900,420"/>
+          <polygon points="0,260 140,240 80,380"/>
+          <polygon points="140,240 220,370 80,380"/>
+          <polygon points="220,370 380,380 300,500"/>
+          <polygon points="380,380 540,390 460,510"/>
+          <polygon points="540,390 740,400 660,520"/>
+          <polygon points="740,400 900,420 820,540"/>
+          <polygon points="0,380 80,380 0,500"/>
+          <polygon points="80,380 220,370 160,500"/>
+          <polygon points="220,370 300,500 160,500"/>
+          <polygon points="300,500 460,510 380,620"/>
+          <polygon points="460,510 660,520 580,630"/>
+          <polygon points="660,520 820,540 740,650"/>
+          <polygon points="820,540 900,560 900,660"/>
+          <polygon points="0,500 160,500 80,620"/>
+          <polygon points="160,500 300,500 220,630"/>
+          <polygon points="300,500 380,620 220,630"/>
+          <polygon points="380,620 580,630 480,700"/>
+          <polygon points="580,630 740,650 480,700"/>
+          <polygon points="740,650 900,660 900,700"/>
+          <polygon points="0,500 0,620 80,620"/>
+          <polygon points="0,620 80,620 0,700"/>
+          <polygon points="80,620 220,630 160,700"/>
+          <polygon points="220,630 380,620 320,700"/>
+          <polygon points="380,620 480,700 320,700"/>
+          <polygon points="480,700 740,650 660,700"/>
+          <polygon points="660,700 900,700 740,650"/>
+        </g>
+      </svg>
       <div class="about-self-kicker">作者信息</div>
       <div class="about-self-title">关于本人</div>
       <div class="about-self-grid">
@@ -650,24 +795,25 @@ body.page-thanks {
           <div class="about-self-photo-shell">
             <img src="../images/creator-photo.png" alt="黄苏博个人照片">
           </div>
-          <p>
-            黄苏博<br>
+          <p class="about-self-id">
+            <b>黄苏博</b><br>
             艺术与科技<br>
-            231612057
+            231612057<br>
+            hsb18250554196
           </p>
         </div>
         <div class="about-self-panel">
 <div class="about-self-resume">
-            <div class="resume-item is-centered">
+            <div style="text-align:center;">
               <strong>工作经历</strong>
-              <span>
-                <b>字节跳动 - 朝夕光年 - Bluesea 工作室</b><br>
-                岗位：游戏技术美术工程师 ｜ 时间：2025.07 - 至今
-              </span>
-              <span style="display:block;margin-top:10px;">
-                <b>北京五一视界数字孪生科技股份有限公司 / 51WORLD</b><br>
-                岗位：UE5技术美术实习生 ｜ 时间：2024.11 - 2025.04
-              </span>
+              <div class="work-entry">
+                <span class="work-company">字节跳动 · 朝夕光年 · Bluesea 工作室</span>
+                <span class="work-meta">游戏技术美术工程师 ｜ 2025.07 - 至今</span>
+              </div>
+              <div class="work-entry">
+                <span class="work-company">北京五一视界 / 51WORLD</span>
+                <span class="work-meta">UE5 技术美术实习生 ｜ 2024.11 - 2025.04</span>
+              </div>
             </div>
             <div class="resume-row">
               <div class="resume-item is-centered">
@@ -700,37 +846,37 @@ body.page-thanks {
       <div class="about-self-work">
         <strong>作品展示</strong>
         <p>
-          以下为个人作品展示。
+          以下为个人作品展示，涵盖 Unity 实时渲染、程序化生成与风格化视觉探索，反映技术美术视角下的创作实践。
         </p>
         <div class="about-self-works">
           <figure class="about-self-work-card is-hero">
             <img src="../images/personal-work-01.png" alt="个人作品 1">
             <figcaption class="about-self-work-caption">
-              【待补充说明】
+              【情绪流域·长江图｜与南艺童芳老师团队合作的作品】
             </figcaption>
           </figure>
           <figure class="about-self-work-card">
             <img src="../images/personal-work-02.png" alt="个人作品 2">
             <figcaption class="about-self-work-caption">
-              【待补充说明】
+              【“最后的审判·一”｜ UE5场景概念设计】
             </figcaption>
           </figure>
           <figure class="about-self-work-card">
             <img src="../images/personal-work-03.png" alt="个人作品 3">
             <figcaption class="about-self-work-caption">
-              【待补充说明】
+              【“最后的审判·二”｜ UE5场景概念设计】
             </figcaption>
           </figure>
           <figure class="about-self-work-card">
             <img src="../images/personal-work-04.png" alt="个人作品 4">
             <figcaption class="about-self-work-caption">
-              【待补充说明】
+              【UE5天气变化系统设计】
             </figcaption>
           </figure>
           <figure class="about-self-work-card">
             <img src="../images/personal-work-05.png" alt="个人作品 5">
             <figcaption class="about-self-work-caption">
-              【待补充说明】
+              【个人独立恐怖解密游戏制作】
             </figcaption>
           </figure>
         </div>

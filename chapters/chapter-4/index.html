@@ -30,6 +30,13 @@ body.page-chapter-4 .nav {
 body.page-chapter-4 #page-content {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.page-chapter-4 .wrap {
+  flex: 1 0 auto;
 }
 
 body.page-chapter-4 .wrap {
@@ -71,77 +78,8 @@ body.page-chapter-4 .hero-cover {
     linear-gradient(135deg, rgba(255,255,255,0.18), transparent 48%);
 }
 
-body.page-chapter-4 .video-placeholder {
-  width: 100%;
-  height: 100%;
-  min-height: 420px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 28px;
-}
 
-body.page-chapter-4 .video-placeholder-inner {
-  width: 100%;
-  height: 100%;
-  min-height: 360px;
-  border-radius: 24px;
-  border: 1px dashed rgba(123, 145, 176, 0.26);
-  background:
-    linear-gradient(180deg, rgba(246, 250, 255, 0.72), rgba(224, 234, 246, 0.52)),
-    linear-gradient(135deg, rgba(255,255,255,0.12), transparent 54%);
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: 14px;
-  text-align: center;
-  padding: 24px;
-}
 
-body.page-chapter-4 .video-placeholder-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(127, 146, 174, 0.18);
-  background: rgba(127, 146, 174, 0.12);
-  color: var(--accent-strong);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-body.page-chapter-4 .video-placeholder-play {
-  position: relative;
-  width: 76px;
-  height: 76px;
-  border-radius: 999px;
-  border: 1px solid rgba(127, 146, 174, 0.26);
-  background: rgba(127, 146, 174, 0.12);
-}
-
-body.page-chapter-4 .video-placeholder-play::before {
-  content: "";
-  position: absolute;
-  left: 30px;
-  top: 23px;
-  border-style: solid;
-  border-width: 14px 0 14px 22px;
-  border-color: transparent transparent transparent rgba(97, 121, 153, 0.94);
-}
-
-body.page-chapter-4 .video-placeholder-title {
-  color: var(--text-dark);
-  font-size: 24px;
-  line-height: 1.2;
-}
-
-body.page-chapter-4 .video-placeholder-copy {
-  max-width: 22em;
-  color: #677892;
-  font-size: 14px;
-  line-height: 1.8;
-}
 
 body.page-chapter-4 .hero-card {
   padding: 32px;
@@ -217,7 +155,9 @@ body.page-chapter-4 .summary-card p {
 }
 
 body.page-chapter-4 footer {
-  padding: 4px 24px 40px;
+  margin-top: auto;
+  flex-shrink: 0;
+  padding: 24px 24px 40px;
 }
 
 @media (max-width: 1080px) {
@@ -271,16 +211,8 @@ body.page-chapter-4 footer {
   <div class="wrap">
     <div class="chapter-shell">
       <section class="hero">
-        <div class="hero-cover">
-          <!-- 【占位符-8】chapter4-video：第四章《太空之梦》章节演示视频 -->
-          <div class="video-placeholder" aria-label="第四章视频占位区域">
-            <div class="video-placeholder-inner">
-              <span class="video-placeholder-badge">【占位符-8】视频占位</span>
-              <span class="video-placeholder-play" aria-hidden="true"></span>
-              <strong class="video-placeholder-title">【占位符-8】第四章视频占位</strong>
-              <span class="video-placeholder-copy">后续可替换为《太空之梦》章节演示视频。</span>
-            </div>
-          </div>
+        <div class="hero-cover" aria-label="第四章《太空之梦》章节演示">
+          <img src="./images/demo.gif" alt="第四章《太空之梦》章节演示" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
         <div class="hero-card">
           <div class="eyebrow">章节四</div>
