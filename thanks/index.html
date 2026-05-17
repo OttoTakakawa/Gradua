@@ -55,7 +55,7 @@ body.page-thanks {
   text-align: left;
 }
 .credits-board {
-  margin-top: 18px;
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
@@ -235,6 +235,7 @@ body.page-thanks {
   border-radius: 18px;
   background: rgba(255,255,255,0.58);
   border: 1px solid rgba(148,176,200,0.16);
+  text-align: center;
 }
 .credit-group {
   padding: 18px 18px 20px;
@@ -259,6 +260,7 @@ body.page-thanks {
   font-size: 20px;
   line-height: 1.3;
   margin-bottom: 12px;
+  text-align: center;
 }
 .panel-copy {
   color: var(--text-soft);
@@ -270,6 +272,74 @@ body.page-thanks {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px 12px;
+}
+.thanks-like-section {
+  margin-top: 38px;
+  text-align: center;
+}
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.62);
+  border: 1.5px solid rgba(148,176,200,0.2);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(.22,1,.36,1);
+  color: var(--text-soft);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+}
+.like-btn:hover {
+  background: rgba(255,255,255,0.82);
+  border-color: rgba(141,168,190,0.35);
+  color: var(--cyan-deep);
+  box-shadow: 0 4px 20px rgba(99,124,148,0.1);
+  transform: translateY(-1px);
+}
+.like-btn:active {
+  transform: scale(0.96);
+}
+.like-btn.is-liked {
+  color: #e85d75;
+  border-color: rgba(232,93,117,0.3);
+  background: rgba(255,240,243,0.6);
+}
+.like-btn.is-liked:hover {
+  background: rgba(255,235,240,0.8);
+  box-shadow: 0 4px 20px rgba(232,93,117,0.12);
+}
+.like-icon {
+  transition: transform 0.3s cubic-bezier(.22,1,.36,1);
+  flex-shrink: 0;
+}
+.like-btn.is-liked .like-icon {
+  fill: #e85d75;
+  stroke: #e85d75;
+  animation: like-pop 0.4s cubic-bezier(.22,1,.36,1);
+}
+@keyframes like-pop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.35); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.like-count {
+  font-weight: 600;
+  font-size: 18px;
+  min-width: 24px;
+  text-align: center;
+}
+.like-label {
+  font-size: 14px;
+}
+.like-hint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-soft);
+  opacity: 0.7;
 }
 .name-chip {
   padding: 10px 12px;
@@ -313,6 +383,19 @@ body.page-thanks {
 </head>
 <body class="page-thanks">
 
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <filter id="lg-distort" x="-12%" y="-12%" width="124%" height="124%"
+            color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022"
+                    numOctaves="3" seed="8" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+      <feDisplacementMap in="SourceGraphic" in2="gray"
+                         scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
 <nav class="nav">
   <span class="nav-indicator" aria-hidden="true"></span>
   <a href="../index.html">首页</a>
@@ -335,43 +418,39 @@ body.page-thanks {
       </p>
       <div class="thanks-grid">
         <section class="credits-panel">
-          <div class="panel-title">感谢名单</div>
+          <div class="panel-title">特别致谢</div>
           <p class="panel-copy">
-            这一部分先按“指导教师、感谢机构、名单列”三类排版，
-            让版式更规整，也更接近正式的毕业作品致谢方式。
+            <!-- 这一部分先按“指导教师、感谢机构、名单列”三类排版，
+            让版式更规整，也更接近正式的毕业作品致谢方式。 -->
           </p>
           <div class="credits-board">
             <div class="credit-group credit-teacher">
               <strong>指导教师</strong>
-              <span>指导教师姓名待补</span>
+              <span>刘瑶老师（副教授） 刘昌老师（教授）</span>
             </div>
             <div class="credit-group credit-org">
               <strong>感谢机构</strong>
-              <span>学院 / 系所 / 实验室 / 展示空间待补</span>
+              <span>南京师范大学美术学院 江苏省艺术与科学中心</span>
             </div>
             <div class="credit-group credit-names">
-              <strong>名单列</strong>
+              <strong>感谢以下同学（按姓名笔画顺序）</strong>
               <div class="credits-list">
-                <span class="name-chip">林舟</span>
-                <span class="name-chip">陈遥</span>
-                <span class="name-chip">周沐</span>
-                <span class="name-chip">许柠</span>
-                <span class="name-chip">宋一禾</span>
-                <span class="name-chip">白知远</span>
-                <span class="name-chip">何见山</span>
-                <span class="name-chip">唐予安</span>
-                <span class="name-chip">苏清禾</span>
-                <span class="name-chip">沈知夏</span>
-                <span class="name-chip">乔南溪</span>
-                <span class="name-chip">顾云舟</span>
-                <span class="name-chip">温若川</span>
-                <span class="name-chip">陆星野</span>
-                <span class="name-chip">方以宁</span>
-                <span class="name-chip">程见微</span>
-                <span class="name-chip">谢闻笙</span>
-                <span class="name-chip">江予澄</span>
-                <span class="name-chip">贺行之</span>
-                <span class="name-chip">许沐言</span>
+                <span class="name-chip">于昊</span>
+                <span class="name-chip">王非凡</span>
+                <span class="name-chip">王靖雯</span>
+                <span class="name-chip">龙德海</span>
+                <span class="name-chip">刘拓</span>
+                <span class="name-chip">刘浩楠</span>
+                <span class="name-chip">庄晓鹏</span>
+                <span class="name-chip">朱亚东</span>
+                <span class="name-chip">张俊昭</span>
+                <span class="name-chip">张磊</span>
+                <span class="name-chip">吴从越</span>
+                <span class="name-chip">查靖锋</span>
+                <span class="name-chip">孙庭忆</span>
+                <span class="name-chip">都皓湲</span>
+                <span class="name-chip">满立志</span>
+                <span class="name-chip">谭鹏翔</span>
               </div>
             </div>
           </div>
@@ -455,11 +534,94 @@ body.page-thanks {
       </div>
     </section>
 
+    <div class="thanks-like-section">
+      <button class="like-btn" id="thanks-like-btn" aria-label="点赞">
+        <svg class="like-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="like-count" id="thanks-like-count">0</span>
+        <span class="like-label">点赞</span>
+      </button>
+      <p class="like-hint">如果你喜欢这个项目，可以点个赞 :)</p>
+    </div>
+
     <p class="thanks-signoff">
       Within · 协作同行 ｜ 愿每一段旅程都有人同行
     </p>
   </div>
 </div>
+
+<script id="page-script">
+var STORAGE_KEY = 'within_like_data';
+
+function getLikeData() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch(e) {
+    return {};
+  }
+}
+
+function saveLikeData(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function getLikeCount(btnId) {
+  var data = getLikeData();
+  return data[btnId] || 0;
+}
+
+function incrementLike(btnId) {
+  var data = getLikeData();
+  data[btnId] = (data[btnId] || 0) + 1;
+  saveLikeData(data);
+  return data[btnId];
+}
+
+(function initLikes() {
+  var btn = document.getElementById('thanks-like-btn');
+  var countEl = document.getElementById('thanks-like-count');
+  if (!btn || !countEl) return;
+
+  countEl.textContent = getLikeCount('thanks_main');
+
+  btn.addEventListener('click', function() {
+    var newCount = incrementLike('thanks_main');
+    countEl.textContent = newCount;
+    btn.classList.add('is-liked');
+    countEl.style.animation = 'none';
+    countEl.offsetHeight;
+    countEl.style.animation = 'like-pop 0.4s cubic-bezier(.22,1,.36,1)';
+    setTimeout(function() {
+      btn.classList.remove('is-liked');
+    }, 600);
+  });
+})();
+
+(function initDevTrigger() {
+  var signoff = document.querySelector('.thanks-signoff');
+  if (!signoff) return;
+  var clickCount = 0;
+  var clickTimer = null;
+  signoff.style.cursor = 'default';
+  signoff.addEventListener('click', function() {
+    clickCount++;
+    if (clickCount === 1) {
+      clickTimer = setTimeout(function() {
+        clickCount = 0;
+      }, 2000);
+    }
+    if (clickCount >= 5) {
+      clickCount = 0;
+      clearTimeout(clickTimer);
+      window.open('dev.html', '_blank');
+    }
+  });
+})();
+</script>
 
 <script id="page-config">
 window.__pageConfig = {

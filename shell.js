@@ -2,6 +2,8 @@
   var PAGE_ORDER = ['index', 'about', 'research', 'design', 'chapters', 'process', 'thanks'];
   var STORAGE_KEY = 'within-nav-indicator';
 
+  var CACHE_VERSION = '20260517';
+
   var state = {
     navigating: false,
     currentPage: null,
@@ -437,6 +439,7 @@
       var newContent = doc.getElementById('page-content');
       if (pageContentEl && newContent) {
         pageContentEl.innerHTML = newContent.innerHTML;
+        bustMediaCache(pageContentEl);
       }
 
       ensureHintDivs();
@@ -463,6 +466,7 @@
         scriptEl.id = 'page-script';
         scriptEl.textContent = '(function(){' + newPageScript.textContent + '})();';
         document.body.appendChild(scriptEl);
+        bustMediaCache(pageContentEl);
       }
 
       document.body.offsetHeight;
@@ -499,6 +503,35 @@
       var img = new Image();
       img.src = base + 'images/overview.webp';
     });
+  }
+
+  function bustMediaCache(root) {
+    root = root || document;
+    var v = CACHE_VERSION;
+
+    var imgs = root.querySelectorAll('img');
+    for (var i = 0; i < imgs.length; i++) {
+      var src = imgs[i].getAttribute('src');
+      if (src && src.indexOf('?v=') === -1 && !/^(data:|blob:|https?:\/\/)/i.test(src)) {
+        imgs[i].setAttribute('src', src + '?v=' + v);
+      }
+    }
+
+    var sources = root.querySelectorAll('video source, video');
+    for (var j = 0; j < sources.length; j++) {
+      var s = sources[j].getAttribute('src');
+      if (s && s.indexOf('?v=') === -1 && !/^(data:|blob:|https?:\/\/)/i.test(s)) {
+        sources[j].setAttribute('src', s + '?v=' + v);
+      }
+    }
+
+    var models = root.querySelectorAll('model-viewer');
+    for (var k = 0; k < models.length; k++) {
+      var m = models[k].getAttribute('src');
+      if (m && m.indexOf('?v=') === -1 && !/^(data:|blob:|https?:\/\/)/i.test(m)) {
+        models[k].setAttribute('src', m + '?v=' + v);
+      }
+    }
   }
 
   function handleWheel(event) {
@@ -593,6 +626,23 @@
         loadPage(href, 'click', direction);
       });
     });
+
+    /* liquid-glass hover chase */
+    navLinks.forEach(function (link) {
+      link.addEventListener('mouseenter', function () {
+        if (state.navigating) return;
+        if (!navIndicator) return;
+        navIndicator.classList.add('is-chasing');
+        moveNavIndicatorToLink(link);
+      });
+    });
+
+    nav.addEventListener('mouseleave', function (e) {
+      if (!e.relatedTarget || !nav.contains(e.relatedTarget)) {
+        if (navIndicator) navIndicator.classList.remove('is-chasing');
+        syncActiveNavIndicator(false);
+      }
+    });
   }
 
   function handlePopState(event) {
@@ -640,6 +690,8 @@
 
     ensureHintDivs();
     bindNavLinks();
+    bustMediaCache();
+    setTimeout(function () { bustMediaCache(); }, 0);
     animateNavIndicatorFromPrevious();
     setupRevealAnimations();
 

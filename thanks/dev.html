@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者面板 — Within</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f7fa;
+  --card-bg: #ffffff;
+  --text: #243241;
+  --text-soft: #7f90a2;
+  --border: rgba(118,136,158,0.14);
+  --cyan: #5d8693;
+  --danger: #e85d75;
+  --shadow: 0 2px 12px rgba(99,124,148,0.08);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px;
+}
+
+.panel {
+  width: 100%;
+  max-width: 640px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.header .badge {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(93,134,147,0.1);
+  color: var(--cyan);
+  font-weight: 500;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  background: rgba(245,247,250,0.5);
+}
+
+.table-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-row .label {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.table-row .value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--cyan);
+  min-width: 48px;
+  text-align: right;
+}
+
+.empty-state {
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: rgba(245,247,250,0.8);
+  border-color: rgba(141,168,190,0.3);
+}
+
+.btn-danger {
+  border-color: rgba(232,93,117,0.25);
+  color: var(--danger);
+  background: rgba(232,93,117,0.04);
+}
+
+.btn-danger:hover {
+  background: rgba(232,93,117,0.08);
+  border-color: rgba(232,93,117,0.4);
+}
+
+.btn-refresh {
+  border-color: rgba(93,134,147,0.2);
+  color: var(--cyan);
+  background: rgba(93,134,147,0.04);
+}
+
+.btn-refresh:hover {
+  background: rgba(93,134,147,0.08);
+  border-color: rgba(93,134,147,0.35);
+}
+
+.footer {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.footer a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: #243241;
+  color: #fff;
+  font-size: 14px;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="header">
+    <h1>开发者面板</h1>
+    <span class="badge">内部工具</span>
+  </div>
+
+  <div class="card">
+    <div class="card-header">点赞统计</div>
+    <div id="stats-container">
+      <div class="empty-state">正在加载数据...</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-refresh" id="btn-refresh">刷新数据</button>
+    <button class="btn btn-danger" id="btn-clear">清空全部点赞</button>
+    <a class="btn" href="index.html">返回感谢页</a>
+  </div>
+
+  <div class="footer">
+    此页面仅在本地存储中记录数据，不会上传至服务器。<br>
+    清空操作不可恢复，请谨慎操作。
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var STORAGE_KEY = 'within_like_data';
+
+var BTN_LABELS = {
+  'thanks_main': '感谢页主点赞按钮'
+};
+
+function getLikeData() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch(e) {
+    return {};
+  }
+}
+
+function saveLikeData(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() {
+    toast.classList.remove('show');
+  }, 2000);
+}
+
+function renderStats() {
+  var data = getLikeData();
+  var container = document.getElementById('stats-container');
+  var keys = Object.keys(data);
+
+  if (keys.length === 0) {
+    container.innerHTML = '<div class="empty-state">暂无点赞记录。<br>用户点击点赞按钮后，数据将显示在此处。</div>';
+    return;
+  }
+
+  var html = '';
+  keys.forEach(function(key) {
+    var label = BTN_LABELS[key] || key;
+    html += '<div class="table-row">';
+    html += '<span class="label">' + label + '</span>';
+    html += '<span class="value">' + data[key] + '</span>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+document.getElementById('btn-refresh').addEventListener('click', function() {
+  renderStats();
+  showToast('数据已刷新');
+});
+
+document.getElementById('btn-clear').addEventListener('click', function() {
+  if (confirm('确定要清空全部点赞数据吗？此操作不可恢复。')) {
+    saveLikeData({});
+    renderStats();
+    showToast('点赞数据已清空');
+  }
+});
+
+renderStats();
+</script>
+
+</body>
+</html>
