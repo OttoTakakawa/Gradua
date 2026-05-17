@@ -103,6 +103,7 @@ body.page-thanks {
   font-size: 24px;
   line-height: 1.2;
   margin-bottom: 12px;
+  text-align: center;
 }
 .about-self-copy {
   color: var(--text-soft);
@@ -116,7 +117,13 @@ body.page-thanks {
   gap: 28px;
   align-items: start;
 }
-.about-self-card,
+.about-self-card {
+  padding: 22px 24px 24px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.52);
+  border: 1px solid rgba(148,176,200,0.12);
+  text-align: center;
+}
 .about-self-panel {
   padding: 22px 24px 24px;
   border-radius: 18px;
@@ -137,18 +144,19 @@ body.page-thanks {
   line-height: 1.9;
 }
 .about-self-photo-shell {
-  border-radius: 20px;
+  width: 180px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
   overflow: hidden;
-  border: 1px solid rgba(148,176,200,0.14);
-  background: rgba(255,255,255,0.6);
+  background: #000;
   box-shadow: 0 14px 36px rgba(99,124,148,0.08);
 }
 .about-self-photo-shell img {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1;
   display: block;
   object-fit: cover;
-  background: #eef2f6;
+  background: #000;
 }
 .about-self-photo-note {
   margin-top: 12px;
@@ -211,6 +219,11 @@ body.page-thanks {
   display: grid;
   gap: 12px;
 }
+.resume-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
 .about-self-panel .about-self-resume {
   margin-top: 14px;
 }
@@ -229,6 +242,9 @@ body.page-thanks {
   color: var(--text-soft);
   font-size: 13px;
   line-height: 1.9;
+}
+.resume-item.is-centered {
+  text-align: center;
 }
 .credits-panel {
   padding: 24px;
@@ -274,21 +290,31 @@ body.page-thanks {
   gap: 10px 12px;
 }
 .thanks-like-section {
-  margin-top: 38px;
+  margin: 56px 0 56px;
+  padding: 24px 0 20px;
   text-align: center;
+  border-top: 1px solid rgba(148,176,200,0.12);
+  border-bottom: 1px solid rgba(148,176,200,0.12);
+}
+.like-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 .like-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 32px;
+  gap: 8px;
+  padding: 12px 28px;
   border-radius: 50px;
   background: rgba(255,255,255,0.62);
   border: 1.5px solid rgba(148,176,200,0.2);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(.22,1,.36,1);
+  transition: all 0.25s ease;
   color: var(--text-soft);
-  font-size: 15px;
+  font-size: 14px;
   font-family: inherit;
   outline: none;
 }
@@ -335,12 +361,6 @@ body.page-thanks {
 .like-label {
   font-size: 14px;
 }
-.like-hint {
-  margin-top: 10px;
-  font-size: 13px;
-  color: var(--text-soft);
-  opacity: 0.7;
-}
 .name-chip {
   padding: 10px 12px;
   border-radius: 14px;
@@ -349,6 +369,143 @@ body.page-thanks {
   color: var(--text-main);
   font-size: 13px;
   text-align: center;
+}
+.comment-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.62);
+  border: 1.5px solid rgba(148,176,200,0.2);
+  cursor: pointer;
+  color: var(--text-soft);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.25s ease;
+}
+.comment-btn:hover {
+  background: rgba(255,255,255,0.82);
+  border-color: rgba(141,168,190,0.35);
+  color: var(--cyan-deep);
+  box-shadow: 0 4px 20px rgba(99,124,148,0.1);
+  transform: translateY(-1px);
+}
+.comment-btn:active {
+  transform: scale(0.96);
+}
+.comment-area {
+  margin-top: 14px;
+  text-align: left;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.comment-area textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(148,176,200,0.2);
+  background: rgba(255,255,255,0.7);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-dark);
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.25s ease;
+}
+.comment-area textarea:focus {
+  border-color: rgba(141,168,190,0.5);
+}
+.comment-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+.comment-submit {
+  padding: 8px 22px;
+  border-radius: 50px;
+  border: none;
+  background: rgba(108,130,146,0.85);
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+.comment-submit:hover {
+  background: rgba(88,110,126,0.95);
+}
+.comment-cancel {
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(148,176,200,0.2);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.comment-cancel:hover {
+  border-color: rgba(141,168,190,0.35);
+  color: var(--text-dark);
+}
+.comment-list {
+  margin-top: 16px;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.comment-item {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(148,176,200,0.1);
+  font-size: 13px;
+  color: var(--text-main);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.comment-empty {
+  font-size: 13px;
+  color: var(--text-soft);
+  opacity: 0.5;
+  text-align: center;
+}
+.data-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 10px;
+}
+.data-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(148,176,200,0.15);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.25s ease;
+}
+.data-btn:hover {
+  opacity: 0.8;
+  border-color: rgba(148,176,200,0.3);
+  color: var(--text-dark);
+}
+#data-file-input {
+  display: none;
 }
 @media (max-width: 700px) {
   .thanks-card { padding: 40px 0 0; }
@@ -458,46 +615,83 @@ body.page-thanks {
       </div>
     </div>
 
+    <div class="thanks-like-section">
+      <div class="like-row">
+        <button class="like-btn" id="thanks-like-btn" aria-label="点赞">
+          <svg class="like-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span class="like-count" id="thanks-like-count">0</span>
+          <span class="like-label">点赞</span>
+        </button>
+        <button class="comment-btn" id="comment-btn">✎ 评语 <span id="comment-count">(0)</span></button>
+      </div>
+      <div class="comment-area" id="comment-area" style="display:none">
+        <textarea id="comment-input" placeholder="写下你想说的话..." rows="3"></textarea>
+        <div class="comment-actions">
+          <button class="comment-cancel" id="comment-cancel">取消</button>
+          <button class="comment-submit" id="comment-submit">提交</button>
+        </div>
+      </div>
+      <div class="comment-list" id="comment-list"></div>
+      <div class="data-actions">
+        <button class="data-btn" id="data-export-btn">↓ 导出数据</button>
+        <button class="data-btn" id="data-import-btn">↑ 导入数据</button>
+        <input type="file" id="data-file-input" accept=".json">
+      </div>
+    </div>
+
     <section class="about-self-block">
-      <div class="about-self-peek">继续下拉，查看作者信息</div>
       <div class="about-self-kicker">作者信息</div>
       <div class="about-self-title">关于本人</div>
-      <p class="about-self-copy">
-        这一部分作为感谢页之后的补充章节，不再单独跳转。它更像是整个毕业展示的收束段，
-        用来说明作者的研究关注、创作方法与这次项目背后的个人立场。
-      </p>
       <div class="about-self-grid">
         <div class="about-self-card">
           <strong>创作者个人信息</strong>
           <div class="about-self-photo-shell">
-            <!-- 【占位符-28】thanks-img-creator-photo：创作者个人照片 -->
-            <img src="../images/style-realistic.png" alt="【占位符-28】黄苏博个人照片占位图">
-          </div>
-          <div class="about-self-photo-note">
-            个人照片占位：后续可直接替换为你的正式照片，建议使用竖向人像图。
+            <img src="../images/creator-photo.png" alt="黄苏博个人照片">
           </div>
           <p>
             黄苏博<br>
             艺术与科技<br>
-            231612057<br>
-            毕业创作《Within · 协作同行》作者
+            231612057
           </p>
         </div>
         <div class="about-self-panel">
-          <strong>创作说明</strong>
-          <p>
-            《Within》并不是单纯展示某种技术能力，而是一次围绕“如何让社交数字化设计真正触及现实困境”的尝试。
-            我希望这个作品既具有研究支撑，也具有情感温度，让体验者在进入虚拟场景时，不只是完成任务，
-            而是逐步理解陪伴、协作和共同前行的意义。
-          </p>
-          <div class="about-self-resume">
-            <div class="resume-item">
-              <strong>简单履历</strong>
-              <span>艺术与科技专业在读，持续关注 XR 叙事、交互体验与数字化社交设计。</span>
+<div class="about-self-resume">
+            <div class="resume-item is-centered">
+              <strong>工作经历</strong>
+              <span>
+                <b>字节跳动 - 朝夕光年 - Bluesea 工作室</b><br>
+                岗位：游戏技术美术工程师 ｜ 时间：2025.07 - 至今
+              </span>
+              <span style="display:block;margin-top:10px;">
+                <b>北京五一视界数字孪生科技股份有限公司 / 51WORLD</b><br>
+                岗位：UE5技术美术实习生 ｜ 时间：2024.11 - 2025.04
+              </span>
             </div>
-            <div class="resume-item">
-              <strong>研究方向</strong>
-              <span>聚焦具身认知、大学生社交困境与虚拟场景中的陪伴式体验建构。</span>
+            <div class="resume-row">
+              <div class="resume-item is-centered">
+                <strong>获奖经历</strong>
+                <span>
+                  中国好创意暨全国数字艺术设计大赛 - 全国二等奖<br>
+                  未来设计师·全国高校数字艺术设计大赛（NCDA）- 全国二等奖<br>
+                  中国好创意暨全国数字艺术设计大赛 - 省级一等奖<br>
+                  未来设计师·全国高校数字艺术设计大赛（NCDA）- 省级一等奖<br>
+                  第四届江苏省科学与艺术创新大赛 - 省级一等奖<br>
+                  "蓝桥杯"全国软件和信息技术专业人才大赛 - 省级二等奖<br>
+                  2023 江苏省研究生创新设计大赛科学普及与传播 - 省级二等奖<br>
+                  首届中国研究生 美丽中国"创新设计大赛 - 优胜奖<br>
+                  第五届紫金奖中国（南京）大学生设计展 - 创新实践奖
+                </span>
+              </div>
+              <div class="resume-item is-centered">
+                <strong>参展经历</strong>
+                <span>
+                  紫金奖·第五届中国（南京）大学生设计展<br>
+                  南京艺术学院"新时代山乡巨变"主题艺术作品大展<br>
+                  香港理工大学 PolyVerse 文化艺术科技国际展
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -506,44 +700,42 @@ body.page-thanks {
       <div class="about-self-work">
         <strong>作品展示</strong>
         <p>
-          作品展示单独放在下方，和上面的信息容器保持同宽。现在先用项目内现有图像占位，后续可以继续扩成多张作品展示。
+          以下为个人作品展示。
         </p>
         <div class="about-self-works">
           <figure class="about-self-work-card is-hero">
-            <!-- 【占位符-29】thanks-img-main-work：Within 作品展示主图 -->
-            <img src="../images/剪贴板图片.jpg" alt="【占位符-29】Within 作品展示主图占位">
+            <img src="../images/personal-work-01.png" alt="个人作品 1">
             <figcaption class="about-self-work-caption">
-              【占位符-29】主作品图占位：建议替换为最能代表你个人创作方向的一张完整作品大图，例如毕业设计海报、展览现场总览或最终成片截图。
+              【待补充说明】
             </figcaption>
           </figure>
           <figure class="about-self-work-card">
-            <!-- 【占位符-30】thanks-img-work-01：补充作品展示图 1 -->
-            <img src="../title.png" alt="【占位符-30】作品补充展示占位图 1">
+            <img src="../images/personal-work-02.png" alt="个人作品 2">
             <figcaption class="about-self-work-caption">
-              【占位符-30】补充作品图 01：可替换为个人其他作品、系列海报或阶段成果图。
+              【待补充说明】
             </figcaption>
           </figure>
           <figure class="about-self-work-card">
-            <!-- 【占位符-31】thanks-img-work-02：补充作品展示图 2 -->
-            <img src="../images/style-lowpoly.png" alt="【占位符-31】作品补充展示占位图 2">
+            <img src="../images/personal-work-03.png" alt="个人作品 3">
             <figcaption class="about-self-work-caption">
-              【占位符-31】补充作品图 02：可继续扩展更多作品，用于形成更完整的个人作品带。
+              【待补充说明】
+            </figcaption>
+          </figure>
+          <figure class="about-self-work-card">
+            <img src="../images/personal-work-04.png" alt="个人作品 4">
+            <figcaption class="about-self-work-caption">
+              【待补充说明】
+            </figcaption>
+          </figure>
+          <figure class="about-self-work-card">
+            <img src="../images/personal-work-05.png" alt="个人作品 5">
+            <figcaption class="about-self-work-caption">
+              【待补充说明】
             </figcaption>
           </figure>
         </div>
       </div>
     </section>
-
-    <div class="thanks-like-section">
-      <button class="like-btn" id="thanks-like-btn" aria-label="点赞">
-        <svg class="like-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        <span class="like-count" id="thanks-like-count">0</span>
-        <span class="like-label">点赞</span>
-      </button>
-      <p class="like-hint">如果你喜欢这个项目，可以点个赞 :)</p>
-    </div>
 
     <p class="thanks-signoff">
       Within · 协作同行 ｜ 愿每一段旅程都有人同行
@@ -620,6 +812,107 @@ function incrementLike(btnId) {
       window.open('dev.html', '_blank');
     }
   });
+})();
+
+(function initComments() {
+  var COMMENT_KEY = 'within_comments';
+  var commentBtn = document.getElementById('comment-btn');
+  var commentArea = document.getElementById('comment-area');
+  var commentInput = document.getElementById('comment-input');
+  var commentSubmit = document.getElementById('comment-submit');
+  var commentCancel = document.getElementById('comment-cancel');
+  var commentList = document.getElementById('comment-list');
+  var commentCount = document.getElementById('comment-count');
+  var exportBtn = document.getElementById('data-export-btn');
+  var importBtn = document.getElementById('data-import-btn');
+  var fileInput = document.getElementById('data-file-input');
+  if (!commentBtn || !commentArea || !commentInput || !commentSubmit || !commentCancel || !commentList || !commentCount) return;
+
+  function getComments() {
+    try { return JSON.parse(localStorage.getItem(COMMENT_KEY) || '[]'); } catch(e) { return []; }
+  }
+
+  function saveComments(arr) {
+    try { localStorage.setItem(COMMENT_KEY, JSON.stringify(arr)); } catch(e) {}
+  }
+
+  function renderComments() {
+    var comments = getComments();
+    commentCount.textContent = '(' + comments.length + ')';
+    commentList.innerHTML = '';
+    if (!comments.length) {
+      var empty = document.createElement('div');
+      empty.className = 'comment-empty';
+      empty.textContent = '还没有评语，来写第一条吧';
+      commentList.appendChild(empty);
+      return;
+    }
+    comments.forEach(function(text) {
+      var item = document.createElement('div');
+      item.className = 'comment-item';
+      item.textContent = text;
+      commentList.appendChild(item);
+    });
+  }
+
+  renderComments();
+
+  commentBtn.addEventListener('click', function() {
+    var hidden = commentArea.style.display === 'none';
+    commentArea.style.display = hidden ? 'block' : 'none';
+    if (hidden) commentInput.focus();
+  });
+
+  commentCancel.addEventListener('click', function() {
+    commentArea.style.display = 'none';
+    commentInput.value = '';
+  });
+
+  commentSubmit.addEventListener('click', function() {
+    var text = commentInput.value.trim();
+    if (!text) return;
+    var comments = getComments();
+    comments.push(text);
+    saveComments(comments);
+    renderComments();
+    commentInput.value = '';
+    commentArea.style.display = 'none';
+  });
+
+  if (exportBtn) {
+    exportBtn.addEventListener('click', function() {
+      var data = { likes: getLikeCount('thanks_main'), comments: getComments() };
+      var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'within-feedback.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  if (importBtn && fileInput) {
+    importBtn.addEventListener('click', function() { fileInput.click(); });
+    fileInput.addEventListener('change', function() {
+      var file = fileInput.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          var data = JSON.parse(e.target.result);
+          if (data.comments && Array.isArray(data.comments)) {
+            saveComments(data.comments);
+            renderComments();
+          }
+        } catch(err) {}
+      };
+      reader.readAsText(file);
+      fileInput.value = '';
+    });
+  }
 })();
 </script>
 

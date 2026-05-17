@@ -41,7 +41,7 @@ body.page-about::after {
    ======================================== */
 
 .louvre-intro {
-  margin-top: 0;
+  margin: 0 0 12px;
   width: 100%;
   max-width: 100%;
 }
@@ -53,7 +53,7 @@ body.page-about::after {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 36px 5vw;
+  padding: 48px 5vw;
 }
 
 .stage-site {
@@ -137,7 +137,7 @@ body.page-about::after {
 .louvre-intro-copy {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 24px;
 }
 
 .louvre-intro-copy .is-title {
@@ -172,19 +172,39 @@ body.page-about::after {
   display: flex;
   flex-direction: column;
   gap: 52px;
-  width: min(420px, 100%);
-  margin: 0 auto;
+  width: min(680px, 100%);
+  margin: 60px auto 0;
 }
 
 .chart-row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  align-items: center;
+  gap: 40px;
+}
+
+.chart-row-visual {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 18px;
 }
 
+.chart-row-desc {
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--text-soft);
+  padding: 8px 0;
+}
+
+.chart-row-desc strong {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
 .chart-row-img {
   width: 100%;
+  max-width: 260px;
   height: auto;
   aspect-ratio: 16/9;
   object-fit: cover;
@@ -222,6 +242,11 @@ body.page-about::after {
 }
 
 @media (max-width: 700px) {
+  .chart-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
   .chart-row-img {
     aspect-ratio: 16/9;
   }
@@ -229,26 +254,123 @@ body.page-about::after {
   .chart-row-text {
     font-size: 15px;
   }
+
+  .chart-row-desc {
+    font-size: 13.5px;
+    text-align: center;
+  }
 }
 
 /* Inspiration quote */
+/* ── Scroll-reveal for inspiration blocks ── */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity .7s cubic-bezier(.22,1,.36,1),
+    transform .8s cubic-bezier(.22,1,.36,1);
+}
+
+.reveal-section.evo-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger for chart rows internal: 3 rows reveal one by one */
+.chart-rows.reveal-section .chart-row {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity .6s cubic-bezier(.22,1,.36,1),
+    transform .7s cubic-bezier(.22,1,.36,1);
+}
+
+.chart-rows.reveal-section.evo-visible .chart-row:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0ms;
+}
+
+.chart-rows.reveal-section.evo-visible .chart-row:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .12s;
+}
+
+.chart-rows.reveal-section.evo-visible .chart-row:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .24s;
+}
+
+/* chart images individually: scale + fade on scroll */
+.chart-row-img {
+  opacity: 0;
+  transform: scale(0.88);
+  transition:
+    opacity .7s cubic-bezier(.22,1,.36,1),
+    transform .8s cubic-bezier(.22,1,.36,1);
+}
+.chart-rows.reveal-section.evo-visible .chart-row:nth-child(1) .chart-row-img {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 80ms;
+}
+.chart-rows.reveal-section.evo-visible .chart-row:nth-child(2) .chart-row-img {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 200ms;
+}
+.chart-rows.reveal-section.evo-visible .chart-row:nth-child(3) .chart-row-img {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 320ms;
+}
+
+/* 内容隐藏逻辑已移除 —— 所有内容保持可见 */
+
+/* ── Quote sub: typewriter container ── */
+.inspiration-quote-sub {
+  display: inline-block;
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.9;
+  margin: 0;
+  min-height: 1.9em;
+  position: relative;
+}
+
+/* cursor */
+.inspiration-quote-sub::after {
+  content: "|";
+  display: inline;
+  color: var(--cyan-deep);
+  font-weight: 300;
+  animation: cursor-blink .85s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .inspiration-quote {
   text-align: center;
-  margin: 52px auto 28px;
+  margin: 120px auto 100px;
   max-width: 680px;
 }
 
 .inspiration-quote-main {
-  font-size: clamp(20px, 3vw, 28px);
+  font-size: clamp(24px, 3.6vw, 32px);
   font-weight: 600;
   color: var(--text-dark);
   line-height: 1.6;
   letter-spacing: -0.01em;
-  margin: 0 0 12px;
+  margin: 0 0 16px;
 }
 
 .inspiration-quote-sub {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--text-soft);
   line-height: 1.9;
   margin: 0;
@@ -260,8 +382,9 @@ body.page-about::after {
   align-items: center;
   justify-content: center;
   gap: 28px;
-  margin: 0 auto 20px;
+  margin: 80px auto 60px;
   max-width: 560px;
+  min-height: 240px;
 }
 
 .media-evolution-item {
@@ -269,6 +392,69 @@ body.page-about::after {
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  position: relative;
+}
+
+/* ── Fade-up on scroll ── */
+.media-evo-fade {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity .6s cubic-bezier(.22,1,.36,1),
+    transform .7s cubic-bezier(.22,1,.36,1);
+}
+
+.media-evo-fade.evo-visible:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .1s;
+}
+
+.media-evo-fade.evo-visible:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .35s;
+}
+
+/* ── Arrow: reveal + continuous breathe ── */
+.media-evolution-arrow-wrap {
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+
+.media-evolution-arrow-wrap.evo-visible {
+  opacity: 1;
+  transition-delay: .22s;
+}
+
+.media-evolution-arrow {
+  font-size: 36px;
+  color: var(--cyan-deep);
+  font-weight: 300;
+  line-height: 1;
+  animation: arrow-breathe 2.2s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.media-evolution-arrow-wrap.evo-visible .media-evolution-arrow {
+  animation-play-state: running;
+}
+
+@keyframes arrow-breathe {
+  0%, 100% { transform: scale(1); opacity: .6; }
+  50%      { transform: scale(1.18); opacity: 1; }
+}
+
+/* ── Card hover: both cards get the same treatment ── */
+.media-evolution-item {
+  cursor: default;
+}
+
+.media-evolution-item:hover .media-evolution-img {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .10);
 }
 
 .media-evolution-img {
@@ -278,6 +464,7 @@ body.page-about::after {
   background: var(--panel);
   border-radius: 16px;
   padding: 16px;
+  transition: transform .38s cubic-bezier(.22,1,.36,1), box-shadow .38s ease;
 }
 
 .media-evolution-label {
@@ -287,20 +474,14 @@ body.page-about::after {
   text-align: center;
 }
 
-.media-evolution-arrow {
-  font-size: 36px;
-  color: var(--cyan-deep);
-  font-weight: 300;
-  line-height: 1;
-}
-
 @media (max-width: 700px) {
   .media-evolution {
     flex-direction: column;
     gap: 18px;
+    min-height: auto;
   }
 
-  .media-evolution-arrow {
+  .media-evolution-arrow-wrap {
     transform: rotate(90deg);
   }
 
@@ -311,6 +492,9 @@ body.page-about::after {
   .media-evolution-label {
     font-size: 15px;
   }
+
+  .media-evo-fade.evo-visible:nth-child(1) { transition-delay: 0ms; }
+  .media-evo-fade.evo-visible:nth-child(3) { transition-delay: .15s; }
 }
 
 @media (max-width: 900px) {
@@ -382,7 +566,7 @@ body.page-about::after {
 }
 
 .section {
-  margin-top: 52px;
+  margin-top: 72px;
 }
 
 .section-structure {
@@ -1551,29 +1735,28 @@ footer {
         <h2>灵感来源</h2>
       </div>
 
-      <!-- 创意引入：卢浮宫导览 -->
       <div class="louvre-intro">
 
       <!-- Stage 1: Louvre website -->
-      <div class="louvre-intro-stage stage-site">
+      <div class="louvre-intro-stage stage-site reveal-section">
         <div class="louvre-intro-visual">
           <div class="louvre-intro-img-wrap">
             <img src="../images/louvre-intro/img1-louvre-site.png" alt="卢浮宫官网导览服务页面">
           </div>
           <div class="louvre-intro-copy">
-            <p class="is-title">卢浮宫的<br>语音导览器</p>
-            <p class="is-body">每年数百万人，通过它了解艺术。<br>这是游客与艺术之间的第一座桥。</p>
-            <p class="is-quiet">向下滚动，看看这座桥的另一种可能</p>
+            <p class="is-title">一次偶然的发现</p>
+            <p class="is-body">翻看卢浮宫官网时看到，<br>展厅里向导览用的设备，居然是一台游戏机。</p>
+            <p class="is-quiet">这个意外的发现，让人忍不住想了解更多</p>
           </div>
         </div>
       </div>
 
       <!-- Stage 2: Nintendo 3DS -->
-      <div class="louvre-intro-stage stage-3ds">
+      <div class="louvre-intro-stage stage-3ds reveal-section">
         <div class="louvre-intro-visual">
           <div class="louvre-intro-copy">
             <p class="is-title">当这座桥变成<br>一台任天堂 3DS</p>
-            <p class="is-body">事情变得不太一样。<br>游戏机，成为了艺术导览的新媒介。</p>
+            <p class="is-body">任天堂专门为卢浮宫定制了专属导览系统。<br>一台游戏机，成为了数十万游客的艺术向导。</p>
           </div>
           <div class="louvre-intro-img-wrap">
             <img src="../images/louvre-intro/img2-3ds.jpeg" alt="Nintendo 3DS Guide Louvre">
@@ -1582,54 +1765,71 @@ footer {
       </div>
 
       <!-- Stage 3: 3DS Game -->
-      <div class="louvre-intro-stage stage-game">
+      <div class="louvre-intro-stage stage-game reveal-section">
         <div class="louvre-intro-visual">
           <div class="louvre-intro-img-wrap">
             <img src="../images/louvre-intro/img3-louvre-game.png" alt="3DS 卢浮宫导览游戏界面">
           </div>
           <div class="louvre-intro-copy">
             <p class="is-title">《3DS导游卢浮宫》</p>
-            <p class="is-body">游戏软件内部收录了庞大的艺术品资料，同时提供参观线路安排、语音导览、以及艺术品的 3D 效果全方位展示。该游戏在 2012 年投入卢浮宫使用。</p>
-            <p class="is-body">3DS 游戏机特有的裸眼 3D 体验，让这场艺术之旅变得更加独一无二。</p>
-            <p class="is-body">电子游戏设备成为了增强传统艺术的媒介，并且创造了独一无二的体验。</p>
-            <p class="is-accent">这种独一无二，只凭语言的描述，无法传达。</p>
+            <p class="is-body">深入了解才发现，它绝不只是"导览器"那么简单——内部收录了庞大的艺术品资料，还能规划线路、语音讲解、甚至用 3D 全方位展示艺术品。2012 年起就在卢浮宫实际投入使用了。</p>
+            <p class="is-body">3DS 特有的裸眼 3D 体验，让艺术品的细节在眼前鲜活地展开。</p>
+            <p class="is-body">原来，一台我们熟悉的电子设备，<br>就能成为连接人与艺术之间的桥梁。</p>
+            <p class="is-accent">那如果让更多人，也能亲身感受到这种体验呢？</p>
           </div>
         </div>
       </div>
 
       <!-- 图表：独特体验/设备/游戏 -->
-      <div class="chart-rows">
+      <div class="chart-rows reveal-section">
         <div class="chart-row">
-          <img class="chart-row-img" src="../images/louvre-intro/img4-inspiration.png" alt="独特且有效的体验">
-          <div class="chart-row-arrow"></div>
-          <div class="chart-row-text">独特且有效的体验</div>
+          <div class="chart-row-visual">
+            <img class="chart-row-img" src="../images/louvre-intro/img4-inspiration.png" alt="独特且有效的体验">
+            <div class="chart-row-arrow"></div>
+            <div class="chart-row-text">独特且有效的体验</div>
+          </div>
+          <div class="chart-row-desc">
+            <strong>工作坊体验内容</strong> — 通过工作坊形式的沉浸体验，在操作与互动中感受艺术与技术的融合。每个环节都围绕"有效"设计：不是走马观花，而是让参与者真正进入情境。
+          </div>
         </div>
         <div class="chart-row">
-          <img class="chart-row-img" src="../images/louvre-intro/img5-inspiration.jpg" alt="独特且新颖的设备">
-          <div class="chart-row-arrow"></div>
-          <div class="chart-row-text">独特且新颖的设备</div>
+          <div class="chart-row-visual">
+            <img class="chart-row-img" src="../images/louvre-intro/img5-inspiration.jpg" alt="独特且新颖的设备">
+            <div class="chart-row-arrow"></div>
+            <div class="chart-row-text">独特且新颖的设备</div>
+          </div>
+          <div class="chart-row-desc">
+            <strong>XR 设备</strong> — 以消费级 XR 一体机为核心载体，摆脱传统设备的空间限制。轻量、可复现的硬件方案，让沉浸体验能走入更多元的校园场景。
+          </div>
         </div>
         <div class="chart-row">
-          <img class="chart-row-img" src="../images/louvre-intro/img6-inspiration.png" alt="独特且有趣的游戏">
-          <div class="chart-row-arrow"></div>
-          <div class="chart-row-text">独特且有趣的游戏</div>
+          <div class="chart-row-visual">
+            <img class="chart-row-img" src="../images/louvre-intro/img6-inspiration.png" alt="独特且有趣的游戏">
+            <div class="chart-row-arrow"></div>
+            <div class="chart-row-text">独特且有趣的游戏</div>
+          </div>
+          <div class="chart-row-desc">
+            <strong>VR 游戏</strong> — 以游戏化机制驱动社交行为，将任务协作与叙事探索融入虚拟空间。玩家通过身体行动完成互动，让交流从刻意变为自然。
+          </div>
         </div>
       </div>
 
       <!-- 引言：媒介即艺术创作工具 -->
-      <div class="inspiration-quote">
+      <div class="inspiration-quote reveal-section" id="inspiration-quote">
         <p class="inspiration-quote-main">"把电子游戏机作为一种媒介来进行艺术创作"</p>
-        <p class="inspiration-quote-sub">存在以这种思路进行设计的可能。</p>
+        <p class="inspiration-quote-sub" id="quote-typewriter"></p>
       </div>
 
       <!-- 媒介演进：裸眼3D → XR -->
       <div class="media-evolution">
-        <div class="media-evolution-item">
+        <div class="media-evolution-item media-evo-fade">
           <img class="media-evolution-img" src="../images/louvre-intro/img7-3ds.png" alt="3DS 裸眼3D">
           <span class="media-evolution-label">裸眼3D</span>
         </div>
-        <div class="media-evolution-arrow">→</div>
-        <div class="media-evolution-item">
+        <div class="media-evolution-arrow-wrap">
+          <div class="media-evolution-arrow">→</div>
+        </div>
+        <div class="media-evolution-item media-evolution-item-xr media-evo-fade">
           <img class="media-evolution-img" src="../images/louvre-intro/img8-xr.png" alt="XR 头显">
           <span class="media-evolution-label">XR体验</span>
         </div>
@@ -1970,6 +2170,56 @@ window.__pageConfig = {
 </script>
 
 <script src="../shell.js"></script>
+
+<script id="page-script">
+/* ── 入场动画观察者（一次性） ── */
+var revealItems = document.querySelectorAll(
+  '.reveal-section, .media-evo-fade, .media-evolution-arrow-wrap'
+);
+var noMotion = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  || !window.IntersectionObserver;
+
+if (revealItems.length && !noMotion) {
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('evo-visible');
+      revealObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.1 });
+
+  revealItems.forEach(function(el) {
+    var rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60 && rect.bottom > 60) {
+      el.classList.add('evo-visible');
+    } else {
+      revealObserver.observe(el);
+    }
+  });
+} else if (revealItems.length) {
+  revealItems.forEach(function(el) { el.classList.add('evo-visible'); });
+}
+
+/* ── 打字机：页面加载后简单启动 ── */
+var typewriterEl = document.getElementById('quote-typewriter');
+var twTimer = null;
+var TW_TEXT = '存在以这种思路进行设计的可能。';
+
+(function startTypewriter() {
+  if (!typewriterEl) return;
+  typewriterEl.textContent = TW_TEXT.charAt(0) || '';
+  var i = 1;
+  twTimer = setInterval(function() {
+    if (i < TW_TEXT.length) {
+      typewriterEl.textContent += TW_TEXT.charAt(i);
+      i++;
+    } else {
+      clearInterval(twTimer);
+      twTimer = null;
+    }
+  }, 65);
+})();
+</script>
 
 </body>
 </html>

@@ -2526,7 +2526,6 @@ grid-template-columns: 1fr;
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
             </button>
           </div>
-          <p class="space-model-note">把模型文件放到 <code>/models/space-layout.glb</code>，或直接修改上面 <code>src</code> 路径即可。当前左侧图片热点仅保留二维结构说明。</p>
         </div>
       </div>
     </div>
@@ -2591,44 +2590,63 @@ window.__pageConfig = {
     modelStatus.textContent = message || '';
   }
 
-  if (viewer) {
-    setModelStatus('空间模型加载中...');
-    modelTimeout = window.setTimeout(function() {
-      if (!window.customElements || !window.customElements.get('model-viewer')) {
-        var ua = navigator.userAgent || 'unknown';
-        fetch('/vendor/model-viewer.min.js', { method: 'GET', cache: 'no-store' })
-          .then(function(response) {
-            var contentType = response.headers.get('content-type') || 'unknown';
-            setModelStatus(
-              '模型组件未加载成功。'
-              + ' 脚本状态: ' + response.status
-              + '；Content-Type: ' + contentType
-              + '；浏览器: ' + ua
-            );
-          })
-          .catch(function(error) {
-            setModelStatus(
-              '模型组件未加载成功。'
-              + ' /vendor/model-viewer.min.js 请求失败：'
-              + (error && error.message ? error.message : 'unknown error')
-              + '；浏览器: ' + ua
-            );
-          });
-      }
-    }, 2400);
+  if (!viewer) return;
 
-    viewer.addEventListener('load', function() {
-      if (modelTimeout) window.clearTimeout(modelTimeout);
-      setModelStatus('');
-    });
-
-    viewer.addEventListener('error', function() {
-      if (modelTimeout) window.clearTimeout(modelTimeout);
-      setModelStatus('空间模型加载失败。请直接访问 /models/space-layout.glb 检查文件是否能打开。');
-    });
+  // ── 动态加载 model-viewer（兼容 PJAX 导航场景） ──
+  function loadModelViewer(callback) {
+    if (window.customElements && window.customElements.get('model-viewer')) {
+      if (callback) callback();
+      return;
+    }
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.src = '/vendor/model-viewer.min.js';
+    s.onload = callback || null;
+    s.onerror = function() {
+      setModelStatus('模型组件脚本加载失败：/vendor/model-viewer.min.js 网络错误');
+    };
+    document.head.appendChild(s);
   }
 
-  if (resetBtn && viewer) {
+  loadModelViewer();
+
+  setModelStatus('空间模型加载中...');
+
+  modelTimeout = window.setTimeout(function() {
+    if (!window.customElements || !window.customElements.get('model-viewer')) {
+      var ua = navigator.userAgent || 'unknown';
+      fetch('/vendor/model-viewer.min.js', { method: 'GET', cache: 'no-store' })
+        .then(function(response) {
+          var contentType = response.headers.get('content-type') || 'unknown';
+          setModelStatus(
+            '模型组件未加载成功。'
+            + ' 脚本状态: ' + response.status
+            + '；Content-Type: ' + contentType
+            + '；浏览器: ' + ua
+          );
+        })
+        .catch(function(error) {
+          setModelStatus(
+            '模型组件未加载成功。'
+            + ' /vendor/model-viewer.min.js 请求失败：'
+            + (error && error.message ? error.message : 'unknown error')
+            + '；浏览器: ' + ua
+          );
+        });
+    }
+  }, 3000);
+
+  viewer.addEventListener('load', function() {
+    if (modelTimeout) window.clearTimeout(modelTimeout);
+    setModelStatus('');
+  });
+
+  viewer.addEventListener('error', function() {
+    if (modelTimeout) window.clearTimeout(modelTimeout);
+    setModelStatus('空间模型加载失败。请直接访问 /models/space-layout.glb 检查文件是否能打开。');
+  });
+
+  if (resetBtn) {
     resetBtn.addEventListener('click', function() {
       viewer.cameraOrbit = '45deg 55deg auto';
       viewer.fieldOfView = '45deg';

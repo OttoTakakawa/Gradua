@@ -46,10 +46,6 @@ echo " http://localhost:8000"
 echo "============================"
 echo
 
-pkill -f "python3? server.py" >/dev/null 2>&1
-pkill -f "python3? -m http.server 8000" >/dev/null 2>&1
-sleep 1
-
 "$PYTHON_CMD" server.py &
 SERVER_PID=$!
 sleep 2

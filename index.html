@@ -42,6 +42,7 @@ body.is-leaving-next .poly {
   height: 180px;
   clip-path: polygon(10% 18%, 74% 0, 100% 34%, 84% 100%, 0 78%);
   transform: rotate(-10deg);
+  --poly-rotate: -6deg; --float-y: -5px; --float-delay: 0s; --entrance-index: 0;
 }
 
 .poly-2 {
@@ -51,6 +52,7 @@ body.is-leaving-next .poly {
   height: 220px;
   clip-path: polygon(20% 0, 100% 22%, 84% 100%, 6% 86%, 0 28%);
   transform: rotate(8deg);
+  --poly-rotate: 10deg; --float-y: 4px; --float-delay: 0.6s; --entrance-index: 1;
 }
 
 .poly-3 {
@@ -60,6 +62,7 @@ body.is-leaving-next .poly {
   height: 190px;
   clip-path: polygon(0 20%, 78% 0, 100% 76%, 26% 100%);
   transform: rotate(12deg);
+  --poly-rotate: -12deg; --float-y: -4px; --float-delay: 1.2s; --entrance-index: 2;
 }
 
 .poly-4 {
@@ -69,6 +72,7 @@ body.is-leaving-next .poly {
   height: 240px;
   clip-path: polygon(18% 0, 100% 18%, 88% 100%, 0 82%, 4% 26%);
   transform: rotate(-7deg);
+  --poly-rotate: 3deg; --float-y: 6px; --float-delay: 2.0s; --entrance-index: 3;
 }
 
 .poly-5 {
@@ -79,6 +83,7 @@ body.is-leaving-next .poly {
   clip-path: polygon(16% 0, 100% 28%, 68% 100%, 0 74%);
   background: linear-gradient(145deg, rgba(138,180,196,0.16), rgba(255,255,255,0.08));
   opacity: 0.9;
+  --poly-rotate: 9deg; --float-y: -3px; --float-delay: 0.3s; --entrance-index: 4;
 }
 
 .poly-6 {
@@ -89,6 +94,7 @@ body.is-leaving-next .poly {
   clip-path: polygon(0 22%, 70% 0, 100% 68%, 18% 100%);
   background: linear-gradient(145deg, rgba(196,168,130,0.12), rgba(255,255,255,0.08));
   opacity: 0.78;
+  --poly-rotate: -5deg; --float-y: 5px; --float-delay: 1.5s; --entrance-index: 5;
 }
 
 .logo-shell {
@@ -123,7 +129,7 @@ body.is-leaving-next .logo {
 }
 
 .logo-caption {
-  margin-top: 18px;
+  margin-top: -64px;
   color: rgba(108, 130, 146, 0.88);
   font-size: 13px;
   letter-spacing: .12em;
@@ -140,6 +146,69 @@ body.is-next-armed .page-index .next-arm-hint {
 @media (max-width: 860px) {
   body.is-next-armed .page-index .next-arm-hint {
     bottom: 16px;
+  }
+}
+
+@keyframes poly-entrance {
+  from { opacity: 0; transform: translateY(24px) scale(0.97) rotate(var(--poly-rotate, 0deg)); }
+  to   { opacity: 1; transform: translateY(0) scale(1) rotate(var(--poly-rotate, 0deg)); }
+}
+@keyframes poly-float {
+  0%, 100% { transform: translateY(0) rotate(var(--poly-rotate, 0deg)); }
+  50%      { transform: translateY(var(--float-y, -4px)) rotate(var(--poly-rotate, 0deg)); }
+}
+@keyframes logo-entrance {
+  from { opacity: 0; transform: scale(0.88); filter: blur(8px) brightness(1.4); }
+  to   { opacity: 1; transform: scale(1); filter: blur(0) brightness(1); }
+}
+@keyframes caption-entrance {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 默认隐藏（等待入场） */
+body.page-index:not(.is-entrance-active):not(.is-sustained) .poly {
+  opacity: 0; transform: translateY(24px) scale(0.97);
+}
+
+/* 入场触发 */
+body.page-index.is-entrance-active .poly {
+  animation: poly-entrance 2.0s cubic-bezier(.22,1,.36,1) both;
+  animation-delay: calc(var(--entrance-index) * 0.12s);
+}
+body.page-index.is-entrance-active .logo {
+  animation: logo-entrance 2.5s cubic-bezier(.22,1,.36,1) both;
+  animation-delay: 0.52s;
+}
+body.page-index.is-entrance-active .logo-caption {
+  animation: caption-entrance 2.0s cubic-bezier(.22,1,.36,1) both;
+  animation-delay: 3.0s;
+}
+
+/* 持续浮动（入场结束后接管） */
+body.page-index.is-sustained .poly {
+  animation: poly-float 7s ease-in-out infinite;
+  animation-delay: var(--float-delay);
+}
+
+/* PJAX 进入时防止闪烁 */
+body.page-index.is-entering-next #page-content > *,
+body.page-index.is-entering-prev #page-content > *,
+body.page-index.is-entering-click #page-content > * {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.page-index.is-entrance-active .poly,
+  body.page-index.is-entrance-active .logo,
+  body.page-index.is-entrance-active .logo-caption,
+  body.page-index.is-sustained .poly {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }
 
@@ -225,6 +294,35 @@ window.__pageConfig = {
 };
 </script>
 <script src="shell.js"></script>
+
+<script id="page-script">
+(function() {
+  console.log('[page-script] 封面动画脚本已执行');
+  var entranceTimer, sustainTimer, cancelled = false;
+
+  entranceTimer = setTimeout(function() {
+    if (cancelled) return;
+    console.log('[page-script] 添加 is-entrance-active → 入场动画开始');
+    document.body.classList.add('is-entrance-active');
+  }, 20);
+
+  sustainTimer = setTimeout(function() {
+    if (cancelled) return;
+    console.log('[page-script] 入场结束，切换至 is-sustained → 持续浮动');
+    document.body.classList.remove('is-entrance-active');
+    document.body.classList.add('is-sustained');
+  }, 5200);
+
+  window.__pageCleanup = function() {
+    console.log('[page-script] __pageCleanup 被调用');
+    cancelled = true;
+    clearTimeout(entranceTimer);
+    clearTimeout(sustainTimer);
+    document.body.classList.remove('is-entrance-active', 'is-sustained');
+    window.__pageCleanup = null;
+  };
+})();
+</script>
 
 </body>
 </html>

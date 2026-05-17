@@ -40,6 +40,7 @@ body::before {
   background-size: 84px 84px, 112px 112px;
 }
 
+/* ── 页面导航过渡 ── */
 body::after {
   content: "";
   position: fixed;
@@ -55,6 +56,49 @@ body.is-leaving-prev::after,
 body.is-leaving-next::after,
 body.is-leaving-click::after {
   opacity: 1;
+}
+
+#page-content > * {
+  transition: opacity .22s ease, transform .24s ease, filter .22s ease;
+}
+
+body.is-leaving-next #page-content > * {
+  opacity: 0;
+  transform: translateY(-24px);
+  filter: blur(3px);
+}
+
+body.is-leaving-prev #page-content > * {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(3px);
+}
+
+body.is-leaving-click #page-content > * {
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity .14s ease, transform .16s cubic-bezier(.4,0,.2,1);
+}
+
+body.is-entering-next #page-content > *,
+body.is-entering-prev #page-content > *,
+body.is-entering-click #page-content > * {
+  transition: none;
+}
+
+body.is-entering-next #page-content > * {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+body.is-entering-prev #page-content > * {
+  opacity: 0;
+  transform: translateY(-16px);
+}
+
+body.is-entering-click #page-content > * {
+  opacity: 0;
+  transform: scale(1.008);
 }
 
 .nav {
@@ -247,10 +291,6 @@ body.is-leaving-click::after {
   font-weight: 600;
 }
 
-#page-content > * {
-  transition: opacity .22s ease, transform .24s ease, filter .22s ease;
-}
-
 .reveal-item {
   opacity: 0;
   transform: translateY(28px);
@@ -272,45 +312,6 @@ body.is-leaving-click::after {
 
 .reveal-item[data-reveal="soft"] {
   transform: translateY(22px);
-}
-
-body.is-leaving-next #page-content > * {
-  opacity: 0;
-  transform: translateY(-24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-prev #page-content > * {
-  opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
-}
-
-body.is-leaving-click #page-content > * {
-  opacity: 0;
-  transform: scale(0.985);
-  transition: opacity .14s ease, transform .16s cubic-bezier(.4,0,.2,1);
-}
-
-body.is-entering-next #page-content > *,
-body.is-entering-prev #page-content > *,
-body.is-entering-click #page-content > * {
-  transition: none;
-}
-
-body.is-entering-next #page-content > * {
-  opacity: 0;
-  transform: translateY(16px);
-}
-
-body.is-entering-prev #page-content > * {
-  opacity: 0;
-  transform: translateY(-16px);
-}
-
-body.is-entering-click #page-content > * {
-  opacity: 0;
-  transform: scale(1.008);
 }
 
 .prev-arm-hint {
